@@ -1,0 +1,1073 @@
+{
+  "text": "英伟达在全球科技产业链中处于核心地位，既是芯片设计企业，也是人工智能基础设施的重要供应商。它与台积电、三星等企业合作生产芯片，与微软、亚马逊云科技、谷歌云等云服务商共同建设人工智能计算平台，同时为游戏、数据中心、自动驾驶和机器人等领域的企业提供GPU及相关软件。英伟达还面临AMD、英特尔以及谷歌等公司的竞争，因此与其他公司的关系既包括供应链合作、技术生态共建和客户服务，也包含市场竞争。",
+  "words": [
+    {
+      "confidence": 0.77702117,
+      "endTime": 0.495,
+      "startTime": 0.305,
+      "word": "英"
+    },
+    {
+      "confidence": 0.45372298,
+      "endTime": 0.625,
+      "startTime": 0.495,
+      "word": "伟"
+    },
+    {
+      "confidence": 0.8863951,
+      "endTime": 0.825,
+      "startTime": 0.625,
+      "word": "达"
+    },
+    {
+      "confidence": 0.94680053,
+      "endTime": 0.945,
+      "startTime": 0.825,
+      "word": "在"
+    },
+    {
+      "confidence": 0.96535254,
+      "endTime": 1.225,
+      "startTime": 0.945,
+      "word": "全"
+    },
+    {
+      "confidence": 0.969507,
+      "endTime": 1.465,
+      "startTime": 1.225,
+      "word": "球"
+    },
+    {
+      "confidence": 0.9410122,
+      "endTime": 1.695,
+      "startTime": 1.465,
+      "word": "科"
+    },
+    {
+      "confidence": 0.95017,
+      "endTime": 1.845,
+      "startTime": 1.695,
+      "word": "技"
+    },
+    {
+      "confidence": 0.8346946,
+      "endTime": 2.055,
+      "startTime": 1.845,
+      "word": "产"
+    },
+    {
+      "confidence": 0.90926665,
+      "endTime": 2.165,
+      "startTime": 2.055,
+      "word": "业"
+    },
+    {
+      "confidence": 0.8307622,
+      "endTime": 2.305,
+      "startTime": 2.165,
+      "word": "链"
+    },
+    {
+      "confidence": 0.96697235,
+      "endTime": 2.505,
+      "startTime": 2.305,
+      "word": "中"
+    },
+    {
+      "confidence": 0.95424134,
+      "endTime": 2.695,
+      "startTime": 2.505,
+      "word": "处"
+    },
+    {
+      "confidence": 0.9464224,
+      "endTime": 2.785,
+      "startTime": 2.695,
+      "word": "于"
+    },
+    {
+      "confidence": 0.97369075,
+      "endTime": 3.035,
+      "startTime": 2.785,
+      "word": "核"
+    },
+    {
+      "confidence": 0.9390182,
+      "endTime": 3.205,
+      "startTime": 3.035,
+      "word": "心"
+    },
+    {
+      "confidence": 0.8428473,
+      "endTime": 3.365,
+      "startTime": 3.205,
+      "word": "地"
+    },
+    {
+      "confidence": 0.9257499,
+      "endTime": 3.555,
+      "startTime": 3.365,
+      "word": "位，"
+    },
+    {
+      "confidence": 0.8527419,
+      "endTime": 4.185,
+      "startTime": 3.965,
+      "word": "既"
+    },
+    {
+      "confidence": 0.92406577,
+      "endTime": 4.325,
+      "startTime": 4.185,
+      "word": "是"
+    },
+    {
+      "confidence": 0.9658283,
+      "endTime": 4.625,
+      "startTime": 4.325,
+      "word": "芯"
+    },
+    {
+      "confidence": 0.95287216,
+      "endTime": 4.815,
+      "startTime": 4.625,
+      "word": "片"
+    },
+    {
+      "confidence": 0.9379303,
+      "endTime": 5.115,
+      "startTime": 4.815,
+      "word": "设"
+    },
+    {
+      "confidence": 0.95282656,
+      "endTime": 5.245,
+      "startTime": 5.115,
+      "word": "计"
+    },
+    {
+      "confidence": 0.91556144,
+      "endTime": 5.445,
+      "startTime": 5.245,
+      "word": "企"
+    },
+    {
+      "confidence": 0.91696787,
+      "endTime": 5.625,
+      "startTime": 5.445,
+      "word": "业，"
+    },
+    {
+      "confidence": 0.95690835,
+      "endTime": 5.955,
+      "startTime": 5.815,
+      "word": "也"
+    },
+    {
+      "confidence": 0.9269691,
+      "endTime": 6.125,
+      "startTime": 5.955,
+      "word": "是"
+    },
+    {
+      "confidence": 0.9675676,
+      "endTime": 6.335,
+      "startTime": 6.125,
+      "word": "人"
+    },
+    {
+      "confidence": 0.97805506,
+      "endTime": 6.525,
+      "startTime": 6.335,
+      "word": "工"
+    },
+    {
+      "confidence": 0.92890316,
+      "endTime": 6.675,
+      "startTime": 6.525,
+      "word": "智"
+    },
+    {
+      "confidence": 0.9603707,
+      "endTime": 6.845,
+      "startTime": 6.675,
+      "word": "能"
+    },
+    {
+      "confidence": 0.92645574,
+      "endTime": 7.055,
+      "startTime": 6.845,
+      "word": "基"
+    },
+    {
+      "confidence": 0.9584603,
+      "endTime": 7.225,
+      "startTime": 7.055,
+      "word": "础"
+    },
+    {
+      "confidence": 0.9696261,
+      "endTime": 7.465,
+      "startTime": 7.225,
+      "word": "设"
+    },
+    {
+      "confidence": 0.81665,
+      "endTime": 7.595,
+      "startTime": 7.465,
+      "word": "施"
+    },
+    {
+      "confidence": 0.85235584,
+      "endTime": 7.745,
+      "startTime": 7.595,
+      "word": "的"
+    },
+    {
+      "confidence": 0.95116293,
+      "endTime": 8.025,
+      "startTime": 7.745,
+      "word": "重"
+    },
+    {
+      "confidence": 0.8340768,
+      "endTime": 8.185,
+      "startTime": 8.025,
+      "word": "要"
+    },
+    {
+      "confidence": 0.897167,
+      "endTime": 8.395,
+      "startTime": 8.185,
+      "word": "供"
+    },
+    {
+      "confidence": 0.5879626,
+      "endTime": 8.425,
+      "startTime": 8.395,
+      "word": "应"
+    },
+    {
+      "confidence": 0.8769987,
+      "endTime": 8.695,
+      "startTime": 8.425,
+      "word": "商。"
+    },
+    {
+      "confidence": 0.94297016,
+      "endTime": 9.579792,
+      "startTime": 9.319792,
+      "word": "它"
+    },
+    {
+      "confidence": 0.80827767,
+      "endTime": 9.699792,
+      "startTime": 9.579792,
+      "word": "与"
+    },
+    {
+      "confidence": 0.95270073,
+      "endTime": 9.979792,
+      "startTime": 9.699792,
+      "word": "台"
+    },
+    {
+      "confidence": 0.73311794,
+      "endTime": 10.129791,
+      "startTime": 9.979792,
+      "word": "积"
+    },
+    {
+      "confidence": 0.25355566,
+      "endTime": 10.329792,
+      "startTime": 10.299791,
+      "word": "电、"
+    },
+    {
+      "confidence": 0.75829417,
+      "endTime": 10.599792,
+      "startTime": 10.329792,
+      "word": "三"
+    },
+    {
+      "confidence": 0.86066604,
+      "endTime": 10.819792,
+      "startTime": 10.599792,
+      "word": "星"
+    },
+    {
+      "confidence": 0.84088284,
+      "endTime": 10.949792,
+      "startTime": 10.819792,
+      "word": "等"
+    },
+    {
+      "confidence": 0.8691333,
+      "endTime": 11.159792,
+      "startTime": 10.949792,
+      "word": "企"
+    },
+    {
+      "confidence": 0.925232,
+      "endTime": 11.279792,
+      "startTime": 11.159792,
+      "word": "业"
+    },
+    {
+      "confidence": 0.9648733,
+      "endTime": 11.569792,
+      "startTime": 11.279792,
+      "word": "合"
+    },
+    {
+      "confidence": 0.9818275,
+      "endTime": 11.699792,
+      "startTime": 11.569792,
+      "word": "作"
+    },
+    {
+      "confidence": 0.97306293,
+      "endTime": 11.869792,
+      "startTime": 11.699792,
+      "word": "生"
+    },
+    {
+      "confidence": 0.95737445,
+      "endTime": 12.019792,
+      "startTime": 11.869792,
+      "word": "产"
+    },
+    {
+      "confidence": 0.96690714,
+      "endTime": 12.219791,
+      "startTime": 12.019792,
+      "word": "芯"
+    },
+    {
+      "confidence": 0.9688695,
+      "endTime": 12.489792,
+      "startTime": 12.219791,
+      "word": "片，"
+    },
+    {
+      "confidence": 0.79206914,
+      "endTime": 12.959791,
+      "startTime": 12.809792,
+      "word": "与"
+    },
+    {
+      "confidence": 0.69412285,
+      "endTime": 13.329792,
+      "startTime": 12.959791,
+      "word": "微"
+    },
+    {
+      "confidence": 0.13454929,
+      "endTime": 13.359792,
+      "startTime": 13.329792,
+      "word": "软、"
+    },
+    {
+      "confidence": 0.6203697,
+      "endTime": 13.649792,
+      "startTime": 13.509792,
+      "word": "亚"
+    },
+    {
+      "confidence": 0.76269686,
+      "endTime": 13.779792,
+      "startTime": 13.649792,
+      "word": "马"
+    },
+    {
+      "confidence": 0.8698557,
+      "endTime": 14.009792,
+      "startTime": 13.779792,
+      "word": "逊"
+    },
+    {
+      "confidence": 0.8888801,
+      "endTime": 14.199792,
+      "startTime": 14.009792,
+      "word": "云"
+    },
+    {
+      "confidence": 0.76748073,
+      "endTime": 14.429792,
+      "startTime": 14.199792,
+      "word": "科"
+    },
+    {
+      "confidence": 0.14908141,
+      "endTime": 14.459791,
+      "startTime": 14.429792,
+      "word": "技、"
+    },
+    {
+      "confidence": 0.8653092,
+      "endTime": 15.079792,
+      "startTime": 14.829792,
+      "word": "谷"
+    },
+    {
+      "confidence": 0.8679808,
+      "endTime": 15.279792,
+      "startTime": 15.079792,
+      "word": "歌"
+    },
+    {
+      "confidence": 0.86186516,
+      "endTime": 15.479792,
+      "startTime": 15.279792,
+      "word": "云"
+    },
+    {
+      "confidence": 0.8557591,
+      "endTime": 15.749792,
+      "startTime": 15.479792,
+      "word": "等"
+    },
+    {
+      "confidence": 0.7628874,
+      "endTime": 15.899792,
+      "startTime": 15.749792,
+      "word": "云"
+    },
+    {
+      "confidence": 0.8392634,
+      "endTime": 16.069792,
+      "startTime": 15.899792,
+      "word": "服"
+    },
+    {
+      "confidence": 0.891244,
+      "endTime": 16.189793,
+      "startTime": 16.069792,
+      "word": "务"
+    },
+    {
+      "confidence": 0.95521635,
+      "endTime": 16.409792,
+      "startTime": 16.189793,
+      "word": "商"
+    },
+    {
+      "confidence": 0.8815772,
+      "endTime": 16.699791,
+      "startTime": 16.409792,
+      "word": "共"
+    },
+    {
+      "confidence": 0.92996967,
+      "endTime": 16.879791,
+      "startTime": 16.699791,
+      "word": "同"
+    },
+    {
+      "confidence": 0.9525107,
+      "endTime": 17.059792,
+      "startTime": 16.879791,
+      "word": "建"
+    },
+    {
+      "confidence": 0.9030391,
+      "endTime": 17.219791,
+      "startTime": 17.059792,
+      "word": "设"
+    },
+    {
+      "confidence": 0.9653601,
+      "endTime": 17.479792,
+      "startTime": 17.219791,
+      "word": "人"
+    },
+    {
+      "confidence": 0.9682539,
+      "endTime": 17.67979,
+      "startTime": 17.479792,
+      "word": "工"
+    },
+    {
+      "confidence": 0.8272059,
+      "endTime": 17.83979,
+      "startTime": 17.67979,
+      "word": "智"
+    },
+    {
+      "confidence": 0.95982295,
+      "endTime": 17.999792,
+      "startTime": 17.83979,
+      "word": "能"
+    },
+    {
+      "confidence": 0.89208174,
+      "endTime": 18.17979,
+      "startTime": 17.999792,
+      "word": "计"
+    },
+    {
+      "confidence": 0.9048046,
+      "endTime": 18.309792,
+      "startTime": 18.17979,
+      "word": "算"
+    },
+    {
+      "confidence": 0.9707046,
+      "endTime": 18.489792,
+      "startTime": 18.309792,
+      "word": "平"
+    },
+    {
+      "confidence": 0.9774214,
+      "endTime": 18.779793,
+      "startTime": 18.489792,
+      "word": "台，"
+    },
+    {
+      "confidence": 0.940889,
+      "endTime": 19.426542,
+      "startTime": 19.256542,
+      "word": "同"
+    },
+    {
+      "confidence": 0.9061181,
+      "endTime": 19.626541,
+      "startTime": 19.426542,
+      "word": "时"
+    },
+    {
+      "confidence": 0.9107785,
+      "endTime": 19.836542,
+      "startTime": 19.626541,
+      "word": "为"
+    },
+    {
+      "confidence": 0.7328988,
+      "endTime": 20.036541,
+      "startTime": 19.836542,
+      "word": "游"
+    },
+    {
+      "confidence": 0.12226672,
+      "endTime": 20.066542,
+      "startTime": 20.036541,
+      "word": "戏、"
+    },
+    {
+      "confidence": 0.87736434,
+      "endTime": 20.506542,
+      "startTime": 20.26654,
+      "word": "数"
+    },
+    {
+      "confidence": 0.9511133,
+      "endTime": 20.646542,
+      "startTime": 20.506542,
+      "word": "据"
+    },
+    {
+      "confidence": 0.80702484,
+      "endTime": 20.76654,
+      "startTime": 20.646542,
+      "word": "中"
+    },
+    {
+      "confidence": 0.20642203,
+      "endTime": 20.966541,
+      "startTime": 20.93654,
+      "word": "心、"
+    },
+    {
+      "confidence": 0.9088151,
+      "endTime": 21.44654,
+      "startTime": 21.226542,
+      "word": "自"
+    },
+    {
+      "confidence": 0.9549931,
+      "endTime": 21.61654,
+      "startTime": 21.44654,
+      "word": "动"
+    },
+    {
+      "confidence": 0.75916415,
+      "endTime": 21.836542,
+      "startTime": 21.61654,
+      "word": "驾"
+    },
+    {
+      "confidence": 0.788187,
+      "endTime": 22.02654,
+      "startTime": 21.836542,
+      "word": "驶"
+    },
+    {
+      "confidence": 0.91538376,
+      "endTime": 22.18654,
+      "startTime": 22.02654,
+      "word": "和"
+    },
+    {
+      "confidence": 0.9003993,
+      "endTime": 22.396542,
+      "startTime": 22.18654,
+      "word": "机"
+    },
+    {
+      "confidence": 0.8426097,
+      "endTime": 22.546541,
+      "startTime": 22.396542,
+      "word": "器"
+    },
+    {
+      "confidence": 0.90862375,
+      "endTime": 22.69654,
+      "startTime": 22.546541,
+      "word": "人"
+    },
+    {
+      "confidence": 0.8913172,
+      "endTime": 22.846542,
+      "startTime": 22.69654,
+      "word": "等"
+    },
+    {
+      "confidence": 0.8967699,
+      "endTime": 23.046541,
+      "startTime": 22.846542,
+      "word": "领"
+    },
+    {
+      "confidence": 0.9480215,
+      "endTime": 23.10654,
+      "startTime": 23.046541,
+      "word": "域"
+    },
+    {
+      "confidence": 0.9168803,
+      "endTime": 23.19654,
+      "startTime": 23.10654,
+      "word": "的"
+    },
+    {
+      "confidence": 0.89612013,
+      "endTime": 23.396542,
+      "startTime": 23.19654,
+      "word": "企"
+    },
+    {
+      "confidence": 0.9309856,
+      "endTime": 23.566542,
+      "startTime": 23.396542,
+      "word": "业"
+    },
+    {
+      "confidence": 0.87458146,
+      "endTime": 23.92654,
+      "startTime": 23.76654,
+      "word": "提"
+    },
+    {
+      "confidence": 0.887794,
+      "endTime": 24.146542,
+      "startTime": 23.92654,
+      "word": "供"
+    },
+    {
+      "confidence": 0.5441382,
+      "endTime": 24.326542,
+      "startTime": 24.146542,
+      "word": "g"
+    },
+    {
+      "confidence": 0.62018883,
+      "endTime": 24.476542,
+      "startTime": 24.326542,
+      "word": "p"
+    },
+    {
+      "confidence": 0.5666028,
+      "endTime": 24.686543,
+      "startTime": 24.476542,
+      "word": "u"
+    },
+    {
+      "confidence": 0.83020395,
+      "endTime": 24.83654,
+      "startTime": 24.686543,
+      "word": "及"
+    },
+    {
+      "confidence": 0.95264107,
+      "endTime": 25.046541,
+      "startTime": 24.83654,
+      "word": "相"
+    },
+    {
+      "confidence": 0.9442333,
+      "endTime": 25.19654,
+      "startTime": 25.046541,
+      "word": "关"
+    },
+    {
+      "confidence": 0.8816659,
+      "endTime": 25.35654,
+      "startTime": 25.19654,
+      "word": "软"
+    },
+    {
+      "confidence": 0.9612189,
+      "endTime": 25.61654,
+      "startTime": 25.35654,
+      "word": "件。"
+    },
+    {
+      "confidence": 0.76640147,
+      "endTime": 26.27654,
+      "startTime": 26.10654,
+      "word": "英"
+    },
+    {
+      "confidence": 0.68898386,
+      "endTime": 26.44654,
+      "startTime": 26.27654,
+      "word": "伟"
+    },
+    {
+      "confidence": 0.90526474,
+      "endTime": 26.636541,
+      "startTime": 26.44654,
+      "word": "达"
+    },
+    {
+      "confidence": 0.9006428,
+      "endTime": 26.826542,
+      "startTime": 26.636541,
+      "word": "还"
+    },
+    {
+      "confidence": 0.8924554,
+      "endTime": 27.026543,
+      "startTime": 26.826542,
+      "word": "面"
+    },
+    {
+      "confidence": 0.72847146,
+      "endTime": 27.156542,
+      "startTime": 27.026543,
+      "word": "临"
+    },
+    {
+      "confidence": 0.8840779,
+      "endTime": 27.406542,
+      "startTime": 27.24654,
+      "word": "a"
+    },
+    {
+      "confidence": 0.7870822,
+      "endTime": 27.526543,
+      "startTime": 27.406542,
+      "word": "m"
+    },
+    {
+      "confidence": 0.24660996,
+      "endTime": 28.076542,
+      "startTime": 28.046541,
+      "word": "d、"
+    },
+    {
+      "confidence": 0.90330154,
+      "endTime": 28.216541,
+      "startTime": 28.076542,
+      "word": "英"
+    },
+    {
+      "confidence": 0.7350647,
+      "endTime": 28.436543,
+      "startTime": 28.216541,
+      "word": "特"
+    },
+    {
+      "confidence": 0.6748695,
+      "endTime": 28.60654,
+      "startTime": 28.436543,
+      "word": "尔"
+    },
+    {
+      "confidence": 0.8989541,
+      "endTime": 28.906542,
+      "startTime": 28.776543,
+      "word": "以"
+    },
+    {
+      "confidence": 0.8726034,
+      "endTime": 29.056541,
+      "startTime": 28.906542,
+      "word": "及"
+    },
+    {
+      "confidence": 0.8503076,
+      "endTime": 29.33654,
+      "startTime": 29.056541,
+      "word": "谷"
+    },
+    {
+      "confidence": 0.8401521,
+      "endTime": 29.506542,
+      "startTime": 29.33654,
+      "word": "歌"
+    },
+    {
+      "confidence": 0.7907667,
+      "endTime": 29.656542,
+      "startTime": 29.506542,
+      "word": "等"
+    },
+    {
+      "confidence": 0.96882147,
+      "endTime": 29.846542,
+      "startTime": 29.656542,
+      "word": "公"
+    },
+    {
+      "confidence": 0.9564309,
+      "endTime": 29.99654,
+      "startTime": 29.846542,
+      "word": "司"
+    },
+    {
+      "confidence": 0.8878382,
+      "endTime": 30.08654,
+      "startTime": 29.99654,
+      "word": "的"
+    },
+    {
+      "confidence": 0.91293514,
+      "endTime": 30.24654,
+      "startTime": 30.08654,
+      "word": "竞"
+    },
+    {
+      "confidence": 0.91026425,
+      "endTime": 30.456541,
+      "startTime": 30.24654,
+      "word": "争，"
+    },
+    {
+      "confidence": 0.5657167,
+      "endTime": 31.096542,
+      "startTime": 30.976542,
+      "word": "因"
+    },
+    {
+      "confidence": 0.7527033,
+      "endTime": 31.276543,
+      "startTime": 31.096542,
+      "word": "此"
+    },
+    {
+      "confidence": 0.92958415,
+      "endTime": 31.44654,
+      "startTime": 31.276543,
+      "word": "与"
+    },
+    {
+      "confidence": 0.84629375,
+      "endTime": 31.636541,
+      "startTime": 31.44654,
+      "word": "其"
+    },
+    {
+      "confidence": 0.97093076,
+      "endTime": 31.826542,
+      "startTime": 31.636541,
+      "word": "他"
+    },
+    {
+      "confidence": 0.9726388,
+      "endTime": 31.99654,
+      "startTime": 31.826542,
+      "word": "公"
+    },
+    {
+      "confidence": 0.9234738,
+      "endTime": 32.12654,
+      "startTime": 31.99654,
+      "word": "司"
+    },
+    {
+      "confidence": 0.95355946,
+      "endTime": 32.206543,
+      "startTime": 32.12654,
+      "word": "的"
+    },
+    {
+      "confidence": 0.9709993,
+      "endTime": 32.37654,
+      "startTime": 32.206543,
+      "word": "关"
+    },
+    {
+      "confidence": 0.9832584,
+      "endTime": 32.636543,
+      "startTime": 32.37654,
+      "word": "系"
+    },
+    {
+      "confidence": 0.91020775,
+      "endTime": 32.98654,
+      "startTime": 32.76654,
+      "word": "既"
+    },
+    {
+      "confidence": 0.95606834,
+      "endTime": 33.166542,
+      "startTime": 32.98654,
+      "word": "包"
+    },
+    {
+      "confidence": 0.91164804,
+      "endTime": 33.36654,
+      "startTime": 33.166542,
+      "word": "括"
+    },
+    {
+      "confidence": 0.9350458,
+      "endTime": 33.60654,
+      "startTime": 33.36654,
+      "word": "供"
+    },
+    {
+      "confidence": 0.9186382,
+      "endTime": 33.71654,
+      "startTime": 33.60654,
+      "word": "应"
+    },
+    {
+      "confidence": 0.668301,
+      "endTime": 33.886543,
+      "startTime": 33.71654,
+      "word": "链"
+    },
+    {
+      "confidence": 0.88486403,
+      "endTime": 34.05654,
+      "startTime": 33.886543,
+      "word": "合"
+    },
+    {
+      "confidence": 0.15746057,
+      "endTime": 34.08654,
+      "startTime": 34.05654,
+      "word": "作、"
+    },
+    {
+      "confidence": 0.9064871,
+      "endTime": 34.947876,
+      "startTime": 34.707874,
+      "word": "技"
+    },
+    {
+      "confidence": 0.93861634,
+      "endTime": 35.097874,
+      "startTime": 34.947876,
+      "word": "术"
+    },
+    {
+      "confidence": 0.9317226,
+      "endTime": 35.307873,
+      "startTime": 35.097874,
+      "word": "生"
+    },
+    {
+      "confidence": 0.9566164,
+      "endTime": 35.487873,
+      "startTime": 35.307873,
+      "word": "态"
+    },
+    {
+      "confidence": 0.9645248,
+      "endTime": 35.707874,
+      "startTime": 35.487873,
+      "word": "共"
+    },
+    {
+      "confidence": 0.92906576,
+      "endTime": 35.897873,
+      "startTime": 35.707874,
+      "word": "建"
+    },
+    {
+      "confidence": 0.9309639,
+      "endTime": 36.027874,
+      "startTime": 35.897873,
+      "word": "和"
+    },
+    {
+      "confidence": 0.93871915,
+      "endTime": 36.267876,
+      "startTime": 36.027874,
+      "word": "客"
+    },
+    {
+      "confidence": 0.97448707,
+      "endTime": 36.417873,
+      "startTime": 36.267876,
+      "word": "户"
+    },
+    {
+      "confidence": 0.9256602,
+      "endTime": 36.597874,
+      "startTime": 36.417873,
+      "word": "服"
+    },
+    {
+      "confidence": 0.93788606,
+      "endTime": 36.807877,
+      "startTime": 36.597874,
+      "word": "务，"
+    },
+    {
+      "confidence": 0.9236643,
+      "endTime": 37.237873,
+      "startTime": 36.997875,
+      "word": "也"
+    },
+    {
+      "confidence": 0.9339482,
+      "endTime": 37.437874,
+      "startTime": 37.237873,
+      "word": "包"
+    },
+    {
+      "confidence": 0.8097448,
+      "endTime": 37.597874,
+      "startTime": 37.437874,
+      "word": "含"
+    },
+    {
+      "confidence": 0.8701153,
+      "endTime": 37.837875,
+      "startTime": 37.597874,
+      "word": "市"
+    },
+    {
+      "confidence": 0.9155988,
+      "endTime": 38.027874,
+      "startTime": 37.837875,
+      "word": "场"
+    },
+    {
+      "confidence": 0.93888354,
+      "endTime": 38.217873,
+      "startTime": 38.027874,
+      "word": "竞"
+    },
+    {
+      "confidence": 0.9639846,
+      "endTime": 38.437874,
+      "startTime": 38.217873,
+      "word": "争。"
+    }
+  ]
+}

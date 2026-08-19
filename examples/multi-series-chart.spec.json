@@ -1,0 +1,35 @@
+{
+  "chartType": "bar",
+  "title": "Gemini 与 GPT 示例能力评分",
+  "xAxis": {
+    "label": "能力维度",
+    "categories": ["逻辑推理", "代码生成", "多模态", "长文本"]
+  },
+  "yAxis": {
+    "min": 0,
+    "max": 100,
+    "label": "示例评分",
+    "unit": "分",
+    "ticks": 6
+  },
+  "series": [
+    {
+      "name": "Gemini",
+      "data": [
+        {"at":9.554,"value":87},
+        {"at":10.604,"value":84},
+        {"at":11.524,"value":95},
+        {"at":12.674,"value":94}
+      ]
+    },
+    {
+      "name": "GPT",
+      "data": [
+        {"at":15.884,"value":94},
+        {"at":16.804,"value":96},
+        {"at":17.774,"value":89},
+        {"at":18.714,"value":92}
+      ]
+    }
+  ]
+}
