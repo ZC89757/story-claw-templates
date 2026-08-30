@@ -1,0 +1,10 @@
+{
+  "whole": "产品竞争力",
+  "events": [
+    {"at": 1.0, "action": "extract", "part": "技术能力", "detail": "决定性能上限与迭代速度"},
+    {"at": 2.8, "action": "extract", "part": "用户体验", "detail": "影响使用效率与长期留存"},
+    {"at": 4.6, "action": "extract", "part": "商业模式", "detail": "决定收入结构与扩张能力"},
+    {"at": 6.4, "action": "extract", "part": "品牌信任", "detail": "降低用户选择与决策成本"},
+    {"at": 8.2, "action": "highlight", "target": "用户体验"}
+  ]
+}

@@ -23,7 +23,10 @@ const CHART = {width: 1920, height: 1080, left: 160, right: 125, top: 175, botto
 const ticks = (min: number, max: number, count: number) =>
   Array.from({length: count}, (_, index) => min + ((max - min) * index) / (count - 1));
 
-const formatTick = (value: number) => Number.isInteger(value) ? value.toLocaleString("zh-CN") : value.toFixed(1);
+const formatTick = (value: number, unit: string) => {
+  if (unit === "年" && Number.isInteger(value) && value >= 1000 && value <= 3000) return String(value);
+  return Number.isInteger(value) ? value.toLocaleString("zh-CN") : value.toFixed(1);
+};
 
 export const XYChartTemplate = ({spec, theme: themeOverrides, style}: XYChartTemplateProps) => {
   const frame = useCurrentFrame();
@@ -55,14 +58,14 @@ export const XYChartTemplate = ({spec, theme: themeOverrides, style}: XYChartTem
           const y = toPixel({x: spec.axes.x.min, y: tick, label: ""}).y;
           return <g key={`y-${tick}`}>
             <line x1={CHART.left} y1={y} x2={CHART.width - CHART.right} y2={y} stroke={theme.grid} strokeWidth="2" />
-            <text x={CHART.left - 22} y={y + 8} textAnchor="end" fontSize="26" fill={theme.muted}>{formatTick(tick)}</text>
+            <text x={CHART.left - 22} y={y + 8} textAnchor="end" fontSize="26" fill={theme.muted}>{formatTick(tick, spec.axes.y.unit)}</text>
           </g>;
         })}
         {ticks(spec.axes.x.min, spec.axes.x.max, spec.axes.x.ticks).map((tick) => {
           const x = toPixel({x: tick, y: spec.axes.y.min, label: ""}).x;
           return <g key={`x-${tick}`}>
             <line x1={x} y1={CHART.top} x2={x} y2={CHART.height - CHART.bottom} stroke={theme.grid} strokeWidth="2" />
-            <text x={x} y={CHART.height - CHART.bottom + 42} textAnchor="middle" fontSize="26" fill={theme.muted}>{formatTick(tick)}</text>
+            <text x={x} y={CHART.height - CHART.bottom + 42} textAnchor="middle" fontSize="26" fill={theme.muted}>{formatTick(tick, spec.axes.x.unit)}</text>
           </g>;
         })}
         <line x1={CHART.left} y1={CHART.top} x2={CHART.left} y2={CHART.height - CHART.bottom} stroke={theme.ink} strokeWidth="5" />

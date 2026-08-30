@@ -1,0 +1,9 @@
+{
+  "title": "报道证据并列",
+  "images": [
+    {"at": 0, "image": "ai-company-logos/openai.svg", "label": "产品主体"},
+    {"at": 0.4, "image": "ai-company-logos/google.svg", "label": "官方页面"},
+    {"at": 0.8, "image": "ai-company-logos/nvidia.svg", "label": "硬件现场"},
+    {"at": 1.2, "image": "AI 生成：办公室里查看网页截图的真实场景", "label": "补充画面"}
+  ]
+}

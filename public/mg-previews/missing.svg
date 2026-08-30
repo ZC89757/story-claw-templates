@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">暂无预览视频，请尝试重启</title>
+  <desc id="desc">预览视频不可用</desc>
+  <rect width="960" height="540" fill="#171b1e"/>
+  <rect x="360" y="165" width="240" height="150" rx="12" fill="#252c30" stroke="#66757b" stroke-width="4"/>
+  <path d="M465 210l65 35-65 35z" fill="#9ba9ad"/>
+  <text x="480" y="380" text-anchor="middle" fill="#d8dfe0" font-family="Microsoft YaHei, Arial, sans-serif" font-size="30">暂无预览视频，请尝试重启</text>
+</svg>

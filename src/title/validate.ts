@@ -9,7 +9,7 @@ export const validateTitleSpec = (input: unknown): string[] => {
   if (typeof input.text !== "string" || !input.text.trim()) errors.push("text is required");
   if (typeof input.text === "string" && input.text.length > 80) errors.push("text may contain at most 80 characters");
   if (typeof input.at !== "number" || !Number.isFinite(input.at) || input.at < 0) errors.push("at must be a non-negative number");
-  if (!Number.isInteger(input.sequence) || (input.sequence as number) < 1 || (input.sequence as number) > 999) errors.push("sequence must be an integer within 1..999");
+  if (input.sequence !== undefined && (!Number.isInteger(input.sequence) || (input.sequence as number) < 1 || (input.sequence as number) > 999)) errors.push("sequence must be an integer within 1..999");
   return errors;
 };
 

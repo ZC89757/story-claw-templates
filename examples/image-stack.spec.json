@@ -1,0 +1,8 @@
+{
+  "title": "官方证据逐层展开",
+  "images": [
+    {"at": 0, "image": "ai-company-logos/openai.svg", "label": "官方标识"},
+    {"at": 0.75, "image": "ai-company-logos/microsoft.svg", "label": "合作平台"},
+    {"at": 1.5, "image": "AI 生成：数据中心与模型服务器的真实摄影画面", "label": "待生成环境"}
+  ]
+}

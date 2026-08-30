@@ -31,7 +31,13 @@ const makeLayout = (spec: DirectedGraphSpec) => {
   const nodes = new Map<string, LayoutNode>();
   const root = spec.edges[0].from;
   const isStar = spec.edges.every((edge) => edge.from === root) && !spec.edges.some((edge) => edge.to === root);
-  if (isStar && ids.length > 3) {
+  const isLongChain = spec.edges.length >= 4 && spec.edges.every((edge, index) => index === 0 || edge.from === spec.edges[index - 1].to);
+  if (isLongChain) {
+    ids.forEach((id, index) => {
+      const angle = -Math.PI + (index / ids.length) * Math.PI * 2;
+      nodes.set(id, {id, x: 800 + Math.cos(angle) * 610, y: 450 + Math.sin(angle) * 310, width: NODE_WIDTH, height: NODE_HEIGHT});
+    });
+  } else if (isStar && ids.length > 3) {
     nodes.set(root, {id: root, x: 800, y: 450, width: NODE_WIDTH, height: NODE_HEIGHT});
     ids.filter((id) => id !== root).forEach((id, index, outer) => {
       const angle = -Math.PI / 2 + (index / outer.length) * Math.PI * 2;
@@ -43,8 +49,8 @@ const makeLayout = (spec: DirectedGraphSpec) => {
       nodes.set(id, {id, x: node.x, y: node.y, width: NODE_WIDTH, height: NODE_HEIGHT});
     });
   }
-  const width = isStar ? 1600 : Math.max(graph.graph().width ?? 1, 1);
-  const height = isStar ? 900 : Math.max(graph.graph().height ?? 1, 1);
+  const width = isStar || isLongChain ? 1600 : Math.max(graph.graph().width ?? 1, 1);
+  const height = isStar || isLongChain ? 900 : Math.max(graph.graph().height ?? 1, 1);
   const scale = Math.min(1.25, (SCENE_WIDTH - 170) / width, (SCENE_HEIGHT - 210) / height);
   return {nodes, width, height, scale};
 };
@@ -64,6 +70,7 @@ export const DirectedGraphTemplate = ({spec, audioSrc, style}: Props) => {
 
   return <AbsoluteFill style={{background: "#191d21", color: "#edf2f3", fontFamily: '"Microsoft YaHei", Arial, sans-serif', overflow: "hidden", ...style}}>
     {audioSrc ? <Audio src={audioSrc} /> : null}
+    {spec.title ? <div style={{position: "absolute", left: 70, top: 42, zIndex: 2, fontSize: 42, fontWeight: 900}}>{spec.title}</div> : null}
     <div style={{position: "absolute", right: 70, top: 48, fontSize: 22, fontWeight: 800, color: "#ef6334"}}>{spec.edges.filter((edge) => edge.at <= seconds).length} / {spec.edges.length}</div>
 
     <svg width={SCENE_WIDTH} height={SCENE_HEIGHT} viewBox={`0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`}>
@@ -91,13 +98,15 @@ export const DirectedGraphTemplate = ({spec, audioSrc, style}: Props) => {
           const normalY = dx / length;
           const relationX = labelX + normalX * 58;
           const relationY = labelY + normalY * 58;
-          const labelWidth = Math.min(330, Math.max(105, edge.relation.length * 24 + 30));
+          const labelWidth = Math.min(310, Math.max(120, edge.relation.length * 22 + 30));
           return <g key={`${edge.from}-${edge.to}-${index}`} opacity={state.lineProgress > 0 ? 1 : 0}>
             <line x1={start.x} y1={start.y} x2={end.x} y2={end.y} pathLength={1} stroke="#ef6334" strokeWidth={4} strokeDasharray={1} strokeDashoffset={1 - state.lineProgress} />
             <polygon points={arrowPoints} fill="#ef6334" opacity={state.lineProgress > 0.9 ? (state.lineProgress - 0.9) * 10 : 0} />
             <g opacity={Math.max(0, (state.lineProgress - 0.35) / 0.65)} transform={`translate(${relationX} ${relationY})`}>
-              <rect x={-labelWidth / 2} y={-23} width={labelWidth} height={46} rx={4} fill="#191d21" stroke="#6c7479" strokeWidth={2} />
-              <text textAnchor="middle" dominantBaseline="central" fontSize={22} fontWeight={800} fill="#f2b092">{edge.relation}</text>
+              <rect x={-labelWidth / 2} y={-34} width={labelWidth} height={68} rx={4} fill="#191d21" stroke="#6c7479" strokeWidth={2} />
+              <foreignObject x={-labelWidth / 2 + 8} y={-30} width={labelWidth - 16} height={60}>
+                <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#f2b092", fontSize: 20, lineHeight: 1.12, fontWeight: 800, textAlign: "center", overflowWrap: "anywhere"}}>{edge.relation}</div>
+              </foreignObject>
             </g>
           </g>;
         })}

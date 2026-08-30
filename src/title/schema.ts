@@ -1,18 +1,39 @@
+import {
+  assertFunctionEnvelope,
+  functionAtSchema,
+  functionGroupSchema,
+  functionOrderSchema,
+  FunctionCallEnvelope,
+  ResolvedFunctionCall,
+} from "../function-call";
+import {TitleSpec} from "./types";
+import {assertTitleSpec} from "./validate";
+
+export type TitleFunctionArgs = FunctionCallEnvelope & {text: string};
+
 export const titleParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["text", "at", "sequence"],
+  required: ["group", "order", "at", "text"],
   properties: {
+    group: functionGroupSchema,
+    order: functionOrderSchema,
+    at: functionAtSchema,
     text: {type: "string", minLength: 1, maxLength: 80},
-    at: {type: "number", minimum: 0, maximum: 3600},
-    sequence: {type: "integer", minimum: 1, maximum: 999},
   },
 } as const;
 
 export const titleFunctionDefinition = {
   type: "function",
   name: "create_title_cue",
-  description: "Create a title cue. The selected title template starts its internally defined animation exactly at the at timestamp.",
+  description: "Create one title cue for an HTML group. at is the absolute episode timestamp. Supply only visible text; numbering and the selected title motion belong to the chosen template.",
   strict: true,
   parameters: titleParametersSchema,
 } as const;
+
+export const resolveTitleFunctionArgs = (
+  input: TitleFunctionArgs,
+): ResolvedFunctionCall<TitleSpec> => {
+  const envelope = assertFunctionEnvelope(input);
+  return {...envelope, spec: assertTitleSpec({text: input.text, at: 0})};
+};

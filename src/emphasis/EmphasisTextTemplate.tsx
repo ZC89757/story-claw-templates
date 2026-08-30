@@ -8,9 +8,10 @@ type Props = {spec: EmphasisSpec; style?: CSSProperties};
 const fontSizeFor = (text: string) => {
   const length = Array.from(text).length;
   if (length <= 2) return 360;
-  if (length <= 4) return 300;
-  if (length <= 8) return 205;
-  return 150;
+  if (length <= 4) return 280;
+  if (length <= 8) return 175;
+  if (length <= 12) return 145;
+  return 125;
 };
 
 export const EmphasisTextTemplate = ({spec, style}: Props) => {

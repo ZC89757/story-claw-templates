@@ -1,17 +1,31 @@
+import {
+  assertFunctionEnvelope,
+  functionAtSchema,
+  functionGroupSchema,
+  functionOrderSchema,
+  FunctionCallEnvelope,
+  ResolvedFunctionCall,
+  toLocalAt,
+} from "../function-call";
+import {TimedTableSpec} from "./types";
+import {assertTimedTableSpec} from "./validate";
+
+export type TimedTableFunctionArgs = FunctionCallEnvelope & {
+  rows: number;
+  columns: number;
+  cells: Array<{row: number; column: number; text: string; at: number}>;
+};
+
 export const timedTableParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["size", "cells"],
+  required: ["group", "order", "at", "rows", "columns", "cells"],
   properties: {
-    size: {
-      type: "object",
-      additionalProperties: false,
-      required: ["rows", "columns"],
-      properties: {
-        rows: {type: "integer", minimum: 1, maximum: 10},
-        columns: {type: "integer", minimum: 1, maximum: 8},
-      },
-    },
+    group: functionGroupSchema,
+    order: functionOrderSchema,
+    at: functionAtSchema,
+    rows: {type: "integer", minimum: 1, maximum: 10},
+    columns: {type: "integer", minimum: 1, maximum: 8},
     cells: {
       type: "array",
       minItems: 1,
@@ -19,10 +33,12 @@ export const timedTableParametersSchema = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["at", "text"],
+        required: ["row", "column", "text", "at"],
         properties: {
-          at: {type: "number", minimum: 0, maximum: 3600},
+          row: {type: "integer", minimum: 1, maximum: 10},
+          column: {type: "integer", minimum: 1, maximum: 8},
           text: {type: "string", maxLength: 160},
+          at: functionAtSchema,
         },
       },
     },
@@ -32,7 +48,27 @@ export const timedTableParametersSchema = {
 export const timedTableFunctionDefinition = {
   type: "function",
   name: "create_timed_table",
-  description: "Create a fully visible empty table whose row-major cell texts appear only when each cell's at timestamp is reached.",
+  description: "Create one timed table for an HTML group. rows and columns define the grid. Every cell explicitly supplies its 1-based row, column, visible text and absolute episode at timestamp. Array order never determines cell position. Put header text in row 1; there is no separate header parameter.",
   strict: true,
   parameters: timedTableParametersSchema,
 } as const;
+
+export const resolveTimedTableFunctionArgs = (
+  input: TimedTableFunctionArgs,
+): ResolvedFunctionCall<TimedTableSpec> => {
+  const envelope = assertFunctionEnvelope(input);
+  const slots = new Array<TimedTableSpec["cells"][number] | undefined>(input.rows * input.columns);
+  for (const cell of input.cells) {
+    if (!Number.isInteger(cell.row) || cell.row < 1 || cell.row > input.rows) throw new Error(`cell row ${cell.row} is outside the table`);
+    if (!Number.isInteger(cell.column) || cell.column < 1 || cell.column > input.columns) throw new Error(`cell column ${cell.column} is outside the table`);
+    const index = (cell.row - 1) * input.columns + cell.column - 1;
+    if (slots[index]) throw new Error(`duplicate table cell at row ${cell.row}, column ${cell.column}`);
+    slots[index] = {text: cell.text, at: toLocalAt(cell.at, envelope.at)};
+  }
+  if (slots.some((cell) => !cell)) throw new Error("every table position must be supplied exactly once");
+  const spec = assertTimedTableSpec({
+    size: {rows: input.rows, columns: input.columns},
+    cells: slots as TimedTableSpec["cells"],
+  });
+  return {...envelope, spec};
+};

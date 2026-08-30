@@ -1,0 +1,1387 @@
+{
+  "fps": 25,
+  "width": 1280,
+  "height": 720,
+  "scenes": [
+    {
+      "id": "intro-infrastructure",
+      "compositionId": "GoogleOptimized01",
+      "group": "intro-infrastructure",
+      "mode": "together",
+      "template": "emphasis",
+      "renderMode": "overlay",
+      "start": 18.4,
+      "end": 19.72,
+      "startFrame": 460,
+      "endFrame": 493,
+      "durationFrames": 33,
+      "timelineOffsetFrames": 0,
+      "sourceText": "AI基础设施公司",
+      "specFile": "specs/intro-infrastructure.json",
+      "clipFile": "clips/intro-infrastructure.mp4",
+      "baseFile": "google-optimized/base/intro-infrastructure.mp4",
+      "background": "#111111",
+      "overlays": [],
+      "spec": {
+        "text": "AI基础设施公司",
+        "at": 0
+      }
+    },
+    {
+      "id": "google-history-01",
+      "compositionId": "GoogleOptimized02",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 22.84,
+      "end": 24.24,
+      "startFrame": 571,
+      "endFrame": 606,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 0,
+      "sourceText": "1998年，拉里·佩奇和谢尔盖·布林创办Google",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-01.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-history-02",
+      "compositionId": "GoogleOptimized03",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 29.52,
+      "end": 30.92,
+      "startFrame": 738,
+      "endFrame": 773,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 167,
+      "sourceText": "2004年，谷歌上市",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-02.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-history-03",
+      "compositionId": "GoogleOptimized04",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 31.76,
+      "end": 33.16,
+      "startFrame": 794,
+      "endFrame": 829,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 223,
+      "sourceText": "2006年，它以16.5亿美元收购YouTube",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-03.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-history-04",
+      "compositionId": "GoogleOptimized05",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 35.68,
+      "end": 37.08,
+      "startFrame": 892,
+      "endFrame": 927,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 321,
+      "sourceText": "2014年收购DeepMind",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-04.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-history-05",
+      "compositionId": "GoogleOptimized06",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 37.36,
+      "end": 38.76,
+      "startFrame": 934,
+      "endFrame": 969,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 363,
+      "sourceText": "2015年重组为Alphabet",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-05.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-history-06",
+      "compositionId": "GoogleOptimized07",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 40.92,
+      "end": 42.32,
+      "startFrame": 1023,
+      "endFrame": 1058,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 452,
+      "sourceText": "2017年，谷歌研究团队发表Transformer论文",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-06.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "transformer-foundation",
+      "compositionId": "GoogleOptimized08",
+      "group": "transformer-foundation",
+      "mode": "together",
+      "template": "emphasis",
+      "renderMode": "overlay",
+      "start": 43.64,
+      "end": 44.8,
+      "startFrame": 1091,
+      "endFrame": 1120,
+      "durationFrames": 29,
+      "timelineOffsetFrames": 0,
+      "sourceText": "Transformer论文",
+      "specFile": "specs/transformer-foundation.json",
+      "clipFile": "clips/transformer-foundation.mp4",
+      "baseFile": "google-optimized/base/transformer-foundation.mp4",
+      "background": "#111111",
+      "overlays": [],
+      "spec": {
+        "text": "Transformer论文",
+        "at": 0
+      }
+    },
+    {
+      "id": "google-history-07",
+      "compositionId": "GoogleOptimized09",
+      "group": "google-history",
+      "mode": "split",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 46.84,
+      "end": 48.24,
+      "startFrame": 1171,
+      "endFrame": 1206,
+      "durationFrames": 35,
+      "timelineOffsetFrames": 600,
+      "sourceText": "2023年，Gemini正式登场",
+      "specFile": "specs/google-history.json",
+      "clipFile": "clips/google-history-07.mp4",
+      "background": "#f4f1ea",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌发展关键节点",
+        "subtitle": "",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-history-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "1998年创办Google",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "1998年创办Google"
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-history-2",
+            "at": 6.672,
+            "progress": 16.666666666666664,
+            "kind": "major",
+            "title": "2004年谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "2004年谷歌上市"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-3",
+            "at": 8.907,
+            "progress": 33.33333333333333,
+            "kind": "major",
+            "title": "2006年收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "2006年收购YouTube"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-4",
+            "at": 12.845,
+            "progress": 50,
+            "kind": "major",
+            "title": "2014年收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "2014年收购DeepMind"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-5",
+            "at": 14.519,
+            "progress": 66.66666666666666,
+            "kind": "major",
+            "title": "2015年重组为Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "2015年重组为Alphabet"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-6",
+            "at": 18.088,
+            "progress": 83.33333333333334,
+            "kind": "major",
+            "title": "2017年发表Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "2017年发表Transformer论文"
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-history-7",
+            "at": 24.017,
+            "progress": 100,
+            "kind": "major",
+            "title": "2023年Gemini正式登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "2023年Gemini正式登场"
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fy2024-financials",
+      "compositionId": "GoogleOptimized10",
+      "group": "fy2024-financials",
+      "mode": "together",
+      "template": "timed-table",
+      "renderMode": "replace",
+      "start": 58.24,
+      "end": 86.12,
+      "startFrame": 1456,
+      "endFrame": 2153,
+      "durationFrames": 697,
+      "timelineOffsetFrames": 0,
+      "sourceText": "Alphabet全年营收约3500亿美元｜净利润约1001亿美元｜“谷歌搜索及其他”收入约1981亿美元｜YouTube广告收入约361亿美元｜Google Cloud收入约432亿美元",
+      "specFile": "specs/fy2024-financials.json",
+      "clipFile": "clips/fy2024-financials.mp4",
+      "background": "#171c20",
+      "overlays": [],
+      "spec": {
+        "size": {
+          "rows": 6,
+          "columns": 2
+        },
+        "cells": [
+          {
+            "text": "财务指标",
+            "at": 0
+          },
+          {
+            "text": "2024年金额",
+            "at": 0
+          },
+          {
+            "text": "Alphabet全年营收",
+            "at": 0.651
+          },
+          {
+            "text": "约3500亿美元",
+            "at": 1.483
+          },
+          {
+            "text": "净利润",
+            "at": 3.488
+          },
+          {
+            "text": "约1001亿美元",
+            "at": 4.08
+          },
+          {
+            "text": "谷歌搜索及其他收入",
+            "at": 6.656
+          },
+          {
+            "text": "约1981亿美元",
+            "at": 9.213
+          },
+          {
+            "text": "YouTube广告收入",
+            "at": 11.749
+          },
+          {
+            "text": "约361亿美元",
+            "at": 13.223
+          },
+          {
+            "text": "Google Cloud收入",
+            "at": 15.258
+          },
+          {
+            "text": "约432亿美元",
+            "at": 16.622
+          }
+        ]
+      }
+    },
+    {
+      "id": "search-ad-flywheel",
+      "compositionId": "GoogleOptimized11",
+      "group": "search-ad-flywheel",
+      "mode": "together",
+      "template": "directed-graph",
+      "renderMode": "replace",
+      "start": 89.52,
+      "end": 111.76,
+      "startFrame": 2238,
+      "endFrame": 2794,
+      "durationFrames": 556,
+      "timelineOffsetFrames": 0,
+      "sourceText": "更多用户带来更多搜索｜更多搜索帮助谷歌理解需求｜更准确的广告匹配提高商家的回报｜商家随后投入更多预算｜这些收入又被用来建设更好的产品｜Chrome、Android、地图、YouTube和Gmail看似免费，实际上共同维护着谷歌与用户之间的连接",
+      "specFile": "specs/search-ad-flywheel.json",
+      "clipFile": "clips/search-ad-flywheel.mp4",
+      "background": "#191d21",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌搜索广告飞轮",
+        "edges": [
+          {
+            "at": 0,
+            "from": "更多用户",
+            "relation": "带来",
+            "to": "更多搜索"
+          },
+          {
+            "at": 2.376,
+            "from": "更多搜索",
+            "relation": "帮助谷歌",
+            "to": "理解需求"
+          },
+          {
+            "at": 5.204,
+            "from": "理解需求",
+            "relation": "提升广告匹配准确度",
+            "to": "商家回报"
+          },
+          {
+            "at": 8.332,
+            "from": "商家回报",
+            "relation": "促使商家投入",
+            "to": "更多预算"
+          },
+          {
+            "at": 10.799,
+            "from": "更多预算",
+            "relation": "转化为收入并用于",
+            "to": "更好产品"
+          },
+          {
+            "at": 14.266,
+            "from": "更好产品",
+            "relation": "通过Chrome、Android、地图、YouTube和Gmail维护",
+            "to": "用户连接"
+          }
+        ]
+      }
+    },
+    {
+      "id": "search-before-after",
+      "compositionId": "GoogleOptimized12",
+      "group": "search-before-after",
+      "mode": "together",
+      "template": "side-by-side-comparison",
+      "renderMode": "replace",
+      "start": 115.6,
+      "end": 138.36,
+      "startFrame": 2890,
+      "endFrame": 3459,
+      "durationFrames": 569,
+      "timelineOffsetFrames": 0,
+      "sourceText": "过去，用户提出问题，搜索引擎给出一排链接｜现在，模型可以直接生成答案｜用户少点一次链接，就可能少一次广告展示｜机会｜一次对核心业务的正面冲击",
+      "specFile": "specs/search-before-after.json",
+      "clipFile": "clips/search-before-after.mp4",
+      "background": "#f3efe6",
+      "overlays": [],
+      "spec": {
+        "title": "搜索模式的前后变化",
+        "leftLabel": "传统搜索与机会",
+        "rightLabel": "生成式AI与冲击",
+        "events": [
+          {
+            "at": 0,
+            "side": "left",
+            "text": "过去：用户提问，搜索引擎给出一排链接",
+            "action": "add"
+          },
+          {
+            "at": 4.211,
+            "side": "right",
+            "text": "现在：模型可以直接生成答案",
+            "action": "add"
+          },
+          {
+            "at": 7.238,
+            "side": "right",
+            "text": "少点一次链接，可能少一次广告展示",
+            "action": "add"
+          },
+          {
+            "at": 13.384,
+            "side": "left",
+            "text": "机会",
+            "action": "add"
+          },
+          {
+            "at": 14.376,
+            "side": "right",
+            "text": "对核心业务的正面冲击",
+            "action": "add"
+          }
+        ]
+      }
+    },
+    {
+      "id": "google-ai-stack",
+      "compositionId": "GoogleOptimized13",
+      "group": "google-ai-stack",
+      "mode": "together",
+      "template": "decomposition",
+      "renderMode": "replace",
+      "start": 143.4,
+      "end": 167.32,
+      "startFrame": 3585,
+      "endFrame": 4183,
+      "durationFrames": 598,
+      "timelineOffsetFrames": 0,
+      "sourceText": "自研TPU芯片和全球数据中心｜DeepMind、Gemini以及模型训练能力｜Google Cloud和Vertex AI｜搜索、Android、Chrome、Workspace和YouTube",
+      "specFile": "specs/google-ai-stack.json",
+      "clipFile": "clips/google-ai-stack.mp4",
+      "background": "#f3efe6",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌AI技术栈",
+        "whole": "谷歌AI体系",
+        "events": [
+          {
+            "at": 0,
+            "action": "extract",
+            "part": "自研TPU芯片和全球数据中心"
+          },
+          {
+            "at": 4.621,
+            "action": "extract",
+            "part": "DeepMind、Gemini与模型训练能力"
+          },
+          {
+            "at": 7.955,
+            "action": "extract",
+            "part": "Google Cloud和Vertex AI"
+          },
+          {
+            "at": 12.296,
+            "action": "extract",
+            "part": "搜索、Android、Chrome、Workspace和YouTube"
+          }
+        ]
+      }
+    },
+    {
+      "id": "capex-growth",
+      "compositionId": "GoogleOptimized14",
+      "group": "capex-growth",
+      "mode": "together",
+      "template": "xy-chart",
+      "renderMode": "replace",
+      "start": 171.2,
+      "end": 190.84,
+      "startFrame": 4280,
+      "endFrame": 4771,
+      "durationFrames": 491,
+      "timelineOffsetFrames": 0,
+      "sourceText": "2023年的资本开支约323亿美元｜2024年增加到约525亿美元，增幅超过六成",
+      "specFile": "specs/capex-growth.json",
+      "clipFile": "clips/capex-growth.mp4",
+      "background": "#f3f0e9",
+      "overlays": [
+        {
+          "group": "capex-growth-emphasis",
+          "spec": {
+            "text": "增幅超过六成",
+            "at": 0
+          },
+          "fromFrame": 183,
+          "durationFrames": 31
+        }
+      ],
+      "spec": {
+        "title": "Alphabet资本开支增长",
+        "axes": {
+          "x": {
+            "min": 2023,
+            "max": 2024,
+            "ticks": 2,
+            "label": "年份",
+            "unit": "年"
+          },
+          "y": {
+            "min": 0,
+            "max": 600,
+            "ticks": 4,
+            "label": "资本开支",
+            "unit": "亿美元"
+          }
+        },
+        "keyframes": [
+          {
+            "at": 0,
+            "label": "2023年约323亿美元",
+            "x": 2023,
+            "y": 323,
+            "motion": "instant"
+          },
+          {
+            "at": 3.118,
+            "label": "2024年约525亿美元",
+            "x": 2024,
+            "y": 525,
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cloud-performance",
+      "compositionId": "GoogleOptimized15",
+      "group": "cloud-performance",
+      "mode": "together",
+      "template": "multi-series-chart",
+      "renderMode": "replace",
+      "start": 195.92,
+      "end": 221.04,
+      "startFrame": 4898,
+      "endFrame": 5526,
+      "durationFrames": 628,
+      "timelineOffsetFrames": 0,
+      "sourceText": "2022年的约263亿美元｜2023年的331亿美元｜2024年的432亿美元｜2022年亏损约19亿美元｜2023年盈利约17亿美元｜2024年盈利约61亿美元",
+      "specFile": "specs/cloud-performance.json",
+      "clipFile": "clips/cloud-performance.mp4",
+      "background": "#171c20",
+      "overlays": [],
+      "spec": {
+        "chartType": "line",
+        "title": "Google Cloud经营表现",
+        "xAxis": {
+          "categories": [
+            "2022",
+            "2023",
+            "2024"
+          ],
+          "label": "年份"
+        },
+        "yAxis": {
+          "min": -100,
+          "max": 500,
+          "ticks": 7,
+          "label": "金额",
+          "unit": "亿美元"
+        },
+        "series": [
+          {
+            "name": "收入",
+            "data": [
+              {
+                "value": 263,
+                "at": 0
+              },
+              {
+                "value": 331,
+                "at": 3.468
+              },
+              {
+                "value": 432,
+                "at": 6.877
+              }
+            ]
+          },
+          {
+            "name": "经营利润",
+            "data": [
+              {
+                "value": -19,
+                "at": 10.508
+              },
+              {
+                "value": 17,
+                "at": 13.355
+              },
+              {
+                "value": 61,
+                "at": 15.561
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ai-competitors",
+      "compositionId": "GoogleOptimized16",
+      "group": "ai-competitors",
+      "mode": "together",
+      "template": "collage-network",
+      "renderMode": "replace",
+      "start": 224.84,
+      "end": 243.8,
+      "startFrame": 5621,
+      "endFrame": 6095,
+      "durationFrames": 474,
+      "timelineOffsetFrames": 0,
+      "sourceText": "微软可以借助OpenAI强化Azure和Office｜亚马逊正通过Anthropic扩大云端模型生态",
+      "specFile": "specs/ai-competitors.json",
+      "clipFile": "clips/ai-competitors.mp4",
+      "background": "#eee9de",
+      "overlays": [],
+      "spec": {
+        "title": "谷歌的AI竞争网络",
+        "subtitle": "微软与OpenAI、亚马逊与Anthropic争夺云端模型生态",
+        "nodes": [
+          {
+            "at": 0,
+            "id": "microsoft",
+            "label": "微软",
+            "role": "云与办公平台竞争者",
+            "assetSrc": "ai-company-logos/microsoft.svg",
+            "kind": "cloud"
+          },
+          {
+            "at": 1.564,
+            "id": "openai",
+            "label": "OpenAI",
+            "role": "微软合作的模型公司",
+            "assetSrc": "ai-company-logos/openai.svg",
+            "kind": "cloud"
+          },
+          {
+            "at": 2.246,
+            "id": "azure",
+            "label": "Azure",
+            "role": "微软云平台",
+            "kind": "cloud"
+          },
+          {
+            "at": 2.657,
+            "id": "office",
+            "label": "Office",
+            "role": "微软办公入口",
+            "kind": "model"
+          },
+          {
+            "at": 3.779,
+            "id": "amazon",
+            "label": "亚马逊",
+            "role": "云平台竞争者",
+            "assetSrc": "ai-company-logos/amazon.svg",
+            "kind": "cloud"
+          },
+          {
+            "at": 4.762,
+            "id": "anthropic",
+            "label": "Anthropic",
+            "role": "亚马逊合作的模型公司",
+            "assetSrc": "ai-company-logos/anthropic.svg",
+            "kind": "chip"
+          },
+          {
+            "at": 5.724,
+            "id": "cloud_model_ecosystem",
+            "label": "云端模型生态",
+            "role": "竞争焦点",
+            "kind": "cloud"
+          }
+        ],
+        "edges": [
+          {
+            "at": 1.564,
+            "from": "microsoft",
+            "relation": "借助",
+            "to": "openai",
+            "type": "investment"
+          },
+          {
+            "at": 2.246,
+            "from": "openai",
+            "relation": "强化",
+            "to": "azure",
+            "type": "cloud"
+          },
+          {
+            "at": 2.657,
+            "from": "openai",
+            "relation": "强化",
+            "to": "office",
+            "type": "supply"
+          },
+          {
+            "at": 4.762,
+            "from": "amazon",
+            "relation": "通过",
+            "to": "anthropic",
+            "type": "competition"
+          },
+          {
+            "at": 5.724,
+            "from": "anthropic",
+            "relation": "扩大",
+            "to": "cloud_model_ecosystem",
+            "type": "investment"
+          }
+        ]
+      }
+    },
+    {
+      "id": "final-conclusion",
+      "compositionId": "GoogleOptimized17",
+      "group": "final-conclusion",
+      "mode": "together",
+      "template": "emphasis",
+      "renderMode": "overlay",
+      "start": 271.6,
+      "end": 276.16,
+      "startFrame": 6790,
+      "endFrame": 6904,
+      "durationFrames": 114,
+      "timelineOffsetFrames": 0,
+      "sourceText": "这不是简单增加一款AI产品，而是谷歌的第二次创业。",
+      "specFile": "specs/final-conclusion.json",
+      "clipFile": "clips/final-conclusion.mp4",
+      "baseFile": "google-optimized/base/final-conclusion.mp4",
+      "background": "#111111",
+      "overlays": [],
+      "spec": {
+        "text": "谷歌的第二次创业",
+        "at": 0
+      }
+    }
+  ]
+}

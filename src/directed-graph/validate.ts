@@ -7,6 +7,7 @@ export const validateDirectedGraphSpec = (input: unknown): string[] => {
   if (!isRecord(input)) return ["spec must be an object"];
   if (!Array.isArray(input.edges) || input.edges.length === 0) return ["edges must contain at least one item"];
   const errors: string[] = [];
+  if (input.title !== undefined && (typeof input.title !== "string" || !input.title.trim())) errors.push("title must be a non-empty string");
   if (input.edges.length > 40) errors.push("edges may contain at most 40 items");
   const knownNodes = new Set<string>();
   const edgeKeys = new Set<string>();

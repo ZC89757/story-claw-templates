@@ -1,0 +1,1950 @@
+{
+  "version": 1,
+  "source": {
+    "repository": "https://github.com/Vincentwei1021/video-shotcraft",
+    "checkout": "D:/video-shotcraft-analysis",
+    "library": "gallery/api/library.json",
+    "cardCount": 152,
+    "styleCount": 209,
+    "revision": "bdd94be16d60fa8f"
+  },
+  "target": {
+    "package": "C:/Users/ZhangChi/Desktop/改写漫剧/story-claw-templates",
+    "catalogStyleCount": 231
+  },
+  "statusMeaning": {
+    "converted": "可直接作为 StoryClaw MG 标签和 Function Calling 使用，模板保留主要动作语义。",
+    "converted_abstract": "可直接调用，但原卡依赖的页面纹理、外部素材或复杂多层镜头被固定视觉抽象替代。",
+    "needs_assets": "尚未接入，等待素材契约。",
+    "needs_runtime": "尚未接入，等待运行时能力。",
+    "not_suitable_for_mg": "不适合当前 MG 契约。"
+  },
+  "summary": {
+    "shotcraftStyles": 209,
+    "byStatus": {
+      "converted": 114,
+      "converted_abstract": 95
+    },
+    "byTemplate": {
+      "title": {
+        "htmlTag": "mg-title",
+        "function": "create_title_cue",
+        "styleCount": 34
+      },
+      "showcase": {
+        "htmlTag": "mg-showcase",
+        "function": "create_showcase_timeline",
+        "styleCount": 55
+      },
+      "metric": {
+        "htmlTag": "mg-metric",
+        "function": "create_metric_timeline",
+        "styleCount": 18
+      },
+      "transition": {
+        "htmlTag": "mg-transition",
+        "function": "create_transition_cue",
+        "styleCount": 29
+      },
+      "rhythm": {
+        "htmlTag": "mg-rhythm",
+        "function": "create_rhythm_cue",
+        "styleCount": 21
+      },
+      "effect": {
+        "htmlTag": "mg-effect",
+        "function": "create_effect_cue",
+        "styleCount": 36
+      },
+      "camera": {
+        "htmlTag": "mg-camera",
+        "function": "create_camera_move",
+        "styleCount": 16
+      }
+    },
+    "unconverted": 0
+  },
+  "entries": [
+    {
+      "style": "blur-slide",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "scramble",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "brace-expand",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "cel-flash-stomp",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "countdown-arc-scatter",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "flying-words",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "glitch-cycle",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "gradient-word-sweep",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "marker-underline-title",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "outline-word-fill",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "paper-title-card",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "pill-chip-slot-cycle-handled",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "pill-slot-cycle",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "text-column-converge",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "title-demote-to-label",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "split-text-stagger",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "drift-assembly",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "tracking-expand",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "text-on-path",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "scramble-decode",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "letter-drop-physics",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "font-weight-pump",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "karaoke-fill-sync",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "terminal-typewriter",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "error-retype",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "typing-code-block",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "vertical-word-roll-blur-cycle",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "word-relay-filmstrip",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "word-relay-geometry",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "text-as-mask",
+      "sourceCategory": "opening",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "letterspace-materialize",
+      "sourceCategory": "opening",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "brand-ink-open",
+      "sourceCategory": "opening",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "document-typewriter-reveal",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "split-flap-title",
+      "sourceCategory": "typography",
+      "targetTemplate": "title",
+      "htmlTag": "mg-title",
+      "function": "create_title_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "ai-stream-response",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "autolayout-gap-dial",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "panel-to-canvas",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "diagram-cascade",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "chip-grid-single-select-blackout",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "chip-lift-to-user-pill",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "dialogue-duet",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "cast-ensemble",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "command-palette-summon",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "glass-pill-dictation-typing",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "hashtag-to-pill-materialize",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "cursor-performance",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "keycap-smash-cut",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "picker-carousel-feature-cycle",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "segmented-thumb-hero",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "theme-sweep-toggle",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "palette-theme-ripple",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "type-and-filter",
+      "sourceCategory": "interaction",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "avatar-bracket-carousel",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "bezier-source-converge-merge",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "card-stack",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "carousel-3d",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "cloner-depth-echo",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "deck-deal-flyin",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "doc-park-left-pill-deal",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "draw-svg-trace",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "axial-stretch",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "contact-shadow-lift",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "floating-glossy-label-pills",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "integration-hub-map",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "list-reveal",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "list-stack-press",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "morph-from-primitive",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "neon-frame-forerun",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "neon-frame-orbit-drop",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "page-waterfall-wall",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "masking-tape-slap",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "popup-book-rise",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "product-card-progressive-assemble",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "radial-wave",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "research-card-stack-scroll",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "row-embed",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "runway-ground-skim",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "skeleton-reveal",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "svg-shape-morph",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "value-stagger-gradient",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "bento-light-up",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "grid-wave-flip",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "wireframe-draw-on",
+      "sourceCategory": "ui-entrance",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "spotlight-hero-card",
+      "sourceCategory": "opening",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "magician-card-flourish",
+      "sourceCategory": "opening",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "outro-group-photo-launch",
+      "sourceCategory": "outro",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "ui-strip-away-outro",
+      "sourceCategory": "outro",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "icon-flip-bloom",
+      "sourceCategory": "outro",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "input-morph-assemble",
+      "sourceCategory": "outro",
+      "targetTemplate": "showcase",
+      "htmlTag": "mg-showcase",
+      "function": "create_showcase_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "before-after-slider-scrub",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "oscilloscope-stream",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "unit-dot-swarm-regroup",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "axis-rescale-shock",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "counter-confetti",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "needle-sweep-selftest",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "tape-scroll-fixed-pointer",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "hatch-depth",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "odometer-digit-roll",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "confetti-crossfire",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "counter-tick-sparks",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "particle-sand-fill",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "changelog-scroll-brake",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "brake-reticle-lock",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "timeline-travel",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "radial-ripple-phone-chips",
+      "sourceCategory": "effects",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "avatar-grid-radial-build-colorize",
+      "sourceCategory": "data",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "voice-waveform-live",
+      "sourceCategory": "interaction",
+      "targetTemplate": "metric",
+      "htmlTag": "mg-metric",
+      "function": "create_metric_timeline",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "bottom-push-stack-wipe",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "bubble-swarm-takeover",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "card-flip-reveal",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "card-flock-tumble",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "circle-match-iris",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "color-block-step-wipe",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "cube-navigation",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "gradient-transition",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "line-carry-transition",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "mosaic-reframe",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "cube-rotate",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "barn-door-split",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "paper-plane-messenger",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "ink-bleed-reveal",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "glitch-displace",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "invisible-cut",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "versus-slam",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "light-leak-burn",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "shared-element-morph",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "letterform-zoom",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "flash-cut",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "shot-transitions-4",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "shot-transitions-5",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "shot-transitions-6",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "whip-pan",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "mask-wipe",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "clock-wipe",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "blinds-slice",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "white-flash-logo-simplify-cut",
+      "sourceCategory": "transition",
+      "targetTemplate": "transition",
+      "htmlTag": "mg-transition",
+      "function": "create_transition_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "beat-pump",
+      "sourceCategory": "effects",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "beat-cut-accelerando",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "paparazzi-flash",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "beat-step-list-theme-cycle",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "drop-blackout-slam",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "wright-triple-cut",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "domino-cascade",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "grid-flash-mosaic",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "flip-grid-reflow",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "comic-panel-split",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "jump-cut-punch-in",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "strobe-black-frames",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "sakuga-timing-shift",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "smear-multiples",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "spectrum-morph-ui",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "speed-ramp",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "freeze-annotate",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "trailer-bumper",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "card-footage-cadence",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "smash-cut",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "quad-split-parallel-scenes",
+      "sourceCategory": "rhythm",
+      "targetTemplate": "rhythm",
+      "htmlTag": "mg-rhythm",
+      "function": "create_rhythm_cue",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "anime-impact",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "assemble-then-type-flyin",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "attention-bounce",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "aurora-bloom-bg-flip",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "brand-frame-snap",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "corner-spotlight-reveal",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "dashboard-glow-highlight-pill",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "flyline-arc",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "glow-orb-ambient",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "glow-wake-sleep-panel",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "halation-bloom",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "hit-counter",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "impact-burst-kit",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "kanada-perspective-snap",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "line-boil",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "line-unfold-panel",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "misregistration-hit",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "orb-flyline-relay",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "pop-burst-confirm",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "reticle-lock-on",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "scan-bracket-sweep",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "scanline-annotate-focus",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "scanline-assemble-flyin",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "score-slam",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "sheen-sweep",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "slide-spotlight-pan",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "spotlight-sweep",
+      "sourceCategory": "effects",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "crane-rise-reveal",
+      "sourceCategory": "opening",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "dataviz-landscape-open",
+      "sourceCategory": "opening",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "fracture",
+      "sourceCategory": "opening",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "icon-field-colorize",
+      "sourceCategory": "opening",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "stroke-segment-build",
+      "sourceCategory": "opening",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "grain-dissolve",
+      "sourceCategory": "outro",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "logo-shrink-wordmark-lockup",
+      "sourceCategory": "outro",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "logo-sting-button",
+      "sourceCategory": "outro",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "neon-triple-marquee",
+      "sourceCategory": "outro",
+      "targetTemplate": "effect",
+      "htmlTag": "mg-effect",
+      "function": "create_effect_cue",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "basic-3d-scene",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "bullet-time-freeze-orbit",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "crash-zoom-punch",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "cursor-flyover",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "dolly-zoom",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "drone-dive-landing",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "dutch-roll-to-level",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "exploded-view",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "graze-face-tour",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "multiplane",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "overhead-tabletop-drop",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "pull-back-isolation",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "slow-push-in",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    },
+    {
+      "style": "steep-tilt-glide",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "terminal-3d",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted_abstract",
+      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
+    },
+    {
+      "style": "tilt-reveal",
+      "sourceCategory": "camera",
+      "targetTemplate": "camera",
+      "htmlTag": "mg-camera",
+      "function": "create_camera_move",
+      "status": "converted",
+      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
+    }
+  ]
+}

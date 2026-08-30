@@ -1,4 +1,6 @@
 node_modules/
 dist/
 out/
+.tmp-preview-qa/
+graphify-out/
 .DS_Store

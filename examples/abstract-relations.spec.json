@@ -1,0 +1,9 @@
+{
+  "edges": [
+    {"at": 1.0, "from": "生成式 AI", "to": "数据", "relation": "依赖"},
+    {"at": 2.5, "from": "生成式 AI", "to": "模型", "relation": "核心能力"},
+    {"at": 4.0, "from": "生成式 AI", "to": "算力", "relation": "训练与推理"},
+    {"at": 5.5, "from": "生成式 AI", "to": "应用", "relation": "产生价值"},
+    {"at": 7.0, "from": "应用", "to": "用户反馈", "relation": "持续优化"}
+  ]
+}

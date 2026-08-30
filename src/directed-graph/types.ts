@@ -7,6 +7,7 @@ export type DirectedGraphEdge = {
 };
 
 export type DirectedGraphSpec = {
+  title?: string;
   edges: DirectedGraphEdge[];
 };
 

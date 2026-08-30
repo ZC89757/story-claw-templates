@@ -1,0 +1,255 @@
+{
+  "fps": 25,
+  "width": 1280,
+  "height": 720,
+  "scenes": [
+    {
+      "id": "progress",
+      "template": "progress-timeline",
+      "renderMode": "replace",
+      "start": 22.84,
+      "end": 55.8,
+      "startFrame": 571,
+      "endFrame": 1395,
+      "durationFrames": 824,
+      "sourceText": "谷歌的发展可以分成几个关键节点。1998年，拉里·佩奇和谢尔盖·布林创办Google，用网页链接关系改进搜索结果；2004年，谷歌上市；2006年，它以16.5亿美元收购YouTube；2014年收购DeepMind；2015年重组为Alphabet；2017年，谷歌研究团队发表Transformer论文，为今天的大模型奠定基础；2023年，Gemini正式登场。看似分散的动作，最终都汇入了同一条主线：控制下一代信息入口。",
+      "specFile": "specs/progress-timeline.json",
+      "spec": {
+        "title": "谷歌发展史",
+        "subtitle": "从搜索、视频到人工智能，控制下一代信息入口",
+        "followViewport": true,
+        "nodes": [
+          {
+            "id": "google-1",
+            "at": 0,
+            "progress": 0,
+            "kind": "major",
+            "title": "Google创办",
+            "eyebrow": "1998年",
+            "detail": {
+              "type": "text",
+              "value": "拉里·佩奇和谢尔盖·布林创办Google，用网页链接关系改进搜索结果",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "instant"
+          },
+          {
+            "id": "google-2",
+            "at": 6.67,
+            "progress": 16.667,
+            "kind": "minor",
+            "title": "谷歌上市",
+            "eyebrow": "2004年",
+            "detail": {
+              "type": "text",
+              "value": "谷歌上市",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-3",
+            "at": 8.905,
+            "progress": 33.333,
+            "kind": "major",
+            "title": "收购YouTube",
+            "eyebrow": "2006年",
+            "detail": {
+              "type": "text",
+              "value": "以16.5亿美元收购YouTube",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-4",
+            "at": 12.843,
+            "progress": 50,
+            "kind": "minor",
+            "title": "收购DeepMind",
+            "eyebrow": "2014年",
+            "detail": {
+              "type": "text",
+              "value": "收购DeepMind",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-5",
+            "at": 14.517,
+            "progress": 66.667,
+            "kind": "major",
+            "title": "重组Alphabet",
+            "eyebrow": "2015年",
+            "detail": {
+              "type": "text",
+              "value": "重组为Alphabet",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-6",
+            "at": 18.086,
+            "progress": 83.333,
+            "kind": "minor",
+            "title": "Transformer论文",
+            "eyebrow": "2017年",
+            "detail": {
+              "type": "text",
+              "value": "谷歌研究团队发表Transformer论文，为今天的大模型奠定基础",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          },
+          {
+            "id": "google-7",
+            "at": 24.015,
+            "progress": 100,
+            "kind": "major",
+            "title": "Gemini登场",
+            "eyebrow": "2023年",
+            "detail": {
+              "type": "text",
+              "value": "Gemini正式登场",
+              "src": "",
+              "caption": ""
+            },
+            "motion": "ease"
+          }
+        ]
+      }
+    },
+    {
+      "id": "decomposition",
+      "template": "decomposition",
+      "renderMode": "replace",
+      "start": 138.8,
+      "end": 167.32,
+      "startFrame": 3470,
+      "endFrame": 4183,
+      "durationFrames": 713,
+      "sourceText": "谷歌的优势，在于它不是只拥有一个大模型。最底层是自研TPU芯片和全球数据中心；中间层是DeepMind、Gemini以及模型训练能力；再往上是Google Cloud和Vertex AI；最接近用户的，则是搜索、Android、Chrome、Workspace和YouTube。这些业务一层套一层，让一次模型升级可以迅速进入办公、搜索、手机和云服务。",
+      "specFile": "specs/decomposition.json",
+      "spec": {
+        "whole": "谷歌AI基础设施",
+        "events": [
+          {
+            "at": 4.609,
+            "action": "extract",
+            "part": "芯片与数据中心",
+            "detail": "提供自研算力底座与全球基础设施，支撑模型训练和运行。"
+          },
+          {
+            "at": 9.23,
+            "action": "extract",
+            "part": "模型与训练",
+            "detail": "负责模型研发、Gemini体系建设以及核心训练能力。"
+          },
+          {
+            "at": 12.564,
+            "action": "extract",
+            "part": "云与AI平台",
+            "detail": "将AI能力转化为云平台和企业级开发服务。"
+          },
+          {
+            "at": 16.905,
+            "action": "extract",
+            "part": "用户产品生态",
+            "detail": "把模型升级快速带入搜索、手机、办公、浏览器和视频等用户场景。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "chart",
+      "template": "multi-series-chart",
+      "renderMode": "replace",
+      "start": 191.36,
+      "end": 221.04,
+      "startFrame": 4784,
+      "endFrame": 5526,
+      "durationFrames": 742,
+      "sourceText": "Google Cloud的变化最能说明投入的价值。它的收入从2022年的约263亿美元，增长到2023年的331亿美元，再增长到2024年的432亿美元；经营表现也从2022年亏损约19亿美元，转为2023年盈利约17亿美元、2024年盈利约61亿美元。云业务已经不再只是追赶亚马逊和微软，而是在AI时代获得了新的增长理由。",
+      "specFile": "specs/multi-series-chart.json",
+      "spec": {
+        "chartType": "bar",
+        "title": "Google Cloud 2022—2024 收入与经营利润",
+        "xAxis": {
+          "label": "年份",
+          "categories": [
+            "2022",
+            "2023",
+            "2024"
+          ]
+        },
+        "yAxis": {
+          "min": -50,
+          "max": 500,
+          "label": "金额",
+          "unit": "亿美元",
+          "ticks": 12
+        },
+        "series": [
+          {
+            "name": "Google Cloud收入",
+            "data": [
+              {
+                "at": 4.542,
+                "value": 263
+              },
+              {
+                "at": 8.01,
+                "value": 331
+              },
+              {
+                "at": 11.419,
+                "value": 432
+              }
+            ]
+          },
+          {
+            "name": "Google Cloud经营利润",
+            "data": [
+              {
+                "at": 15.05,
+                "value": -19
+              },
+              {
+                "at": 17.897,
+                "value": 17
+              },
+              {
+                "at": 20.103,
+                "value": 61
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "emphasis",
+      "template": "emphasis",
+      "renderMode": "overlay",
+      "start": 271.6,
+      "end": 275.96,
+      "startFrame": 6790,
+      "endFrame": 6899,
+      "durationFrames": 109,
+      "sourceText": "这不是简单增加一款AI产品，而是谷歌的第二次创业。",
+      "specFile": "specs/emphasis.json",
+      "spec": {
+        "text": "谷歌第二次创业",
+        "at": 0
+      }
+    }
+  ]
+}
