@@ -144,7 +144,10 @@ const SHOTCRAFT_CAMERA_STYLES = makeShotcraftEntries(
   "mg-camera",
   "运镜",
   "运镜",
-  "overlay",
+  // Camera owns a transformed copy of the raw plate for its active window.
+  // It is therefore a scene/base layer, not a transparent graphic overlay:
+  // title, emphasis, transition and other overlays are painted above it.
+  "replace",
   [
     "basic-3d-scene", "bullet-time-freeze-orbit", "crash-zoom-punch", "cursor-flyover", "dolly-zoom",
     "drone-dive-landing", "dutch-roll-to-level", "exploded-view", "graze-face-tour", "multiplane",

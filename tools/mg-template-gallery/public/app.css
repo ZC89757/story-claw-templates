@@ -1,4 +1,4 @@
-/* ../story-claw-templates/tools/mg-template-gallery/gallery.css */
+/* tools/mg-template-gallery/gallery.css */
 :root {
   color-scheme: dark;
   --bg:#0c0d0e;
@@ -482,4 +482,7 @@ pre {
   max-width: 1500px;
   margin: 0 auto;
   padding-inline: clamp(24px, 4vw, 64px);
+}
+.fact-wide {
+  grid-column: 1/-1;
 }

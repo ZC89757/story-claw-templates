@@ -1,6 +1,7 @@
 export * from "./function-call";
 export * from "./runtime";
 export * from "./catalog";
+export * from "./provider";
 export * from "./xy-chart/index";
 export * from "./progress-timeline/index";
 export * from "./directed-graph/index";

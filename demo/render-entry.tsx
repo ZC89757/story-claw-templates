@@ -30,8 +30,7 @@ const spec = assertProgressTimelineSpec(progressSpec);
 const directedGraphSpec = assertDirectedGraphSpec(directedGraphSpecJson);
 const nvidiaGraphSpec = assertDirectedGraphSpec(nvidiaGraphSpecJson);
 const tableSpec = assertTimedTableSpec(tableSpecJson);
-const barChartSpec = assertMultiSeriesChartSpec(multiSeriesChartSpecJson);
-const lineChartSpec = assertMultiSeriesChartSpec({...multiSeriesChartSpecJson, chartType: "line"});
+const multiSeriesChartSpec = assertMultiSeriesChartSpec(multiSeriesChartSpecJson);
 const containmentSpec = assertContainmentSpec(containmentSpecJson);
 const radialRelationSpec = assertDirectedGraphSpec(radialRelationSpecJson);
 const decompositionSpec = assertDecompositionSpec(decompositionSpecJson);
@@ -44,8 +43,8 @@ const Root = () => <>
   <Composition id="DirectedGraphDemo" component={DirectedGraphTemplate} defaultProps={{spec: directedGraphSpec, audioSrc: staticFile("progress-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={900} />
   <Composition id="NvidiaDirectedGraphDemo" component={DirectedGraphTemplate} defaultProps={{spec: nvidiaGraphSpec, audioSrc: staticFile("nvidia-graph-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={1200} />
   <Composition id="TimedTableDemo" component={TimedTableTemplate} defaultProps={{spec: tableSpec, audioSrc: staticFile("gemini-gpt-table-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={1290} />
-  <Composition id="MultiSeriesChartDemo" component={MultiSeriesChartTemplate} defaultProps={{spec: barChartSpec, audioSrc: staticFile("multi-series-chart-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={930} />
-  <Composition id="MultiSeriesLineChartDemo" component={MultiSeriesChartTemplate} defaultProps={{spec: lineChartSpec, audioSrc: staticFile("multi-series-chart-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={930} />
+  <Composition id="MultiSeriesChartDemo" component={MultiSeriesChartTemplate} defaultProps={{spec: multiSeriesChartSpec, group: "bar", audioSrc: staticFile("multi-series-chart-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={930} />
+  <Composition id="MultiSeriesLineChartDemo" component={MultiSeriesChartTemplate} defaultProps={{spec: multiSeriesChartSpec, group: "line", audioSrc: staticFile("multi-series-chart-narration.mp3")}} width={1920} height={1080} fps={30} durationInFrames={930} />
   <Composition id="ContainmentDemo" component={ContainmentTemplate} defaultProps={{spec: containmentSpec}} width={1920} height={1080} fps={30} durationInFrames={300} />
   <Composition id="RadialRelationDemo" component={RadialRelationTemplate} defaultProps={{spec: radialRelationSpec}} width={1920} height={1080} fps={30} durationInFrames={300} />
   <Composition id="DecompositionDemo" component={DecompositionTemplate} defaultProps={{spec: decompositionSpec}} width={1920} height={1080} fps={30} durationInFrames={315} />

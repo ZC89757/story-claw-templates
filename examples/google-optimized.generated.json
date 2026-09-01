@@ -1189,7 +1189,6 @@
       "background": "#171c20",
       "overlays": [],
       "spec": {
-        "chartType": "line",
         "title": "Google Cloud经营表现",
         "xAxis": {
           "categories": [

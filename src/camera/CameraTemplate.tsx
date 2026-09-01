@@ -1,3 +1,4 @@
+import {createContext, useContext} from "react";
 import type {CSSProperties, ReactNode} from "react";
 import {AbsoluteFill, Audio, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {cameraProgress, easeInOut, easeOut} from "./evaluate";
@@ -7,7 +8,8 @@ type Props = {
   spec: CameraSpec;
   style?: string;
   baseFile?: string;
-  timelineOffsetFrames?: number;
+  /** Number of source-video frames to skip when this layer starts mid-episode. */
+  baseTrimBeforeFrames?: number;
   css?: CSSProperties;
 };
 
@@ -99,8 +101,12 @@ type LayerProps = {
   style?: CSSProperties;
 };
 
+const BaseTrimBeforeContext = createContext(0);
+
 /** Source footage when available, or the same formal plate used by preview MP4s. */
 const BaseLayer = ({baseFile, accent, secondary, style}: LayerProps) => {
+  const contextTrimBefore = useContext(BaseTrimBeforeContext);
+  const trimBefore = Number.isFinite(contextTrimBefore) ? Math.max(0, Math.trunc(contextTrimBefore)) : 0;
   const layerStyle: CSSProperties = {
     position: "absolute",
     inset: 0,
@@ -110,7 +116,7 @@ const BaseLayer = ({baseFile, accent, secondary, style}: LayerProps) => {
     ...style,
   };
   return baseFile
-    ? <OffthreadVideo src={staticFile(baseFile)} muted style={layerStyle} />
+    ? <OffthreadVideo src={staticFile(baseFile)} muted trimBefore={trimBefore} style={layerStyle} />
     : <PreviewPlate accent={accent} secondary={secondary} style={layerStyle} />;
 };
 
@@ -445,18 +451,22 @@ const CameraBody = (props: CameraRendererProps) => {
   return <>{renderer(props)}</>;
 };
 
-export const CameraTemplate = ({spec, style = "slow-push-in", baseFile, timelineOffsetFrames = 0, css}: Props) => {
+export const CameraTemplate = ({spec, style = "slow-push-in", baseFile, baseTrimBeforeFrames = 0, css}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   if (!isCameraStyle(style)) throw new Error(`Unsupported camera style: ${style}`);
   const recipe = cameraRecipeFor(style);
-  const seconds = (frame + timelineOffsetFrames) / fps;
+  // The runtime Sequence already maps this layer's frame to the instance-root
+  // timeline. Adding a second offset here would double-shift split fragments.
+  const seconds = frame / fps;
   const activeItem = [...(spec.items ?? [])].reverse().find((item) => item.at <= seconds);
   const moveStart = activeItem?.at ?? spec.at;
   const p = cameraProgress(Math.max(0, seconds - moveStart));
   const text = activeItem?.text ?? spec.text;
   return <AbsoluteFill style={{background: "#080c0f", overflow: "hidden", fontFamily: '"Microsoft YaHei", Arial, sans-serif', ...css}}>
-    <CameraBody baseFile={baseFile} p={p} frame={frame} text={text} recipe={recipe} />
-    <CameraSfx recipe={recipe} />
+    <BaseTrimBeforeContext.Provider value={baseTrimBeforeFrames}>
+      <CameraBody baseFile={baseFile} p={p} frame={frame} text={text} recipe={recipe} />
+      <CameraSfx recipe={recipe} />
+    </BaseTrimBeforeContext.Provider>
   </AbsoluteFill>;
 };

@@ -53,7 +53,7 @@ const Template = ({scene}: {scene: Scene}) => {
     case "directed-graph": return <DirectedGraphTemplate spec={spec} />;
     case "title": return <FadeTitleTemplate spec={spec} />;
     case "xy-chart": return <XYChartTemplate spec={spec} />;
-    case "multi-series-chart": return <MultiSeriesChartTemplate spec={spec} />;
+    case "multi-series-chart": return <MultiSeriesChartTemplate spec={spec} group={scene.group as "bar" | "line"} />;
     case "containment": return <ContainmentTemplate spec={spec} />;
     case "decomposition": return <DecompositionTemplate spec={spec} />;
     case "weighted-comparison": return <BalanceComparisonTemplate spec={spec} />;

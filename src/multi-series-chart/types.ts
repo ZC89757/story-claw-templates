@@ -1,5 +1,3 @@
-export type MultiSeriesChartType = "bar" | "line";
-
 export type MultiSeriesChartDatum = {
   at: number;
   value: number;
@@ -11,7 +9,6 @@ export type MultiSeriesChartSeries = {
 };
 
 export type MultiSeriesChartSpec = {
-  chartType: MultiSeriesChartType;
   title: string;
   xAxis: {
     label: string;

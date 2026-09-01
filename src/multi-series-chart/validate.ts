@@ -5,7 +5,6 @@ const isRecord = (value: unknown): value is Record<string, unknown> => typeof va
 export const validateMultiSeriesChartSpec = (input: unknown): string[] => {
   if (!isRecord(input)) return ["spec must be an object"];
   const errors: string[] = [];
-  if (input.chartType !== "bar" && input.chartType !== "line") errors.push("chartType must be bar or line");
   if (typeof input.title !== "string" || !input.title.trim()) errors.push("title is required");
   if (!isRecord(input.xAxis) || !Array.isArray(input.xAxis.categories) || input.xAxis.categories.length < 1 || input.xAxis.categories.length > 16) errors.push("xAxis.categories must contain 1..16 items");
   if (!isRecord(input.yAxis)) errors.push("yAxis must be an object");

@@ -10,7 +10,7 @@ import {titleFunctionDefinition} from "../src/title/schema";
 import {emphasisFunctionDefinition} from "../src/emphasis/schema";
 import {xyChartFunctionDefinition} from "../src/xy-chart/schema";
 import {resolveXYChartFunctionArgs} from "../src/xy-chart/schema";
-import {multiSeriesBarChartFunctionDefinition, multiSeriesLineChartFunctionDefinition} from "../src/multi-series-chart/schema";
+import {multiSeriesChartFunctionDefinition} from "../src/multi-series-chart/schema";
 import {containmentFunctionDefinition} from "../src/containment/schema";
 import {decompositionFunctionDefinition, resolveDecompositionFunctionArgs} from "../src/decomposition/schema";
 import {
@@ -33,8 +33,7 @@ const definitions: Array<[Definition, string[]]> = [
   [titleFunctionDefinition, ["group", "order", "at", "text"]],
   [emphasisFunctionDefinition, ["group", "order", "at", "text"]],
   [xyChartFunctionDefinition, ["group", "order", "at", "title", "axes", "keyframes"]],
-  [multiSeriesBarChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
-  [multiSeriesLineChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
+  [multiSeriesChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
   [containmentFunctionDefinition, ["group", "order", "at", "title", "root", "relations", "highlights"]],
   [decompositionFunctionDefinition, ["group", "order", "at", "title", "whole", "parts", "highlights"]],
   [weightedComparisonFunctionDefinition, ["group", "order", "at", "title", "leftLabel", "rightLabel", "items", "highlights"]],

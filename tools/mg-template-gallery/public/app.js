@@ -26,9 +26,9 @@
     mod
   ));
 
-  // ../story-claw-templates/node_modules/react/cjs/react.development.js
+  // node_modules/react/cjs/react.development.js
   var require_react_development = __commonJS({
-    "../story-claw-templates/node_modules/react/cjs/react.development.js"(exports, module) {
+    "node_modules/react/cjs/react.development.js"(exports, module) {
       "use strict";
       if (true) {
         (function() {
@@ -1097,7 +1097,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect2(create, deps) {
+          function useEffect(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1880,7 +1880,7 @@
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect2;
+          exports.useEffect = useEffect;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -1900,9 +1900,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react/index.js
+  // node_modules/react/index.js
   var require_react = __commonJS({
-    "../story-claw-templates/node_modules/react/index.js"(exports, module) {
+    "node_modules/react/index.js"(exports, module) {
       "use strict";
       if (false) {
         module.exports = null;
@@ -1912,9 +1912,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/scheduler/cjs/scheduler.development.js
+  // node_modules/scheduler/cjs/scheduler.development.js
   var require_scheduler_development = __commonJS({
-    "../story-claw-templates/node_modules/scheduler/cjs/scheduler.development.js"(exports) {
+    "node_modules/scheduler/cjs/scheduler.development.js"(exports) {
       "use strict";
       if (true) {
         (function() {
@@ -2362,9 +2362,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/scheduler/index.js
+  // node_modules/scheduler/index.js
   var require_scheduler = __commonJS({
-    "../story-claw-templates/node_modules/scheduler/index.js"(exports, module) {
+    "node_modules/scheduler/index.js"(exports, module) {
       "use strict";
       if (false) {
         module.exports = null;
@@ -2374,9 +2374,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react-dom/cjs/react-dom.development.js
+  // node_modules/react-dom/cjs/react-dom.development.js
   var require_react_dom_development = __commonJS({
-    "../story-claw-templates/node_modules/react-dom/cjs/react-dom.development.js"(exports) {
+    "node_modules/react-dom/cjs/react-dom.development.js"(exports) {
       "use strict";
       if (true) {
         (function() {
@@ -23538,9 +23538,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react-dom/index.js
+  // node_modules/react-dom/index.js
   var require_react_dom = __commonJS({
-    "../story-claw-templates/node_modules/react-dom/index.js"(exports, module) {
+    "node_modules/react-dom/index.js"(exports, module) {
       "use strict";
       if (false) {
         checkDCE();
@@ -23551,9 +23551,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react-dom/client.js
+  // node_modules/react-dom/client.js
   var require_client = __commonJS({
-    "../story-claw-templates/node_modules/react-dom/client.js"(exports) {
+    "node_modules/react-dom/client.js"(exports) {
       "use strict";
       var m = require_react_dom();
       if (false) {
@@ -23582,9 +23582,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react/cjs/react-jsx-runtime.development.js
+  // node_modules/react/cjs/react-jsx-runtime.development.js
   var require_react_jsx_runtime_development = __commonJS({
-    "../story-claw-templates/node_modules/react/cjs/react-jsx-runtime.development.js"(exports) {
+    "node_modules/react/cjs/react-jsx-runtime.development.js"(exports) {
       "use strict";
       if (true) {
         (function() {
@@ -24475,9 +24475,9 @@
     }
   });
 
-  // ../story-claw-templates/node_modules/react/jsx-runtime.js
+  // node_modules/react/jsx-runtime.js
   var require_jsx_runtime = __commonJS({
-    "../story-claw-templates/node_modules/react/jsx-runtime.js"(exports, module) {
+    "node_modules/react/jsx-runtime.js"(exports, module) {
       "use strict";
       if (false) {
         module.exports = null;
@@ -24487,7 +24487,7 @@
     }
   });
 
-  // ../story-claw-templates/tools/mg-template-gallery/app.tsx
+  // tools/mg-template-gallery/app.tsx
   var import_react = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -24512,9 +24512,9 @@
   }
   function CopyButton({ value }) {
     const [label, setLabel] = (0, import_react.useState)("\u590D\u5236");
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "copy", onClick: async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "copy", onClick: async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       try {
         await writeClipboard(value);
         setLabel("\u5DF2\u590D\u5236");
@@ -24524,31 +24524,53 @@
       window.setTimeout(() => setLabel("\u590D\u5236"), 1200);
     }, children: label });
   }
+  function detailJsonFor(item) {
+    const tools = (item.planningTools ?? []).map(({ name, description, parameters }) => ({ name, description, parameters }));
+    return JSON.stringify({ functionCalling: tools.length === 1 ? tools[0] : tools }, null, 2);
+  }
   function HoverVideo({ src }) {
     const ref = (0, import_react.useRef)(null);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", { ref, className: "preview", muted: true, loop: true, playsInline: true, preload: "metadata", src, onMouseEnter: () => ref.current?.play().catch(() => {
-    }), onMouseLeave: () => {
-      if (ref.current) {
-        ref.current.pause();
-        ref.current.currentTime = 0;
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      "video",
+      {
+        ref,
+        className: "preview",
+        muted: true,
+        loop: true,
+        playsInline: true,
+        preload: "metadata",
+        src,
+        onMouseEnter: () => ref.current?.play().catch(() => {
+        }),
+        onMouseLeave: () => {
+          if (!ref.current) return;
+          ref.current.pause();
+          ref.current.currentTime = 0;
+        }
       }
-    } });
+    );
   }
   function Gallery({ catalog }) {
-    const [category, setCategory] = (0, import_react.useState)("\u5168\u90E8"), [structure, setStructure] = (0, import_react.useState)(""), [query, setQuery] = (0, import_react.useState)(""), [open, setOpen] = (0, import_react.useState)(/* @__PURE__ */ new Set()), [selected, setSelected] = (0, import_react.useState)(null);
+    const [category, setCategory] = (0, import_react.useState)("\u5168\u90E8");
+    const [structure, setStructure] = (0, import_react.useState)("");
+    const [query, setQuery] = (0, import_react.useState)("");
+    const [open, setOpen] = (0, import_react.useState)(/* @__PURE__ */ new Set());
+    const [selected, setSelected] = (0, import_react.useState)(null);
     const tree = (0, import_react.useMemo)(() => {
-      const m = /* @__PURE__ */ new Map();
-      catalog.forEach((i) => {
-        if (!m.has(i.category)) m.set(i.category, /* @__PURE__ */ new Map());
-        const g = m.get(i.category);
-        if (!g.has(i.structureName)) g.set(i.structureName, []);
-        g.get(i.structureName).push(i);
+      const categories = /* @__PURE__ */ new Map();
+      catalog.forEach((item) => {
+        if (!categories.has(item.category)) categories.set(item.category, /* @__PURE__ */ new Map());
+        const groups = categories.get(item.category);
+        if (!groups.has(item.structureName)) groups.set(item.structureName, []);
+        groups.get(item.structureName).push(item);
       });
-      return [...m];
+      return [...categories];
     }, [catalog]);
-    const rows = (0, import_react.useMemo)(() => catalog.filter((i) => (category === "\u5168\u90E8" || i.category === category) && (!structure || i.structureName === structure) && (!query || [i.name, i.style, i.template, i.structureName, i.category, i.description].join(" ").toLowerCase().includes(query.toLowerCase()))), [catalog, category, structure, query]);
+    const rows = (0, import_react.useMemo)(() => catalog.filter(
+      (item) => (category === "\u5168\u90E8" || item.category === category) && (!structure || item.structureName === structure) && (!query || [item.name, item.style, item.template, item.structureName, item.category, item.description].join(" ").toLowerCase().includes(query.toLowerCase()))
+    ), [catalog, category, structure, query]);
     if (selected) {
-      const detailJson = JSON.stringify({ template: selected, functionCalling: selected.planningTools || [] }, null, 2);
+      const detailJson = detailJsonFor(selected);
       return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: "detail-main", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "back", onClick: () => setSelected(null), children: "\u2190 \u8FD4\u56DE\u6A21\u677F\u5217\u8868" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "detail-layout", children: [
@@ -24584,11 +24606,15 @@
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fact", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "\u56FE\u5C42\u804C\u8D23" }),
                 selected.layerRole
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fact fact-wide", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "\u9002\u7528\u573A\u666F" }),
+                selected.useWhen
               ] })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", { className: "json-block", children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("summary", { className: "json-summary", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u67E5\u770B\u6A21\u677F JSON \u4E0E\u53C2\u6570\u5951\u7EA6" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u67E5\u770B Function Calling \u53C2\u6570\u5951\u7EA6" }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CopyButton, { value: detailJson })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", { children: detailJson })
@@ -24612,7 +24638,8 @@
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: catalog.length })
           ] }),
           tree.map(([cat, groups]) => {
-            const isOpen = open.has(cat), count = [...groups.values()].reduce((n, v) => n + v.length, 0);
+            const isOpen = open.has(cat);
+            const count = [...groups.values()].reduce((total, items) => total + items.length, 0);
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "tree-root", children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "tree-branch", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: `tree-category ${category === cat && !structure ? "active" : ""}`, onClick: () => {
@@ -24622,19 +24649,21 @@
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "label", children: cat }),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: count })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "toggle", "aria-expanded": isOpen, onClick: () => setOpen((p) => {
-                  const n = new Set(p);
-                  n.has(cat) ? n.delete(cat) : n.add(cat);
-                  return n;
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "toggle", "aria-expanded": isOpen, onClick: () => setOpen((previous) => {
+                  const next = new Set(previous);
+                  next.has(cat) ? next.delete(cat) : next.add(cat);
+                  return next;
                 }), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `arrow ${isOpen ? "open" : ""}` }) })
               ] }),
-              isOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tree-group", children: [...groups].map(([name, items]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: `nav-btn ${category === cat && structure === name ? "active" : ""}`, onClick: () => {
-                setCategory(cat);
-                setStructure(name);
-              }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "label", children: name }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: items.length })
-              ] }, name)) })
+              isOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tree-group", children: [...groups].map(
+                ([name, items]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: `nav-btn ${category === cat && structure === name ? "active" : ""}`, onClick: () => {
+                  setCategory(cat);
+                  setStructure(name);
+                }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "label", children: name }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: items.length })
+                ] }, name)
+              ) })
             ] }, cat);
           })
         ] })
@@ -24642,7 +24671,7 @@
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "toolbar", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "search", children: [
           "\u2315",
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: query, onChange: (e) => setQuery(e.target.value), placeholder: "\u641C\u7D22\u540D\u79F0\u3001\u6837\u5F0F ID\u3001\u6A21\u677F\u7C7B\u578B\u2026" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: query, onChange: (event) => setQuery(event.target.value), placeholder: "\u641C\u7D22\u540D\u79F0\u3001\u6837\u5F0F ID\u3001\u6A21\u677F\u7C7B\u578B\u2026" })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "active-row", children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: category === "\u5168\u90E8" ? "\u5168\u90E8\u6A21\u677F" : structure ? `${category} / ${structure}` : `${category}\u5206\u7C7B` }),
@@ -24669,12 +24698,12 @@
     ] });
   }
   async function boot() {
-    const r = await fetch("/api/catalog", { cache: "no-store" });
-    if (!r.ok) throw new Error("\u65E0\u6CD5\u8BFB\u53D6\u6A21\u677F\u76EE\u5F55");
-    (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "app", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Gallery, { catalog: await r.json() }) }));
+    const response = await fetch("/api/catalog", { cache: "no-store" });
+    if (!response.ok) throw new Error("\u65E0\u6CD5\u8BFB\u53D6\u6A21\u677F\u76EE\u5F55");
+    (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "app", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Gallery, { catalog: await response.json() }) }));
   }
-  boot().catch((e) => {
-    document.getElementById("root").textContent = e instanceof Error ? e.message : "\u9884\u89C8\u52A0\u8F7D\u5931\u8D25";
+  boot().catch((error) => {
+    document.getElementById("root").textContent = error instanceof Error ? error.message : "\u9884\u89C8\u52A0\u8F7D\u5931\u8D25";
   });
 })();
 /*! Bundled license information:

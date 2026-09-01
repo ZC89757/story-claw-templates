@@ -1,3 +1,4 @@
+import {createContext, useContext} from "react";
 import type {CSSProperties, ReactNode} from "react";
 import {AbsoluteFill, Audio, Easing, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {TitleLayout, titleFontSize} from "./TitleLayout";
@@ -116,7 +117,16 @@ const Text = ({text, opacity = 1, scale = 1, x = 0, y = 0, rotate = 0, color = I
   ...extra,
 }}>{text}</div>;
 
-const Background = ({children, color = "transparent"}: {children: ReactNode; color?: string}) => <AbsoluteFill style={{background: color, overflow: "hidden"}}>{children}</AbsoluteFill>;
+/**
+ * Standalone previews keep the authored colour wash, while the episode
+ * compositor can opt into a transparent root so the raw plate remains visible
+ * outside the actual title/card artwork.
+ */
+const TransparentRootContext = createContext(false);
+const Background = ({children, color = "transparent"}: {children: ReactNode; color?: string}) => {
+  const transparent = useContext(TransparentRootContext);
+  return <AbsoluteFill style={{background: transparent ? "transparent" : color, overflow: "hidden"}}>{children}</AbsoluteFill>;
+};
 
 // 01 · braces pull apart while a clipped title is revealed between them.
 const BraceExpand = ({text, frame}: TitleRendererProps) => {
@@ -652,7 +662,7 @@ const TitleSfx = ({style}: {style: ShotcraftTitleStyle}) => {
  * contract remains exactly TitleSpec; group selects an already-authored fixed
  * motion recipe and no visual tuning is requested from the model.
  */
-export const ShotcraftTitleTemplate = ({spec, style = "split-text-stagger", css}: Props) => {
+export const ShotcraftTitleTemplate = ({spec, style = "split-text-stagger", css, transparentBackground = false}: Props & {transparentBackground?: boolean}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
@@ -660,10 +670,12 @@ export const ShotcraftTitleTemplate = ({spec, style = "split-text-stagger", css}
   const renderer = TITLE_RENDERERS[style as ShotcraftTitleStyle];
   if (!renderer) return null;
   const localFrame = Math.floor(titleElapsed(spec, seconds) * fps);
-  return <TitleLayout spec={spec} style={css}>
-    <AbsoluteFill style={{background: "transparent"}}>
-      <TitleSfx style={style as ShotcraftTitleStyle} />
-      {renderer({text: spec.text, frame: localFrame})}
-    </AbsoluteFill>
-  </TitleLayout>;
+  return <TransparentRootContext.Provider value={transparentBackground}>
+    <TitleLayout spec={spec} style={css}>
+      <AbsoluteFill style={{background: "transparent"}}>
+        <TitleSfx style={style as ShotcraftTitleStyle} />
+        {renderer({text: spec.text, frame: localFrame})}
+      </AbsoluteFill>
+    </TitleLayout>
+  </TransparentRootContext.Provider>;
 };

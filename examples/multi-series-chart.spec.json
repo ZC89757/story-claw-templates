@@ -1,5 +1,4 @@
 {
-  "chartType": "bar",
   "title": "Gemini 与 GPT 示例能力评分",
   "xAxis": {
     "label": "能力维度",

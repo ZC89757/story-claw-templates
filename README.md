@@ -46,8 +46,7 @@ resolver 将动态元素的绝对时间换算为模板内部时间：`localAt = 
 | `create_title_cue` | `text` | 编号及所选标题模板的运动 |
 | `create_emphasis_text_cue` | `text` | 字号、换行、入场运动、描边和阴影 |
 | `create_timed_table` | `rows`，`columns`，`cells[{row,column,text,at}]` | 网格和单元格显现动画 |
-| `create_multi_series_bar_chart` | `title`，`xAxis{label,categories}`，`yAxis{label,unit}`，`series[].data[{category,at,value}]` | 柱状图类型、坐标范围、刻度、颜色和运动 |
-| `create_multi_series_line_chart` | 参数同多系列柱状图 | 折线图类型、坐标范围、刻度、颜色和运动 |
+| `create_multi_series_chart` | `group`，`title`，`xAxis{label,categories}`，`yAxis{label,unit}`，`series[].data[{category,at,value}]` | `group` 决定柱状图或折线图；坐标范围、刻度、颜色和运动由模板计算 |
 | `create_containment_timeline` | `title`，`root`，`relations[{at,parent,child}]`，`highlights[{at,target}]` | 包含与强调动作、嵌套布局和镜头 |
 | `create_decomposition_timeline` | `title`，`whole`，`parts[{at,part}]`，`highlights[{at,target}]` | 拆出与强调动作、卡片布局和运动 |
 | `create_weighted_comparison` | `title`，`leftLabel`，`rightLabel`，`items[{at,side,text,weight}]`，`highlights[{at,side}]` | 加入/强调动作、天平物理和计分动画 |
@@ -72,7 +71,7 @@ resolver 将动态元素的绝对时间换算为模板内部时间：`localAt = 
 
 - `motion`、`action`、`sequence`
 - `progress`、节点 `kind`、`detail`
-- `chartType`、坐标轴范围和刻度数
+- 坐标轴范围和刻度数
 - `assetSrc`、节点视觉类型、关系线颜色
 - 动画时长、布局坐标、摄像机行为和视觉样式
 

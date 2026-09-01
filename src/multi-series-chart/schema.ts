@@ -8,7 +8,7 @@ import {
   ResolvedFunctionCall,
   toLocalAt,
 } from "../function-call";
-import {MultiSeriesChartSpec, MultiSeriesChartType} from "./types";
+import {MultiSeriesChartSpec} from "./types";
 import {assertMultiSeriesChartSpec} from "./validate";
 
 export type MultiSeriesChartFunctionArgs = FunctionCallEnvelope & {
@@ -79,22 +79,16 @@ export const multiSeriesChartParametersSchema = {
   },
 } as const;
 
-const chartDefinition = (name: string, label: string) => ({
+export const multiSeriesChartFunctionDefinition = {
   type: "function",
-  name,
-  description: `Create one ${label} animation for an HTML group. Copy absolute episode timestamps into the root and every datum. Supply visible data and axis meaning only; category placement, bounds, ticks and motion are computed by the template.`,
+  name: "create_multi_series_chart",
+  description: "Create one multi-series chart animation for an HTML group. Copy the HTML group unchanged and use absolute episode timestamps for the root and every datum. Supply visible data and axis meaning only; bar or line rendering, category placement, bounds, ticks and motion are determined by the template group.",
   strict: true,
   parameters: multiSeriesChartParametersSchema,
-} as const);
-
-export const multiSeriesBarChartFunctionDefinition = chartDefinition("create_multi_series_bar_chart", "multi-series bar chart");
-export const multiSeriesLineChartFunctionDefinition = chartDefinition("create_multi_series_line_chart", "multi-series line chart");
-/** @deprecated Use the explicit bar or line definition. */
-export const multiSeriesChartFunctionDefinition = multiSeriesBarChartFunctionDefinition;
+} as const;
 
 export const resolveMultiSeriesChartFunctionArgs = (
   input: MultiSeriesChartFunctionArgs,
-  chartType: MultiSeriesChartType,
 ): ResolvedFunctionCall<MultiSeriesChartSpec> => {
   const envelope = assertFunctionEnvelope(input);
   const categories = input.xAxis.categories;
@@ -102,7 +96,6 @@ export const resolveMultiSeriesChartFunctionArgs = (
   const allValues = input.series.flatMap((series) => series.data.map((datum) => datum.value));
   const yAxis = autoAxis(allValues);
   const spec = assertMultiSeriesChartSpec({
-    chartType,
     title: input.title,
     xAxis: input.xAxis,
     yAxis: {...yAxis, ...input.yAxis},

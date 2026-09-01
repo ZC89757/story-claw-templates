@@ -3,14 +3,14 @@ import {AbsoluteFill, Audio, useCurrentFrame, useVideoConfig} from "remotion";
 import {evaluateChartDatum} from "./evaluate";
 import {MultiSeriesChartSpec} from "./types";
 
-type Props = {spec: MultiSeriesChartSpec; audioSrc?: string; style?: CSSProperties};
+type Props = {spec: MultiSeriesChartSpec; group: "bar" | "line"; audioSrc?: string; style?: CSSProperties};
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const PLOT = {left: 155, right: 95, top: 190, bottom: 175};
 const COLORS = ["#ef6334", "#58a6c4", "#e0b84f", "#69ad78", "#c178c7", "#e58aa1", "#8f9ee8", "#91a16b"];
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-export const MultiSeriesChartTemplate = ({spec, audioSrc, style}: Props) => {
+export const MultiSeriesChartTemplate = ({spec, group, audioSrc, style}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
@@ -26,7 +26,7 @@ export const MultiSeriesChartTemplate = ({spec, audioSrc, style}: Props) => {
     {audioSrc ? <Audio src={audioSrc} /> : null}
     <div style={{position: "absolute", left: PLOT.left, top: 62, fontSize: 50, fontWeight: 900}}>{spec.title}</div>
     <div style={{position: "absolute", right: PLOT.right, top: 76, display: "flex", gap: 30}}>
-      {spec.series.map((series, index) => <div key={series.name} style={{display: "flex", alignItems: "center", gap: 10, fontSize: 24, fontWeight: 800}}><span style={{width: 22, height: 22, background: COLORS[index], borderRadius: spec.chartType === "line" ? "50%" : 2}} />{series.name}</div>)}
+      {spec.series.map((series, index) => <div key={series.name} style={{display: "flex", alignItems: "center", gap: 10, fontSize: 24, fontWeight: 800}}><span style={{width: 22, height: 22, background: COLORS[index], borderRadius: group === "line" ? "50%" : 2}} />{series.name}</div>)}
     </div>
 
     <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
@@ -46,7 +46,7 @@ export const MultiSeriesChartTemplate = ({spec, audioSrc, style}: Props) => {
       <text x={PLOT.left + plotWidth / 2} y={HEIGHT - 48} textAnchor="middle" fontSize={27} fontWeight={800} fill="#aeb8bc">{spec.xAxis.label}</text>
       <text transform={`translate(48 ${PLOT.top + plotHeight / 2}) rotate(-90)`} textAnchor="middle" fontSize={27} fontWeight={800} fill="#aeb8bc">{spec.yAxis.label}{spec.yAxis.unit ? `（${spec.yAxis.unit}）` : ""}</text>
 
-      {spec.chartType === "bar" ? spec.series.flatMap((series, seriesIndex) => series.data.map((datum, categoryIndex) => {
+      {group === "bar" ? spec.series.flatMap((series, seriesIndex) => series.data.map((datum, categoryIndex) => {
         const progress = evaluateChartDatum(datum, seconds);
         const groupWidth = categoryWidth * 0.7;
         const gap = Math.min(10, groupWidth * 0.04);

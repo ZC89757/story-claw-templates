@@ -79,8 +79,7 @@ const xySpec = {
   ],
 };
 
-const multiSeriesSpec = (chartType: "bar" | "line") => ({
-  chartType,
+const multiSeriesSpec = {
   title: "两条增长曲线",
   xAxis: {label: "季度", categories: ["Q1", "Q2", "Q3", "Q4"]},
   yAxis: {min: 0, max: 100, label: "指数", unit: "分", ticks: 6},
@@ -88,7 +87,7 @@ const multiSeriesSpec = (chartType: "bar" | "line") => ({
     {name: "模型 A", data: [{at: 0, value: 28}, {at: 0.7, value: 42}, {at: 1.4, value: 66}, {at: 2.1, value: 82}]},
     {name: "模型 B", data: [{at: 0, value: 20}, {at: 0.7, value: 35}, {at: 1.4, value: 52}, {at: 2.1, value: 70}]},
   ],
-});
+};
 
 const containmentSpec = {
   title: "系统包含关系",
@@ -196,8 +195,8 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "graph-flow": content = <DirectedGraphTemplate spec={directedGraphSpec} />; break;
     case "graph-radial": content = <RadialRelationTemplate spec={directedGraphSpec} />; break;
     case "chart-line": content = <XYChartTemplate spec={xySpec} />; break;
-    case "chart-bar": content = <MultiSeriesChartTemplate spec={multiSeriesSpec("bar")} />; break;
-    case "chart-multi-line": content = <MultiSeriesChartTemplate spec={multiSeriesSpec("line")} />; break;
+    case "chart-bar": content = <MultiSeriesChartTemplate spec={multiSeriesSpec} group="bar" />; break;
+    case "chart-multi-line": content = <MultiSeriesChartTemplate spec={multiSeriesSpec} group="line" />; break;
     case "containment": content = <ContainmentTemplate spec={containmentSpec} />; break;
     case "decomposition": content = <DecompositionTemplate spec={decompositionSpec} />; break;
     case "comparison-weighted": content = <BalanceComparisonTemplate spec={{title: "方案对比", leftLabel: "方案 A", rightLabel: "方案 B", events: comparisonEvents}} />; break;

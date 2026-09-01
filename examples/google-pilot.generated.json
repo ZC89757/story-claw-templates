@@ -180,7 +180,6 @@
       "sourceText": "Google Cloud的变化最能说明投入的价值。它的收入从2022年的约263亿美元，增长到2023年的331亿美元，再增长到2024年的432亿美元；经营表现也从2022年亏损约19亿美元，转为2023年盈利约17亿美元、2024年盈利约61亿美元。云业务已经不再只是追赶亚马逊和微软，而是在AI时代获得了新的增长理由。",
       "specFile": "specs/multi-series-chart.json",
       "spec": {
-        "chartType": "bar",
         "title": "Google Cloud 2022—2024 收入与经营利润",
         "xAxis": {
           "label": "年份",

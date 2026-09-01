@@ -57,3 +57,49 @@ export type MgRenderInput = {
   fps: number;
   scene: MgRuntimeScene;
 };
+
+/**
+ * Stable runtime payload used by the host application.
+ *
+ * `kind` is deliberately opaque to Story Claw: only this template package's
+ * runtime knows how to turn it into a Remotion component.  Keeping the
+ * renderer selector here lets templates add new internal components without
+ * teaching the host their names.
+ */
+export type MgLayerRole = "scene" | "overlay";
+
+export type MgRuntimeLayer = {
+  kind: string;
+  group: string;
+  spec: unknown;
+  layerRole: MgLayerRole;
+  /** Internal presentation data consumed by runtime/render-entry.tsx only. */
+  canvas: "safe" | "full";
+  background: string;
+  overlayBackdrop?: string;
+};
+
+export type MgRuntimeLayerPlacement = {
+  id: string;
+  instance: string;
+  htmlTag: string;
+  group: string;
+  order?: number;
+  layerRole: MgLayerRole;
+  startFrame: number;
+  endFrame: number;
+  durationFrames: number;
+  timelineOffsetFrames: number;
+  sourceText: string;
+  render: MgRuntimeLayer;
+};
+
+export type MgRuntimeEpisodeInput = {
+  width: number;
+  height: number;
+  fps: number;
+  durationFrames: number;
+  /** A file copied to the Remotion public directory by the host. */
+  baseFile: string;
+  layers: MgRuntimeLayerPlacement[];
+};
