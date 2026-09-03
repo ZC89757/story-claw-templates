@@ -155,10 +155,22 @@ const SHOTCRAFT_CAMERA_STYLES = makeShotcraftEntries(
   ],
   "camera",
   "slow-push-in",
-  "直接作用于原画底片的固定推拉、俯仰、旋转和视差运镜；模型只提供锚点文字和时间",
+  "在独立模板场景中执行固定推拉、俯仰、旋转和视差运镜；模型只提供锚点文字和时间",
 );
 
 export const MG_STYLE_CATALOG = Object.freeze([
+  {
+    template: "sc-video",
+    htmlTag: "sc-video",
+    style: "normal",
+    name: "普通 AI 视频",
+    structureName: "AI 视频片段",
+    category: "视频",
+    renderMode: "replace",
+    description: "根据提示词和可选参考图生成普通视频片段。",
+    previewKind: "sc-video-normal",
+    isDefault: true,
+  },
   {
     template: "progress-timeline",
     htmlTag: "progress-timeline",

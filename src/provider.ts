@@ -9,6 +9,10 @@ export type {
   MgRuntimeEpisodeInput,
   MgRuntimeLayer,
   MgRuntimeLayerPlacement,
+  CompositionNode,
+  MgCompositionBundle,
+  MgActiveWindow,
+  MgRuntimeCompositionNode,
 } from "./runtime.js";
 import {progressTimelineFunctionDefinition, resolveProgressTimelineFunctionArgs} from "./progress-timeline/schema.js";
 import {timedTableFunctionDefinition, resolveTimedTableFunctionArgs} from "./timed-table/schema.js";
@@ -41,6 +45,7 @@ import {transitionFunctionDefinition, resolveTransitionFunctionArgs} from "./tra
 import {rhythmFunctionDefinition, resolveRhythmFunctionArgs} from "./rhythm/schema.js";
 import {effectFunctionDefinition, resolveEffectFunctionArgs} from "./effect/schema.js";
 import {cameraFunctionDefinition, resolveCameraFunctionArgs} from "./camera/schema.js";
+import {scVideoFunctionDefinition, resolveScVideoFunctionArgs} from "./sc-video/schema.js";
 
 /** The only static template description consumed by Story Claw. */
 export type MgTemplateDescriptor = Readonly<{
@@ -139,6 +144,7 @@ const elementAts = {
 };
 
 const bindings: readonly Binding[] = Object.freeze([
+  {name: scVideoFunctionDefinition.name, label: "普通 AI 视频", template: "sc-video", definition: scVideoFunctionDefinition, resolve: resolveScVideoFunctionArgs, elementAts: elementAts.root},
   {name: progressTimelineFunctionDefinition.name, label: "时间进度条", template: "progress-timeline", definition: progressTimelineFunctionDefinition, resolve: (input) => resolveProgressTimelineFunctionArgs(input as never), elementAts: elementAts.progress},
   {name: timedTableFunctionDefinition.name, label: "动态表格", template: "timed-table", definition: timedTableFunctionDefinition, resolve: (input) => resolveTimedTableFunctionArgs(input as never), elementAts: elementAts.table},
   {name: directedGraphFunctionDefinition.name, label: "有向关系图", template: "directed-graph", definition: directedGraphFunctionDefinition, resolve: (input) => resolveDirectedGraphFunctionArgs(input as never), elementAts: elementAts.graph},
@@ -197,6 +203,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
   if (template === "progress-timeline" && group === "vertical") return "#191d21";
   if (template === "directed-graph" && group === "radial") return "#f4f0e8";
   const backgrounds: Record<MgTemplateName, string> = {
+    "sc-video": "#000000",
     "progress-timeline": "#f4f1ea",
     "timed-table": "#171c20",
     "directed-graph": "#191d21",
@@ -252,6 +259,7 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - at 直接使用字级时间轴 JSON 的 start 数值，不进行换算
 - 根 at 使用该实例首个标签文字的 start；每个结构元素使用其对应标签文字首字的 start
 - 没有单独对应文字的结构性元素使用实例根 at
+- <sc-video> 的时间窗口由宿主代码根据标签文字绑定，其工具参数不填写 at
 
 内容规则：
 - 根据标签文字及其所在段落填写工具参数，保留原文数字、正负号、年份、单位和系列关系
@@ -268,6 +276,8 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - group 必须从该标签的可用 group 中选择；首次生成使用默认样式：${defaultGroups()}
 - 实例身份是“HTML 标签名 + group + order”。不同 group 本身已能区分实例，不需要共用 order
 - 只有相同 HTML 标签且相同 group 出现两个或更多独立实例时，才给这组实例按首次出现顺序填写连续 order=1、2、3；单实例不写 order
+- 相同 HTML 标签且相同 group 出现在不同父标签中时，属于多个独立实例，也必须在全文范围内使用连续 order 区分
+- <sc-video> 只允许 group="normal" 和可选 order，不使用 mode 或 value
 - value 是当前实例内部元素的正文顺序，从 1 连续编号；同一实例的 group、order、mode 必须一致
 - mode 只能是 together 或 split；标签可嵌套，但不能嵌套同一个动画实例
 - <mg-title> 和 <emphasis> 的单个动画实例只能包裹一段文字`;
@@ -382,6 +392,9 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   validateAnnotatedInstance: ({htmlTag, tagCount}) => {
     const template = templateByHtmlTag.get(htmlTag);
     if (!template) throw new Error(`不支持的 MG 标签 <${htmlTag}>`);
+    if (template === "sc-video" && tagCount !== 1) {
+      throw new Error("<sc-video> 的单个动画实例只能出现一次");
+    }
     if ((template === "title" || template === "emphasis") && tagCount !== 1) {
       throw new Error(`<${htmlTag}> 的单个动画实例只能出现一次`);
     }

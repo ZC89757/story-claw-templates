@@ -30,7 +30,7 @@ import {MetricTemplate} from "../src/metric";
 import {TransitionTemplate} from "../src/transition";
 import {RhythmTemplate} from "../src/rhythm";
 import {EffectTemplate} from "../src/effect";
-import {CameraTemplate} from "../src/camera";
+import {CameraTemplate, CameraPreviewPlate} from "../src/camera";
 
 type PreviewProps = {previewKind: string; style: string};
 
@@ -189,6 +189,11 @@ const cameraSpec = {
 const Preview = ({previewKind, style}: PreviewProps) => {
   let content: ReactNode;
   switch (previewKind) {
+    case "sc-video-normal": content = <CameraPreviewPlate
+      accent="#8ad3df"
+      secondary="#ad8cff"
+      label="<sc-video>"
+    />; break;
     case "timeline-horizontal": content = <ProgressTimelineTemplate spec={progressSpec} />; break;
     case "timeline-vertical": content = <VerticalProgressTimelineTemplate spec={progressSpec} />; break;
     case "table": content = <TimedTableTemplate spec={tableSpec} />; break;

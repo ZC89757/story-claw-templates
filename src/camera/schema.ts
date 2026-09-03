@@ -39,7 +39,7 @@ export const cameraParametersSchema = {
 export const cameraFunctionDefinition = {
   type: "function",
   name: "create_camera_move",
-  description: "Create one fixed camera treatment on the original footage for an HTML group. Supply only an anchor text and absolute timestamps; zoom, tilt, perspective, parallax, duration and fixed sound are owned by the selected style. For multiple marked fragments, copy each fragment into items.",
+  description: "Create one self-contained camera-animation scene for an HTML group. Supply only an anchor text and absolute timestamps; the visual plate, zoom, tilt, perspective, parallax, duration and fixed sound are owned by the selected style. For multiple marked fragments, copy each fragment into items.",
   strict: true,
   parameters: cameraParametersSchema,
 } as const;

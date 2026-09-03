@@ -37,7 +37,14 @@ import {TransitionTemplate} from "../src/transition";
 import {RhythmTemplate} from "../src/rhythm";
 import {EffectTemplate} from "../src/effect";
 import {CameraTemplate} from "../src/camera";
-import type {MgRenderInput, MgRuntimeEpisodeInput, MgRuntimeLayer, MgRuntimeLayerPlacement, MgRuntimeScene} from "../src/runtime";
+import type {
+  MgRenderInput,
+  MgRuntimeCompositionNode,
+  MgRuntimeEpisodeInput,
+  MgRuntimeLayer,
+  MgRuntimeLayerPlacement,
+  MgRuntimeScene,
+} from "../src/runtime";
 
 const ScaledCanvas = ({children, full = false}: {children: ReactNode; full?: boolean}) => {
   const {width, height} = useVideoConfig();
@@ -90,7 +97,7 @@ const RuntimeTemplate = ({layer, baseFile, baseTrimBeforeFrames}: {
   }
 };
 
-const Layer = ({layer, baseFile}: {layer: MgRuntimeLayerPlacement; baseFile: string}) => <Sequence
+const Layer = ({layer, baseFile}: {layer: MgRuntimeLayerPlacement; baseFile?: string}) => <Sequence
   from={layer.startFrame}
   durationInFrames={layer.durationFrames}
   premountFor={Math.min(15, layer.startFrame)}
@@ -117,35 +124,117 @@ const Layer = ({layer, baseFile}: {layer: MgRuntimeLayerPlacement; baseFile: str
   </AbsoluteFill>
 </Sequence>;
 
-/**
- * One composition owns the raw master and every MG layer. Overlay placements
- * never become H.264 intermediates, so their CSS transparency is real.
- */
-const EpisodeComposition = ({episode}: {episode: MgRuntimeEpisodeInput}) => <AbsoluteFill style={{background: "#000", overflow: "hidden"}}>
-  <OffthreadVideo src={staticFile(episode.baseFile)} muted style={{width: "100%", height: "100%", objectFit: "cover"}} />
-  {episode.layers.map((layer) => <Layer key={layer.id} layer={layer} baseFile={episode.baseFile} />)}
-</AbsoluteFill>;
+const CompositionVideo = ({videoPath, muted = false, transparent = false}: {
+  videoPath: string;
+  muted?: boolean;
+  transparent?: boolean;
+}) => <OffthreadVideo
+  src={staticFile(videoPath)}
+  muted={muted}
+  transparent={transparent}
+  style={{width: "100%", height: "100%", objectFit: "cover"}}
+/>;
+
+const isTransparentVideo = (node: MgRuntimeCompositionNode): boolean =>
+  node.layerRole === "overlay" || /\.mov(?:$|[?#])/i.test(node.videoPath);
+
+const NodeContent = ({node}: {node: MgRuntimeCompositionNode}) => {
+  const timelineOffsetFrames = node.timelineOffsetFrames ?? 0;
+  if (node.videoPath) {
+    return <CompositionVideo videoPath={node.videoPath} transparent={isTransparentVideo(node)} />;
+  }
+  if (!node.render) return null;
+  return <AbsoluteFill style={{
+    background: node.render.layerRole === "scene" ? node.render.background : node.render.overlayBackdrop ?? "transparent",
+    overflow: "hidden",
+    pointerEvents: "none",
+  }}>
+    <ScaledCanvas full={node.render.canvas === "full"}>
+      <Sequence from={-timelineOffsetFrames} layout="none">
+        <RuntimeTemplate layer={node.render} baseTrimBeforeFrames={0} />
+      </Sequence>
+    </ScaledCanvas>
+  </AbsoluteFill>;
+};
+
+const Node = ({node}: {node: MgRuntimeCompositionNode}) => {
+  const durationInFrames = Math.max(1, node.endFrame - node.startFrame);
+  const activeWindows = node.activeWindows?.map((window) => ({
+    startFrame: Math.max(0, Math.min(durationInFrames, Math.trunc(window.startFrame))),
+    endFrame: Math.max(0, Math.min(durationInFrames, Math.trunc(window.endFrame))),
+  })).filter((window) => window.endFrame > window.startFrame);
+  const content = activeWindows?.length
+    ? activeWindows.map((window, index) => <Sequence
+      key={`${node.nodeId}-active-${index}`}
+      from={window.startFrame}
+      durationInFrames={window.endFrame - window.startFrame}
+      layout="none"
+    >
+      <Sequence from={-window.startFrame} layout="none">
+        <NodeContent node={node} />
+      </Sequence>
+    </Sequence>)
+    : activeWindows
+      ? null
+      : <NodeContent node={node} />;
+  return <Sequence
+    from={node.startFrame}
+    durationInFrames={durationInFrames}
+    premountFor={Math.min(15, node.startFrame)}
+    style={{zIndex: node.zIndex}}
+  >
+    <AbsoluteFill style={{overflow: "hidden", pointerEvents: "none"}}>
+      {content}
+    </AbsoluteFill>
+  </Sequence>;
+};
+
+const stableNodes = (nodes: readonly MgRuntimeCompositionNode[]): MgRuntimeCompositionNode[] =>
+  nodes
+    .map((node, index) => ({node, index}))
+    .filter(({node}) => node.endFrame > node.startFrame)
+    .sort((left, right) => left.node.zIndex - right.node.zIndex || left.index - right.index)
+    .map(({node}) => node);
+
+/** One composition owns every video node and template layer. */
+const EpisodeComposition = ({episode}: {episode: MgRuntimeEpisodeInput}) => {
+  const nodes = stableNodes(episode.nodes ?? []);
+  return <AbsoluteFill style={{
+    background: episode.transparentBackground ? "transparent" : "#000",
+    overflow: "hidden",
+  }}>
+    {episode.baseFile ? <CompositionVideo videoPath={episode.baseFile} muted /> : null}
+    {(episode.layers ?? []).map((layer) => <Layer key={layer.id} layer={layer} baseFile={episode.baseFile} />)}
+    {nodes.map((node) => <Node key={node.nodeId} node={node} />)}
+  </AbsoluteFill>;
+};
 
 /* Retained for any standalone template-package consumer using the old scene prop. */
 const LegacyScene = ({scene}: {scene: MgRuntimeScene}) => <AbsoluteFill style={{background: scene.background}} />;
 
 const Root = () => {
   const supplied = getInputProps() as Partial<MgRuntimeEpisodeInput & MgRenderInput> & {episode?: Partial<MgRuntimeEpisodeInput>};
-  const sourceEpisode = supplied.episode ?? (Array.isArray(supplied.layers) ? supplied : undefined);
+  const sourceEpisode = supplied.episode ?? (
+    Array.isArray(supplied.layers) || Array.isArray(supplied.nodes) || supplied.baseFile
+      ? supplied
+      : undefined
+  );
   const episode = sourceEpisode ? {
     width: sourceEpisode.width ?? 1280,
     height: sourceEpisode.height ?? 720,
     fps: sourceEpisode.fps ?? 25,
     durationFrames: sourceEpisode.durationFrames ?? 1,
-    baseFile: sourceEpisode.baseFile ?? "base/raw-master.mp4",
+    ...(sourceEpisode.baseFile ? {baseFile: sourceEpisode.baseFile} : {}),
     layers: sourceEpisode.layers ?? [],
+    nodes: sourceEpisode.nodes ?? [],
+    transparentBackground: sourceEpisode.transparentBackground ?? false,
   } satisfies MgRuntimeEpisodeInput : undefined;
   const legacyScene = supplied.scene;
   return <>
     <Composition
       id="StoryClawMgEpisode"
       component={EpisodeComposition}
-      defaultProps={{episode: episode ?? {width: 1280, height: 720, fps: 25, durationFrames: 1, baseFile: "base/raw-master.mp4", layers: []}}}
+      defaultProps={{episode: episode ?? {width: 1280, height: 720, fps: 25, durationFrames: 1, layers: [], nodes: []}}}
       width={episode?.width ?? 1280}
       height={episode?.height ?? 720}
       fps={episode?.fps ?? 25}

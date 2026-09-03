@@ -6,6 +6,7 @@ export type MgTemplateUsage = Readonly<{
 }>;
 
 export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
+  {template: "sc-video", useWhen: "指定原文需要生成普通 AI 视频片段，可选已有参考图、生成参考图或不指定创意参考图"},
   {template: "progress-timeline", useWhen: "原文有明确时间、年份、阶段或里程碑，且需要按顺序展开"},
   {template: "timed-table", useWhen: "多个对象共享多个字段，需要逐项对照"},
   {template: "directed-graph", useWhen: "原文存在真实因果、依赖、转移或流程"},
@@ -24,6 +25,6 @@ export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
   {template: "metric", useWhen: "原文包含可读的数字、比例、进度、仪表或指标变化"},
   {template: "transition", useWhen: "原文明确存在两个画面段落之间的转场节点，且需要几何擦除或闪切"},
   {template: "rhythm", useWhen: "原文需要在重音、节拍或蒙太奇节点施加短促的脉冲、冻结或频闪"},
-  {template: "effect", useWhen: "原文需要光斑、扫描、框线、冲击、装配或品牌视觉效果，但不需要改变原画内容"},
-  {template: "camera", useWhen: "原文需要对原画底片做固定的推拉、俯仰、旋转、视差或定格运镜"},
+  {template: "effect", useWhen: "原文需要光斑、扫描、框线、冲击、装配或品牌视觉效果"},
+  {template: "camera", useWhen: "原文适合用独立模板场景表现固定推拉、俯仰、旋转、视差或定格运镜"},
 ]);

@@ -132,6 +132,16 @@ const PreviewPlate = ({accent, secondary, style}: {accent: string; secondary: st
   </div>
 </div>;
 
+/** Shared generated-video plate used by camera and <sc-video> previews. */
+export const CameraPreviewPlate = ({accent, secondary, label}: {
+  accent: string;
+  secondary: string;
+  label?: string;
+}) => <div style={{position: "absolute", inset: 0, background: "#080c0f", overflow: "hidden"}}>
+  <PreviewPlate accent={accent} secondary={secondary} style={{position: "absolute", inset: 0}} />
+  {label ? <div style={{position: "absolute", left: 94, bottom: 90, color: accent, fontSize: 42, fontWeight: 900, fontFamily: '"Microsoft YaHei", Arial, sans-serif'}}>{label}</div> : null}
+</div>;
+
 const CameraSfx = ({recipe}: {recipe: CameraRecipe}) => {
   const {fps} = useVideoConfig();
   return <Sequence from={Math.round(.05 * fps)} durationInFrames={Math.max(1, Math.round(.88 * fps))} layout="none">

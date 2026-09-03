@@ -1,4 +1,5 @@
 export type MgTemplateName =
+  | "sc-video"
   | "progress-timeline"
   | "timed-table"
   | "directed-graph"
@@ -94,12 +95,57 @@ export type MgRuntimeLayerPlacement = {
   render: MgRuntimeLayer;
 };
 
+/** Minimal persistent composition-tree node owned by the host application. */
+export type CompositionNode = {
+  nodeId: string;
+  parentNodeId?: string;
+  videoPath: string;
+  startFrame: number;
+  endFrame: number;
+  zIndex: number;
+};
+
+/** Persistent render bundle. Runtime-only placement data is deliberately excluded. */
+export type MgCompositionBundle = {
+  width: number;
+  height: number;
+  fps: number;
+  durationFrames: number;
+  nodes: CompositionNode[];
+};
+
+export type MgActiveWindow = {
+  /** Local frame in the rendered clip. */
+  startFrame: number;
+  /** Exclusive local frame in the rendered clip. */
+  endFrame: number;
+};
+
+/** Runtime-only enrichment used to render provider templates beside videos. */
+export type MgRuntimeCompositionNode = CompositionNode & {
+  instance?: string;
+  htmlTag?: string;
+  group?: string;
+  order?: number;
+  layerRole?: MgLayerRole;
+  timelineOffsetFrames?: number;
+  sourceText?: string;
+  render?: MgRuntimeLayer;
+  /** Local clip-frame windows in which the rendered template is visible. */
+  activeWindows?: MgActiveWindow[];
+};
+
 export type MgRuntimeEpisodeInput = {
   width: number;
   height: number;
   fps: number;
   durationFrames: number;
-  /** A file copied to the Remotion public directory by the host. */
-  baseFile: string;
-  layers: MgRuntimeLayerPlacement[];
+  /** Optional compatibility plate. New essay compositions may omit it. */
+  baseFile?: string;
+  /** Legacy provider placements. */
+  layers?: MgRuntimeLayerPlacement[];
+  /** Unified video composition nodes. */
+  nodes?: MgRuntimeCompositionNode[];
+  /** Transparent only for a standalone overlay clip render. */
+  transparentBackground?: boolean;
 };
