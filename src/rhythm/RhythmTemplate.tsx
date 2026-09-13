@@ -27,7 +27,7 @@ const wave = (value: number, speed = 4): number => Math.pow(Math.max(0, Math.sin
 const RhythmSfx = ({style}: {style: string}) => {
   const {fps} = useVideoConfig();
   const files: Record<string, string> = {
-    "paparazzi-flash": "click-camera.mp3",
+    "paparazzi-flash": "click-shutter.mp3",
     "drop-blackout-slam": "impact-cine.mp3",
     "domino-cascade": "impact-cine.mp3",
     "comic-panel-split": "impact-cine.mp3",

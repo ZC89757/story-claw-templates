@@ -1,5 +1,5 @@
 import type {CSSProperties, ReactNode} from "react";
-import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
+import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {deterministic, easeInOut, easeOut, effectProgress} from "./evaluate";
 import type {EffectItem, EffectSpec} from "./types";
 
@@ -21,10 +21,11 @@ export const EFFECT_STYLES = [
   "sheen-sweep", "slide-spotlight-pan", "spotlight-sweep", "crane-rise-reveal",
   "dataviz-landscape-open", "fracture", "icon-field-colorize", "stroke-segment-build",
   "grain-dissolve", "logo-shrink-wordmark-lockup", "logo-sting-button", "neon-triple-marquee",
+  "object-drop", "glass-fracture",
 ] as const;
 
 type EffectStyle = (typeof EFFECT_STYLES)[number];
-type SfxName = "click-camera.mp3" | "glitch-electric-small.mp3" | "impact-cine.mp3" | "pop.mp3" | "sparkle.mp3" | "swoosh-quick.mp3" | "transition-snap.mp3" | "transition-soft.mp3" | "whoosh-big.mp3" | "whoosh-fast.mp3";
+type SfxName = "click-shutter.mp3" | "glitch-electric-small.mp3" | "impact-cine.mp3" | "pop.mp3" | "sparkle.mp3" | "swoosh-quick.mp3" | "transition-snap.mp3" | "transition-soft.mp3" | "whoosh-big.mp3" | "whoosh-fast.mp3";
 
 type EffectRecipe = {renderer: EffectStyle; sfx: SfxName};
 
@@ -48,9 +49,9 @@ export const EFFECT_RECIPES = {
   "misregistration-hit": {renderer: "misregistration-hit", sfx: "transition-snap.mp3"},
   "orb-flyline-relay": {renderer: "orb-flyline-relay", sfx: "whoosh-fast.mp3"},
   "pop-burst-confirm": {renderer: "pop-burst-confirm", sfx: "pop.mp3"},
-  "reticle-lock-on": {renderer: "reticle-lock-on", sfx: "click-camera.mp3"},
+  "reticle-lock-on": {renderer: "reticle-lock-on", sfx: "click-shutter.mp3"},
   "scan-bracket-sweep": {renderer: "scan-bracket-sweep", sfx: "swoosh-quick.mp3"},
-  "scanline-annotate-focus": {renderer: "scanline-annotate-focus", sfx: "click-camera.mp3"},
+  "scanline-annotate-focus": {renderer: "scanline-annotate-focus", sfx: "click-shutter.mp3"},
   "scanline-assemble-flyin": {renderer: "scanline-assemble-flyin", sfx: "whoosh-fast.mp3"},
   "score-slam": {renderer: "score-slam", sfx: "impact-cine.mp3"},
   "sheen-sweep": {renderer: "sheen-sweep", sfx: "sparkle.mp3"},
@@ -65,13 +66,17 @@ export const EFFECT_RECIPES = {
   "logo-shrink-wordmark-lockup": {renderer: "logo-shrink-wordmark-lockup", sfx: "transition-snap.mp3"},
   "logo-sting-button": {renderer: "logo-sting-button", sfx: "impact-cine.mp3"},
   "neon-triple-marquee": {renderer: "neon-triple-marquee", sfx: "swoosh-quick.mp3"},
+  "object-drop": {renderer: "object-drop", sfx: "impact-cine.mp3"},
+  "glass-fracture": {renderer: "glass-fracture", sfx: "glitch-electric-small.mp3"},
 } as const satisfies Record<EffectStyle, EffectRecipe>;
 
-const Sfx = ({style}: {style: string}) => {
+const Sfx = ({style, cueAt}: {style: string; cueAt?: number}) => {
   const {fps} = useVideoConfig();
   const file = EFFECT_RECIPES[style as EffectStyle]?.sfx;
   if (!file) throw new Error(`Unsupported effect style: ${style}`);
-  return <Sequence from={Math.round(0.06 * fps)} durationInFrames={Math.max(1, Math.round(0.85 * fps))} layout="none">
+  const defaultCueAt = style === "object-drop" ? 0.70 : style === "glass-fracture" ? 0.46 : 0.06;
+  const cue = cueAt ?? defaultCueAt;
+  return <Sequence from={Math.max(0, Math.round(cue * fps))} durationInFrames={Math.max(1, Math.round(0.85 * fps))} layout="none">
     <Audio src={staticFile(`audio/${file}`)} volume={0.18} />
   </Sequence>;
 };
@@ -138,10 +143,72 @@ const DotField = ({p}: {p: number}) => <div style={{position: "absolute", inset:
 
 const Grain = ({p}: {p: number}) => <div style={{position: "absolute", inset: 180}}>{Array.from({length: 120}).map((_, index) => { const x = (index * 83) % 100; const y = (index * 47) % 100; const q = easeOut(Math.max(0, Math.min(1, p * 1.5 - (index % 17) * 0.025))); return <i key={index} style={{position: "absolute", left: `${x}%`, top: `${y}%`, width: 4 + (index % 4) * 2, height: 4 + (index % 4) * 2, borderRadius: "50%", background: index % 3 ? CYAN : ACCENT, opacity: q * (1 - p * 0.45), transform: `translate(${(1 - q) * ((index % 2 ? 1 : -1) * 140)}px,${(1 - q) * 80}px)`}} />; })}</div>;
 
-type BodyProps = {text: string; items: EffectItem[]; p: number; frame: number; seconds: number};
+// This source has a black background and bright cracks. `screen` removes the
+// black while keeping the crack lines, so no white flash is introduced.
+const BROKEN_GLASS_IMAGE = "mg-effect/_internal/glass-fracture/broken-glass-reference.jpg";
+const IMPACT_SMOKE_IMAGES = Array.from({length: 12}, (_, index) =>
+  `mg-effect/_internal/object-drop/nv1-smoke-alpha-${String(index).padStart(2, "0")}.png`,
+);
+
+const DroppedObject = ({p, image}: {p: number; image: string}) => {
+  const panelWidth = 880;
+  const panelHeight = 471;
+  const landingTop = 335;
+  const startTop = -620;
+  const fall = clampEffect(Math.pow(p / 0.44, 2.35));
+  const top = startTop + (landingTop - startTop) * fall;
+  const rotation = -6 * (1 - fall);
+  const motionBlur = (1 - fall) * 2.8;
+  return <div style={{position: "absolute", left: W / 2 - panelWidth / 2, top, width: panelWidth, height: panelHeight, transformOrigin: "50% 100%", transform: `rotate(${rotation}deg)`, filter: `blur(${motionBlur}px) drop-shadow(0 28px 20px rgba(0,0,0,.76))`}}>
+    <div style={{position: "absolute", inset: -10, borderRadius: 12, background: "linear-gradient(145deg,#1d2a24,#070a09 68%)", border: "5px solid rgba(118,185,0,.72)", boxShadow: "inset 0 0 0 2px rgba(255,255,255,.14), 0 0 34px rgba(118,185,0,.20)"}} />
+    <Img src={staticFile(image)} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", borderRadius: 5, display: "block", filter: "saturate(1.06) contrast(1.04)"}} />
+    <div style={{position: "absolute", inset: 0, borderRadius: 5, background: "linear-gradient(110deg,rgba(255,255,255,.20),transparent 18% 72%,rgba(118,185,0,.12))", mixBlendMode: "screen", opacity: .54}} />
+    <div style={{position: "absolute", left: 0, right: 0, bottom: -18, height: 20, background: "linear-gradient(90deg,transparent,rgba(118,185,0,.55),transparent)", filter: "blur(10px)", opacity: .72}} />
+  </div>;
+};
+
+const ImpactSmoke = ({p}: {p: number}) => {
+  // The source animation is converted to alpha-only frames so its original
+  // title and black background never appear in the effect.
+  const smokeProgress = clampEffect((p - 0.46) / 0.36);
+  const smokeIn = easeOut(clampEffect((p - 0.46) / 0.07));
+  const smokeOut = 1 - clampEffect((p - 0.82) / 0.24);
+  const smoke = smokeIn * smokeOut;
+  if (smoke <= 0.001) return null;
+  const sourceFrame = Math.min(
+    IMPACT_SMOKE_IMAGES.length - 1,
+    Math.max(0, Math.floor(smokeProgress * (IMPACT_SMOKE_IMAGES.length - 1))),
+  );
+  return <div style={{position: "absolute", left: W / 2 - 1200, top: 535, width: 2400, height: 565, overflow: "hidden", opacity: Math.min(1, smoke * 1.12), transformOrigin: "50% 100%", transform: `translateY(${(1 - smokeIn) * 20}px) scale(${0.84 + smokeProgress * .16},${0.78 + smokeProgress * .22})`}}>
+    <Img src={staticFile(IMPACT_SMOKE_IMAGES[sourceFrame])} style={{position: "absolute", left: 0, top: 0, width: "100%", height: "100%", objectFit: "fill", filter: "brightness(0) invert(1) blur(1px)"}} />
+  </div>;
+};
+
+const clampEffect = (value: number): number => Math.min(1, Math.max(0, value));
+
+const GlassFracture = ({p, image}: {p: number; image: string}) => {
+  const appear = easeOut(clampEffect(p / 0.16));
+  const crack = easeOut(clampEffect((p - 0.18) / 0.34));
+  const logoSize = 430;
+  const logoLeft = W / 2 - logoSize / 2;
+  const logoTop = H / 2 - logoSize / 2;
+  return <>
+    <div style={{position: "absolute", inset: 0, background: "#000"}} />
+    <div style={{position: "absolute", left: logoLeft, top: logoTop, width: logoSize, height: logoSize, opacity: appear, filter: "drop-shadow(0 0 22px rgba(118,185,0,.38))"}}>
+      <Img src={staticFile(image)} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain"}} />
+    </div>
+    <Img src={staticFile(BROKEN_GLASS_IMAGE)} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", mixBlendMode: "screen", filter: "brightness(1.24) contrast(1.18)", opacity: crack * .92}} />
+  </>;
+};
+
+type BodyProps = {text: string; items: EffectItem[]; image?: string; p: number; frame: number; seconds: number};
+const requiredEffectImage = (image: string | undefined, group: "object-drop" | "glass-fracture"): string => {
+  if (!image?.trim()) throw new Error(`${group} requires one image asset`);
+  return image.trim();
+};
 const glow = (p: number) => Math.pow(Math.max(0, Math.sin(p * Math.PI * 4)), 8);
 const dots = (p: number, count = 18, accent = ACCENT, secondary = CYAN) => <>{Array.from({length: count}).map((_, index) => { const a = Math.PI * 2 * index / count; const d = easeOut(p) * (110 + (index % 6) * 52); return <i key={index} style={{position: "absolute", left: W / 2, top: H / 2, width: 6 + index % 5 * 3, height: 6 + index % 5 * 3, borderRadius: index % 3 ? "50%" : 2, background: index % 2 ? accent : secondary, opacity: (1 - p) * .82, transform: `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px)`}} />; })}</>;
-const explicitCue = ({text, p, frame, kind}: BodyProps & {kind: EffectStyle}) => {
+const explicitCue = ({text, p, frame, image, kind}: BodyProps & {kind: EffectStyle}) => {
   const pulse = glow(p);
   switch (kind) {
     case "anime-impact": return <><div style={{position: "absolute", inset: 0, background: "#fff", opacity: Math.max(0, .85 - p * 4), mixBlendMode: "screen"}} />{Array.from({length: 28}).map((_, index) => <i key={index} style={{position: "absolute", left: W / 2, top: H / 2, width: 420 + index % 5 * 115, height: 5 + index % 3 * 3, background: index % 4 ? "#fff" : ACCENT, opacity: Math.max(0, .9 - p * 3), transformOrigin: "0 50%", transform: `rotate(${index / 28 * Math.PI * 2}rad) scaleX(${easeOut(p * 3)})`}} />)}<CueText text={text} p={p} /></>;
@@ -174,6 +241,15 @@ const explicitCue = ({text, p, frame, kind}: BodyProps & {kind: EffectStyle}) =>
     case "crane-rise-reveal": return <><div style={{position: "absolute", left: 130, top: 100, width: 1660, height: 870, overflow: "hidden", border: "2px solid #8ad3df"}}><div style={{position: "absolute", inset: 0, transformOrigin: "left top", transform: `translate(${-1300 * (1 - p)}px,${-1260 * (1 - p)}px) scale(${1 + (1 - p) * 2.2})`}}>{Array.from({length: 8}).map((_, index) => <div key={index} style={{position: "absolute", left: 80, right: 80, top: 80 + index * 104, height: 76, border: "2px solid #ffffff44", background: "#ffffff12"}} />)}</div></div><CueText text={text} p={p} index={-3} /></>;
     case "dataviz-landscape-open": return <><svg width={W} height={H} style={{position: "absolute", inset: 0}}>{["M -100 870 C 390 620 580 790 1340 420", "M -80 570 C 360 540 820 700 1340 420", "M 40 1020 C 620 700 760 730 1340 420", "M 340 120 C 610 450 980 310 1340 420"].map((d, index) => <path key={index} d={d} fill="none" stroke={index % 2 ? CYAN : ACCENT} strokeWidth={index ? 5 : 10} strokeDasharray="2200" strokeDashoffset={2200 * (1 - p)} opacity={.28 + index * .14} />)}</svg><CueText text={text} p={p} index={-3} /></>;
     case "fracture": return <><ShardField p={p} /><CueText text={text} p={p} /></>;
+    case "object-drop": {
+      const objectImage = requiredEffectImage(image, "object-drop");
+      return <>
+        <div style={{position: "absolute", inset: 0, background: "#000"}} />
+        <ImpactSmoke p={p} />
+        <DroppedObject p={p} image={objectImage} />
+      </>;
+    }
+    case "glass-fracture": return <GlassFracture p={p} image={requiredEffectImage(image, "glass-fracture")} />;
     case "icon-field-colorize": return <><DotField p={p} /><div style={{position: "absolute", left: 700, top: 350, width: 520, height: 330, border: `5px solid ${ACCENT}`, opacity: p, transform: `scale(${.75 + p * .25})`}} /><CueText text={text} p={p} index={3} /></>;
     case "stroke-segment-build": return <><svg width={W} height={H} style={{position: "absolute", inset: 0}}>{Array.from({length: 16}).map((_, index) => { const rank = [7,2,12,4,0,14,9,1,10,5,15,6,3,13,8,11].indexOf(index); const q = easeOut(Math.max(0, Math.min(1, (p - .08 - rank * .045) / .14))); return <line key={index} x1={430 + index % 4 * 250} y1={310 + Math.floor(index / 4) * 145} x2={550 + index % 4 * 250} y2={310 + Math.floor(index / 4) * 145 + (index % 3 - 1) * 80} stroke={index % 3 ? INK : ACCENT} strokeWidth="18" opacity={q} />; })}</svg><CueText text={text} p={Math.max(0, (p - .78) * 5)} /></>;
     case "grain-dissolve": return <><Grain p={p} /><div style={{position: "absolute", left: 430, top: 410, width: 1060, height: 250, border: `2px dashed ${CYAN}`, opacity: p < .7 ? p : 0, transform: "rotate(-4deg)"}} /><CueText text={text} p={Math.max(0, (p - .62) * 2.7)} /></>;
@@ -189,19 +265,71 @@ const EffectBody = ({style, ...props}: BodyProps & {style: string}): ReactNode =
   return explicitCue({...props, kind: recipe.renderer});
 };
 
+const OBJECT_DROP_FALL_PORTION = 0.44;
+const OBJECT_DROP_TAIL_SECONDS = 1.6;
+const OBJECT_DROP_DEFAULT_FALL_SECONDS = 0.55;
+const GLASS_FRACTURE_APPEAR_PORTION = 0.18;
+const GLASS_FRACTURE_TAIL_SECONDS = 0.9;
+const GLASS_FRACTURE_DEFAULT_CRACK_SECONDS = 0.46;
+
+/** Scene-local second at which the falling object hits the ground. */
+const objectDropImpactAt = (spec: EffectSpec): number =>
+  spec.impactAt ?? spec.at + OBJECT_DROP_DEFAULT_FALL_SECONDS;
+
+/** Map object-drop wall-clock time onto the fixed renderers' 0..1 progress
+ * budget so the object lands exactly at impactAt and smoke follows the impact. */
+const objectDropProgress = (spec: EffectSpec, seconds: number): number => {
+  const fallDuration = Math.max(0.15, objectDropImpactAt(spec) - spec.at);
+  const elapsed = seconds - spec.at;
+  if (elapsed <= 0) return 0;
+  if (elapsed <= fallDuration) return (elapsed / fallDuration) * OBJECT_DROP_FALL_PORTION;
+  return OBJECT_DROP_FALL_PORTION
+    + (1.08 - OBJECT_DROP_FALL_PORTION) * clampEffect((elapsed - fallDuration) / OBJECT_DROP_TAIL_SECONDS);
+};
+
+/** Scene-local second at which the intact content cracks apart. */
+const glassFractureCrackAt = (spec: EffectSpec): number =>
+  spec.crackAt ?? spec.at + GLASS_FRACTURE_DEFAULT_CRACK_SECONDS;
+
+/** Reveal the intact content before crackAt, then grow the cracks from exactly
+ * crackAt and retire after the fixed crack tail. */
+const glassFractureProgress = (spec: EffectSpec, seconds: number): number => {
+  const crackDelay = Math.max(0.05, glassFractureCrackAt(spec) - spec.at);
+  const appearSeconds = Math.min(0.3, crackDelay);
+  const elapsed = seconds - spec.at;
+  if (elapsed <= 0) return 0;
+  if (elapsed <= appearSeconds) return (elapsed / appearSeconds) * GLASS_FRACTURE_APPEAR_PORTION;
+  if (elapsed <= crackDelay) return GLASS_FRACTURE_APPEAR_PORTION;
+  return GLASS_FRACTURE_APPEAR_PORTION
+    + (1.08 - GLASS_FRACTURE_APPEAR_PORTION) * clampEffect((elapsed - crackDelay) / GLASS_FRACTURE_TAIL_SECONDS);
+};
+
 export const EffectTemplate = ({spec, style = "line-unfold-panel", css}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
-  const rawProgress = effectProgress(spec.at, seconds);
-  const p = easeInOut(rawProgress);
+  const isObjectDrop = style === "object-drop";
+  const isGlassFracture = style === "glass-fracture";
+  // object-drop and glass-fracture own their whole mg-effect window: after the
+  // impact or the crack they hold the final frame instead of retiring, so the
+  // landed object / cracked screen stays visible until the tag ends.
+  const holdsToEnd = isObjectDrop || isGlassFracture;
+  const rawProgress = isObjectDrop
+    ? objectDropProgress(spec, seconds)
+    : isGlassFracture
+      ? glassFractureProgress(spec, seconds)
+      : effectProgress(spec.at, seconds);
   // Keep the geometry clamped through easing, but use the raw progression to
   // retire the overlay. Previously p could never exceed 1, so p >= 1.08 was
   // unreachable and completed effects froze for the entire scene window.
-  if (seconds < spec.at || rawProgress > 1.08) return null;
+  if (seconds < spec.at) return null;
+  if (!holdsToEnd && rawProgress > 1.08) return null;
+  const p = holdsToEnd ? Math.min(rawProgress, 1.08) : easeInOut(rawProgress);
   const items = spec.items ?? [];
   return <AbsoluteFill style={{background: "transparent", overflow: "hidden", pointerEvents: "none", ...css}}>
-    <EffectBody style={style} text={spec.text} items={items} p={p} frame={frame} seconds={seconds} />
-    <Sfx style={style} />
+    <EffectBody style={style} text={spec.text} items={items} image={spec.image} p={p} frame={frame} seconds={seconds} />
+    <Sfx style={style} cueAt={isObjectDrop
+      ? objectDropImpactAt(spec)
+      : isGlassFracture ? glassFractureCrackAt(spec) : undefined} />
   </AbsoluteFill>;
 };

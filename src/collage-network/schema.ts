@@ -64,7 +64,7 @@ export const collageNetworkParametersSchema = {
 export const collageNetworkFunctionDefinition = {
   type: "function",
   name: "create_collage_network",
-  description: "Create one progressive editorial-collage network for an HTML group. at values are absolute episode timestamps. Supply visible entity labels, stable ASCII ids, roles and relationship text only. Asset paths, visual categories, relationship colors, layout and camera motion are resolved by code or fixed by the template.",
+  description: "Create one progressive editorial-collage network for an HTML group. at values are absolute episode timestamps. Supply visible entity labels, stable ASCII ids, roles and relationship text only. Logo paths are discovered by the Provider's fixed directory scanner from node id/label/role; do not supply asset paths. Unmatched entities use a text monogram. Visual categories, relationship colors, layout and viewport focus are resolved by code or fixed by the template.",
   strict: true,
   parameters: collageNetworkParametersSchema,
 } as const;

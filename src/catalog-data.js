@@ -3,15 +3,15 @@ const displayName = (style) => style
   .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
   .join(" ");
 
-const makeShotcraftEntries = (template, htmlTag, structureName, category, renderMode, styles, previewKind, defaultStyle, description) => styles.map((style) => ({
+const makeShotcraftEntries = (template, htmlTag, structureName, category, renderMode, styles, previewKind, defaultStyle, description, styleDescriptions = {}, styleNames = {}) => styles.map((style) => ({
   template,
   htmlTag,
   style,
-  name: displayName(style),
+  name: styleNames[style] ?? displayName(style),
   structureName,
   category,
   renderMode,
-  description: `${description}（Shotcraft: ${style}）`,
+  description: `${styleDescriptions[style] ?? description}（Shotcraft: ${style}）`,
   previewKind,
   isDefault: style === defaultStyle,
 }));
@@ -133,29 +133,19 @@ const SHOTCRAFT_EFFECT_STYLES = makeShotcraftEntries(
     "scanline-assemble-flyin", "score-slam", "sheen-sweep", "slide-spotlight-pan", "spotlight-sweep",
     "crane-rise-reveal", "dataviz-landscape-open", "fracture", "icon-field-colorize", "stroke-segment-build",
     "grain-dissolve", "logo-shrink-wordmark-lockup", "logo-sting-button", "neon-triple-marquee",
+    "object-drop", "glass-fracture",
   ],
   "effect",
   "line-unfold-panel",
   "以固定的光斑、扫描、框线、冲击和装配效果叠加在原画上，模型只提供锚点文字和时间",
-);
-
-const SHOTCRAFT_CAMERA_STYLES = makeShotcraftEntries(
-  "camera",
-  "mg-camera",
-  "运镜",
-  "运镜",
-  // Camera owns a transformed copy of the raw plate for its active window.
-  // It is therefore a scene/base layer, not a transparent graphic overlay:
-  // title, emphasis, transition and other overlays are painted above it.
-  "replace",
-  [
-    "basic-3d-scene", "bullet-time-freeze-orbit", "crash-zoom-punch", "cursor-flyover", "dolly-zoom",
-    "drone-dive-landing", "dutch-roll-to-level", "exploded-view", "graze-face-tour", "multiplane",
-    "overhead-tabletop-drop", "pull-back-isolation", "slow-push-in", "steep-tilt-glide", "terminal-3d", "tilt-reveal",
-  ],
-  "camera",
-  "slow-push-in",
-  "在独立模板场景中执行固定推拉、俯仰、旋转和视差运镜；模型只提供锚点文字和时间",
+  {
+    "object-drop": "单个完整的产品或实体物体图从画面上方垂直落下；烟雾、地面和落点效果由模板固定提供",
+    "glass-fracture": "将一张完整 logo、图标或画面置于固定的全屏玻璃裂纹下层；裂纹由模板固定覆盖",
+  },
+  {
+    "object-drop": "物体坠落",
+    "glass-fracture": "破碎效果",
+  },
 );
 
 export const MG_STYLE_CATALOG = Object.freeze([
@@ -169,6 +159,30 @@ export const MG_STYLE_CATALOG = Object.freeze([
     renderMode: "replace",
     description: "根据提示词和可选参考图生成普通视频片段。",
     previewKind: "sc-video-normal",
+    isDefault: true,
+  },
+  {
+    template: "sc-longtake",
+    htmlTag: "sc-longtake",
+    style: "relay",
+    name: "接力一镜到底",
+    structureName: "连续 AI 视频",
+    category: "视频",
+    renderMode: "replace",
+    description: "把过长的一镜到底拆成多个 AI 视频段，逐段以前一段尾帧作为下一段首帧连续生成。",
+    previewKind: "sc-longtake-relay",
+    isDefault: true,
+  },
+  {
+    template: "video-footage",
+    htmlTag: "video-footage",
+    style: "full-bleed",
+    name: "素材视频截取",
+    structureName: "已有视频素材",
+    category: "视频",
+    renderMode: "replace",
+    description: "先读取固定素材库的字幕时间轴，再选择一个已有视频及其连续时间区间，全屏静音播放。",
+    previewKind: "video-footage-full-bleed",
     isDefault: true,
   },
   {
@@ -323,7 +337,7 @@ export const MG_STYLE_CATALOG = Object.freeze([
     structureName: "拼贴关系网络",
     category: "关系",
     renderMode: "replace",
-    description: "组合公司、产品或人物卡片并连接关系。",
+    description: "在整体语义范围内展示公司、产品或人物关系；together 使用一个外层标签和 values 节点词数组，split 保持逐节点标注。",
     previewKind: "collage",
     isDefault: true,
   },
@@ -349,6 +363,42 @@ export const MG_STYLE_CATALOG = Object.freeze([
     renderMode: "replace",
     description: "将多张真实截图、图片或待生成画面在同一画面并列显现。",
     previewKind: "image-grid",
+    isDefault: true,
+  },
+  {
+    template: "news-report",
+    htmlTag: "news-report",
+    style: "paper-stack",
+    name: "新闻报道纸张堆叠",
+    structureName: "新闻报道",
+    category: "素材",
+    renderMode: "replace",
+    description: "将多张真实新闻网页截图像纸张一样逐张摞起，只展示报道页面，不叠加中心标题。",
+    previewKind: "news-report-paper-stack",
+    isDefault: true,
+  },
+  {
+    template: "era-shift",
+    htmlTag: "era-shift",
+    style: "foreground-with-background",
+    name: "前景与背景切换",
+    structureName: "策略转向",
+    category: "结构",
+    renderMode: "replace",
+    description: "用一张固定或按参考图生成的可配置人物/物体前景叠在代码生成的背景生态前方，再在指定时间将 startItems 背景切换为 endItems，表现产业或产品的策略转向。",
+    previewKind: "era-shift-foreground-with-background",
+    isDefault: true,
+  },
+  {
+    template: "route-shift",
+    htmlTag: "route-shift",
+    style: "road-transfer",
+    name: "双路线切换",
+    structureName: "路线切换",
+    category: "结构",
+    renderMode: "replace",
+    description: "用 First、Second 和单一 Switch 节点表现从原路线切换到新路线。",
+    previewKind: "route-shift-road-transfer",
     isDefault: true,
   },
   {
@@ -447,11 +497,22 @@ export const MG_STYLE_CATALOG = Object.freeze([
     previewKind: "emphasis",
     isDefault: true,
   },
+  {
+    template: "news-flashback",
+    htmlTag: "news-flashback",
+    style: "project",
+    name: "网页资料闪回",
+    structureName: "资料闪回",
+    category: "强调",
+    renderMode: "scene",
+    description: "整屏翻页展示真实网页截图，中央压着被资料支撑的那句重点大字。",
+    previewKind: "news-flashback-project",
+    isDefault: true,
+  },
   ...SHOTCRAFT_TITLE_STYLES,
   ...SHOTCRAFT_SHOWCASE_STYLES,
   ...SHOTCRAFT_METRIC_STYLES,
   ...SHOTCRAFT_TRANSITION_STYLES,
   ...SHOTCRAFT_RHYTHM_STYLES,
   ...SHOTCRAFT_EFFECT_STYLES,
-  ...SHOTCRAFT_CAMERA_STYLES,
 ]);

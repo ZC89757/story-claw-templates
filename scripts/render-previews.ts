@@ -19,6 +19,8 @@ const onlyArg = process.argv.find((arg) => arg.startsWith("--only="))?.slice("--
   })();
 
 const walk = async (directory: string): Promise<string[]> => {
+  // 目录可能不存在（例如旧展示稿已从仓库移除），此时按空集合处理。
+  try { await fs.access(directory); } catch { return []; }
   const entries = await fs.readdir(directory, {withFileTypes: true});
   const files: string[] = [];
   for (const entry of entries) {

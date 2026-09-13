@@ -10,7 +10,7 @@
   },
   "target": {
     "package": "C:/Users/ZhangChi/Desktop/改写漫剧/story-claw-templates",
-    "catalogStyleCount": 231
+    "catalogStyleCount": 219
   },
   "statusMeaning": {
     "converted": "可直接作为 StoryClaw MG 标签和 Function Calling 使用，模板保留主要动作语义。",
@@ -20,10 +20,10 @@
     "not_suitable_for_mg": "不适合当前 MG 契约。"
   },
   "summary": {
-    "shotcraftStyles": 209,
+    "shotcraftStyles": 193,
     "byStatus": {
-      "converted": 114,
-      "converted_abstract": 95
+      "converted": 108,
+      "converted_abstract": 85
     },
     "byTemplate": {
       "title": {
@@ -55,11 +55,6 @@
         "htmlTag": "mg-effect",
         "function": "create_effect_cue",
         "styleCount": 36
-      },
-      "camera": {
-        "htmlTag": "mg-camera",
-        "function": "create_camera_move",
-        "styleCount": 16
       }
     },
     "unconverted": 0
@@ -1801,150 +1796,6 @@
       "function": "create_effect_cue",
       "status": "converted_abstract",
       "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "basic-3d-scene",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "bullet-time-freeze-orbit",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "crash-zoom-punch",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
-    },
-    {
-      "style": "cursor-flyover",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "dolly-zoom",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "drone-dive-landing",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "dutch-roll-to-level",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
-    },
-    {
-      "style": "exploded-view",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "graze-face-tour",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "multiplane",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "overhead-tabletop-drop",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
-    },
-    {
-      "style": "pull-back-isolation",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
-    },
-    {
-      "style": "slow-push-in",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
-    },
-    {
-      "style": "steep-tilt-glide",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "terminal-3d",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted_abstract",
-      "notes": "已接入可调用的固定视觉抽象；原卡中的外部页面纹理、多层素材或复杂镜头参数由模板固定，模型只传语义文字和时间。"
-    },
-    {
-      "style": "tilt-reveal",
-      "sourceCategory": "camera",
-      "targetTemplate": "camera",
-      "htmlTag": "mg-camera",
-      "function": "create_camera_move",
-      "status": "converted",
-      "notes": "已按原卡的语义动作接入对应 MG 模板；模型只传语义数据和时间。"
     }
   ]
 }

@@ -63,12 +63,12 @@ export const ContainmentTemplate = ({spec, audioSrc, style}: Props) => {
   containEvents.forEach((event) => reveal.set(event.child, evaluateContainmentEvent(event, seconds).progress));
 
   const latestVisibleChild = [...containEvents].reverse().find((event) => event.at <= seconds);
-  const cameraNode = latestVisibleChild ? layout.nodes.get(latestVisibleChild.child)! : layout.nodes.get(layout.root)!;
-  const cameraProgress = latestVisibleChild ? evaluateContainmentEvent(latestVisibleChild, seconds).progress : 0;
-  const desiredScale = Math.min(2.15, Math.max(1, 330 / cameraNode.radius));
-  const cameraScale = 1 + (desiredScale - 1) * cameraProgress;
-  const cameraX = WIDTH / 2 - cameraNode.x * cameraScale;
-  const cameraY = HEIGHT / 2 - cameraNode.y * cameraScale;
+  const focusNode = latestVisibleChild ? layout.nodes.get(latestVisibleChild.child)! : layout.nodes.get(layout.root)!;
+  const focusProgress = latestVisibleChild ? evaluateContainmentEvent(latestVisibleChild, seconds).progress : 0;
+  const desiredScale = Math.min(2.15, Math.max(1, 330 / focusNode.radius));
+  const viewportScale = 1 + (desiredScale - 1) * focusProgress;
+  const viewportX = WIDTH / 2 - focusNode.x * viewportScale;
+  const viewportY = HEIGHT / 2 - focusNode.y * viewportScale;
 
   const latestHighlight = [...spec.events].reverse().find((event) => event.action === "highlight" && event.at <= seconds);
   const highlightTarget = latestHighlight?.action === "highlight" ? latestHighlight.target : undefined;
@@ -78,7 +78,7 @@ export const ContainmentTemplate = ({spec, audioSrc, style}: Props) => {
     {audioSrc ? <Audio src={audioSrc} /> : null}
     {spec.title ? <div style={{position: "absolute", left: 84, top: 54, zIndex: 3, fontSize: 42, fontWeight: 900}}>{spec.title}</div> : null}
     <div style={{position: "absolute", inset: 0, backgroundImage: "linear-gradient(#d8d5cd 1px, transparent 1px), linear-gradient(90deg, #d8d5cd 1px, transparent 1px)", backgroundSize: "48px 48px", opacity: 0.23}} />
-    <div style={{position: "absolute", width: WIDTH, height: HEIGHT, transformOrigin: "0 0", transform: `translate(${cameraX}px, ${cameraY}px) scale(${cameraScale})`}}>
+    <div style={{position: "absolute", width: WIDTH, height: HEIGHT, transformOrigin: "0 0", transform: `translate(${viewportX}px, ${viewportY}px) scale(${viewportScale})`}}>
       {[...layout.nodes.values()].sort((a, b) => a.depth - b.depth).map((node) => {
         const progress = reveal.get(node.id) ?? 0;
         const color = COLORS[node.depth % COLORS.length];

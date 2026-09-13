@@ -12,6 +12,17 @@ export const validateEffectSpec = (input: unknown): string[] => {
   if (typeof input.at !== "number" || !Number.isFinite(input.at) || input.at < 0) {
     errors.push("at must be a non-negative number");
   }
+  for (const [field, value] of [["impactAt", input.impactAt], ["crackAt", input.crackAt]] as const) {
+    if (value === undefined) continue;
+    if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+      errors.push(`${field} must be a non-negative number when supplied`);
+    } else if (typeof input.at === "number" && value < input.at) {
+      errors.push(`${field} must not be earlier than at`);
+    }
+  }
+  if (input.image !== undefined && (typeof input.image !== "string" || !input.image.trim() || input.image.length > 2000)) {
+    errors.push("image must be a non-empty string of at most 2000 characters when supplied");
+  }
   if (input.items !== undefined) {
     if (!Array.isArray(input.items) || input.items.length < 1 || input.items.length > 12) {
       errors.push("items must contain 1-12 items when supplied");

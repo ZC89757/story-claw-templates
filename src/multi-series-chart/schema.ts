@@ -82,7 +82,7 @@ export const multiSeriesChartParametersSchema = {
 export const multiSeriesChartFunctionDefinition = {
   type: "function",
   name: "create_multi_series_chart",
-  description: "Create one multi-series chart animation for an HTML group. Copy the HTML group unchanged and use absolute episode timestamps for the root and every datum. Supply visible data and axis meaning only; bar or line rendering, category placement, bounds, ticks and motion are determined by the template group.",
+  description: "Create one multi-series chart animation for an HTML group. Copy the HTML group unchanged and use absolute episode timestamps for the root and every datum. Supply visible data and axis meaning only; bar or line rendering, category placement, bounds, ticks and motion are determined by the template group. If the HTML lacks concrete numbers but names identifiable entities and a meaningful comparison, call search_web first and use only reliable, unit-consistent public data; never invent values or add source fields to this strict schema.",
   strict: true,
   parameters: multiSeriesChartParametersSchema,
 } as const;

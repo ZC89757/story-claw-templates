@@ -23,6 +23,7 @@ import {
   TypewriterTitleTemplate,
 } from "../src/title";
 import {EmphasisTextTemplate} from "../src/emphasis";
+import {NewsFlashbackTemplate} from "../src/news-flashback";
 import {XYChartTemplate} from "../src/xy-chart";
 import {MultiSeriesChartTemplate} from "../src/multi-series-chart";
 import {ContainmentTemplate} from "../src/containment";
@@ -31,12 +32,16 @@ import {BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/we
 import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
+import {NewsReportTemplate} from "../src/news-report";
+import {EraShiftTemplate} from "../src/era-shift";
+import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
 import {MetricTemplate} from "../src/metric";
 import {TransitionTemplate} from "../src/transition";
 import {RhythmTemplate} from "../src/rhythm";
 import {EffectTemplate} from "../src/effect";
-import {CameraTemplate} from "../src/camera";
+import {ScLongtakeTemplate} from "../src/sc-longtake";
+import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
 import type {
   MgRenderInput,
   MgRuntimeCompositionNode,
@@ -57,10 +62,9 @@ const ScaledCanvas = ({children, full = false}: {children: ReactNode; full?: boo
 };
 
 /** This switch stays inside the template package. The host only sends kind. */
-const RuntimeTemplate = ({layer, baseFile, baseTrimBeforeFrames}: {
+const RuntimeTemplate = ({layer, durationInFrames}: {
   layer: MgRuntimeLayer;
-  baseFile?: string;
-  baseTrimBeforeFrames: number;
+  durationInFrames: number;
 }) => {
   const spec = layer.spec as never;
   switch (layer.kind) {
@@ -76,12 +80,16 @@ const RuntimeTemplate = ({layer, baseFile, baseTrimBeforeFrames}: {
     case "collage-network": return <CollageNetworkTemplate spec={spec} />;
     case "image-stack": return <ImageStackTemplate spec={spec} />;
     case "image-grid": return <ImageGridTemplate spec={spec} />;
+    case "news-report": return <NewsReportTemplate spec={spec} />;
+    case "era-shift": return <EraShiftTemplate spec={spec} />;
+    case "route-shift": return <RouteShiftTemplate spec={spec} />;
     case "showcase": return <ShowcaseTemplate spec={spec} style={layer.group} />;
     case "metric": return <MetricTemplate spec={spec} style={layer.group} />;
     case "transition": return <TransitionTemplate spec={spec} style={layer.group} />;
     case "rhythm": return <RhythmTemplate spec={spec} style={layer.group} />;
     case "effect": return <EffectTemplate spec={spec} style={layer.group} />;
-    case "camera": return <CameraTemplate spec={spec} style={layer.group} baseFile={baseFile} baseTrimBeforeFrames={baseTrimBeforeFrames} />;
+    case "sc-longtake": return <ScLongtakeTemplate spec={spec} />;
+    case "video-footage": return <VideoFootageTemplate spec={spec} durationInFrames={durationInFrames} />;
     case "title": {
       if (layer.group === "blur-slide") return <BlurSlideTitleTemplate spec={spec} />;
       if (layer.group === "scramble") return <ScrambleTitleTemplate spec={spec} />;
@@ -93,11 +101,24 @@ const RuntimeTemplate = ({layer, baseFile, baseTrimBeforeFrames}: {
       return <ShotcraftTitleTemplate spec={spec} style={layer.group} transparentBackground />;
     }
     case "emphasis": return <EmphasisTextTemplate spec={spec} />;
+    case "news-flashback": return <NewsFlashbackTemplate spec={spec} />;
     default: throw new Error(`Unsupported template runtime kind: ${layer.kind}`);
   }
 };
 
-const Layer = ({layer, baseFile}: {layer: MgRuntimeLayerPlacement; baseFile?: string}) => <Sequence
+const RuntimeLayerCanvas = ({layer, timelineOffsetFrames, durationInFrames}: {
+  layer: MgRuntimeLayer;
+  timelineOffsetFrames: number;
+  durationInFrames: number;
+}) => {
+  const content = <Sequence from={-timelineOffsetFrames} layout="none">
+    <RuntimeTemplate layer={layer} durationInFrames={durationInFrames} />
+  </Sequence>;
+  if (layer.kind === "video-footage") return content;
+  return <ScaledCanvas full={layer.canvas === "full"}>{content}</ScaledCanvas>;
+};
+
+const Layer = ({layer}: {layer: MgRuntimeLayerPlacement}) => <Sequence
   from={layer.startFrame}
   durationInFrames={layer.durationFrames}
   premountFor={Math.min(15, layer.startFrame)}
@@ -107,20 +128,11 @@ const Layer = ({layer, baseFile}: {layer: MgRuntimeLayerPlacement; baseFile?: st
     overflow: "hidden",
     pointerEvents: "none",
   }}>
-    <ScaledCanvas full={layer.render.canvas === "full"}>
-      <Sequence from={-layer.timelineOffsetFrames} layout="none">
-        <RuntimeTemplate
-          layer={layer.render}
-          // Runtime-specific components decide whether they consume the raw
-          // plate. Story Claw only transports this opaque Provider payload.
-          baseFile={baseFile}
-          // For a split window, startFrame - timelineOffsetFrames is the
-          // instance-root source frame. Camera consumes it; other templates
-          // simply ignore the value.
-          baseTrimBeforeFrames={layer.startFrame - layer.timelineOffsetFrames}
-        />
-      </Sequence>
-    </ScaledCanvas>
+    <RuntimeLayerCanvas
+      layer={layer.render}
+      timelineOffsetFrames={layer.timelineOffsetFrames}
+      durationInFrames={layer.durationFrames}
+    />
   </AbsoluteFill>
 </Sequence>;
 
@@ -138,7 +150,7 @@ const CompositionVideo = ({videoPath, muted = false, transparent = false}: {
 const isTransparentVideo = (node: MgRuntimeCompositionNode): boolean =>
   node.layerRole === "overlay" || /\.mov(?:$|[?#])/i.test(node.videoPath);
 
-const NodeContent = ({node}: {node: MgRuntimeCompositionNode}) => {
+const NodeContent = ({node, durationInFrames}: {node: MgRuntimeCompositionNode; durationInFrames: number}) => {
   const timelineOffsetFrames = node.timelineOffsetFrames ?? 0;
   if (node.videoPath) {
     return <CompositionVideo videoPath={node.videoPath} transparent={isTransparentVideo(node)} />;
@@ -149,11 +161,11 @@ const NodeContent = ({node}: {node: MgRuntimeCompositionNode}) => {
     overflow: "hidden",
     pointerEvents: "none",
   }}>
-    <ScaledCanvas full={node.render.canvas === "full"}>
-      <Sequence from={-timelineOffsetFrames} layout="none">
-        <RuntimeTemplate layer={node.render} baseTrimBeforeFrames={0} />
-      </Sequence>
-    </ScaledCanvas>
+    <RuntimeLayerCanvas
+      layer={node.render}
+      timelineOffsetFrames={timelineOffsetFrames}
+      durationInFrames={durationInFrames}
+    />
   </AbsoluteFill>;
 };
 
@@ -171,12 +183,12 @@ const Node = ({node}: {node: MgRuntimeCompositionNode}) => {
       layout="none"
     >
       <Sequence from={-window.startFrame} layout="none">
-        <NodeContent node={node} />
+        <NodeContent node={node} durationInFrames={durationInFrames} />
       </Sequence>
     </Sequence>)
     : activeWindows
       ? null
-      : <NodeContent node={node} />;
+      : <NodeContent node={node} durationInFrames={durationInFrames} />;
   return <Sequence
     from={node.startFrame}
     durationInFrames={durationInFrames}
@@ -204,7 +216,7 @@ const EpisodeComposition = ({episode}: {episode: MgRuntimeEpisodeInput}) => {
     overflow: "hidden",
   }}>
     {episode.baseFile ? <CompositionVideo videoPath={episode.baseFile} muted /> : null}
-    {(episode.layers ?? []).map((layer) => <Layer key={layer.id} layer={layer} baseFile={episode.baseFile} />)}
+    {(episode.layers ?? []).map((layer) => <Layer key={layer.id} layer={layer} />)}
     {nodes.map((node) => <Node key={node.nodeId} node={node} />)}
   </AbsoluteFill>;
 };

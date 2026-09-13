@@ -12,7 +12,7 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 const nodeX = (progress: number) => TRACK_LEFT + (progress / 100) * (TRACK_WIDTH - TRACK_LEFT * 2);
 const smooth = (value: number) => value * value * (3 - 2 * value);
 
-const cameraForProgress = (spec: ProgressTimelineSpec, progress: number) => {
+const viewportOffsetForProgress = (spec: ProgressTimelineSpec, progress: number) => {
   if (!spec.followViewport) return 0;
   const majors = spec.nodes.filter((node) => node.kind === "major");
   if (majors.length < 2) return 0;
@@ -42,7 +42,7 @@ export const ProgressTimelineTemplate = ({spec, audioSrc, style}: Props) => {
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
   const state = evaluateProgressTimeline(spec, seconds);
-  const camera = cameraForProgress(spec, state.progress);
+  const viewportOffset = viewportOffsetForProgress(spec, state.progress);
   const active = spec.nodes[state.activeIndex];
   const detailAge = Math.max(0, seconds - active.at);
   const detailReveal = smooth(clamp(detailAge / 0.45, 0, 1));
@@ -61,7 +61,7 @@ export const ProgressTimelineTemplate = ({spec, audioSrc, style}: Props) => {
       <DetailContent detail={active.detail} />
     </div>
 
-    <div style={{position: "absolute", left: 0, top: 0, width: TRACK_WIDTH, height: 1080, transform: `translateX(${-camera}px)`}}>
+    <div style={{position: "absolute", left: 0, top: 0, width: TRACK_WIDTH, height: 1080, transform: `translateX(${-viewportOffset}px)`}}>
       <div style={{position: "absolute", left: TRACK_LEFT, top: TRACK_Y, width: TRACK_WIDTH - TRACK_LEFT * 2, height: 10, background: "#d4d2ca"}} />
       <div style={{position: "absolute", left: TRACK_LEFT, top: TRACK_Y, width: Math.max(0, nodeX(state.progress) - TRACK_LEFT), height: 10, background: "#b33b2f"}} />
       {spec.nodes.map((node, index) => {

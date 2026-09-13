@@ -619,7 +619,7 @@ const TITLE_RENDERERS: Record<ShotcraftTitleStyle, TitleRenderer> = {
 const TITLE_SFX: Record<ShotcraftTitleStyle, {file: string; volume: number}> = {
   "brace-expand": {file: "transition-soft.mp3", volume: 0.17},
   "cel-flash-stomp": {file: "impact-cine.mp3", volume: 0.21},
-  "countdown-arc-scatter": {file: "click-camera.mp3", volume: 0.16},
+  "countdown-arc-scatter": {file: "click-shutter.mp3", volume: 0.16},
   "flying-words": {file: "whoosh-fast.mp3", volume: 0.16},
   "glitch-cycle": {file: "glitch-electric-small.mp3", volume: 0.18},
   "gradient-word-sweep": {file: "sparkle.mp3", volume: 0.15},
@@ -648,7 +648,7 @@ const TITLE_SFX: Record<ShotcraftTitleStyle, {file: string; volume: number}> = {
   "letterspace-materialize": {file: "transition-soft.mp3", volume: 0.14},
   "brand-ink-open": {file: "transition-soft.mp3", volume: 0.15},
   "document-typewriter-reveal": {file: "keyboard.mp3", volume: 0.11},
-  "split-flap-title": {file: "click-camera.mp3", volume: 0.17},
+  "split-flap-title": {file: "click-shutter.mp3", volume: 0.17},
 };
 
 const TitleSfx = ({style}: {style: ShotcraftTitleStyle}) => {

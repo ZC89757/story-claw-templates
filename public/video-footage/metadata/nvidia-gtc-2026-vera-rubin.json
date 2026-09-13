@@ -1,0 +1,76 @@
+{
+  "source": "nvidia-gtc-2026-vera-rubin.mp4",
+  "duration": 220.003,
+  "subtitles": [
+    {
+      "start": 0.48,
+      "end": 14.47,
+      "text": "Scale out runs over Spectrum 4 Ethernet. With three scaling laws in full steam, pre-training, post-training and inference, and now agentic systems, compute demand continues to grow exponentially."
+    },
+    {
+      "start": 14.48,
+      "end": 28.63,
+      "text": "Vera Rubin is architected for every phase of Agentic AI, advancing every pillar of computing including CPU, storage, networking, and security."
+    },
+    {
+      "start": 28.64,
+      "end": 45.59,
+      "text": "Vera Rubin NVLink 72 delivers 3.6 exaflops of compute and 260 terabytes per second of all-to-all NVLink bandwidth."
+    },
+    {
+      "start": 45.6,
+      "end": 53.91,
+      "text": "The Vera CPU rack is designed for orchestration and agentic workflows."
+    },
+    {
+      "start": 53.92,
+      "end": 61.59,
+      "text": "AI-native storage is built with BlueField 4, while Spectrum-X co-packaged optics increase energy efficiency and resiliency."
+    },
+    {
+      "start": 61.6,
+      "end": 76.63,
+      "text": "The Groq 3 LPX rack is tightly connected to Vera Rubin, adding a token accelerator to the already incredibly fast platform."
+    },
+    {
+      "start": 76.64,
+      "end": 83.03,
+      "text": "Together, Vera Rubin and Groq deliver 35 times more throughput per megawatt."
+    },
+    {
+      "start": 83.04,
+      "end": 89.75,
+      "text": "The new Vera Rubin platform has seven chips and five rack-scale computers for agentic AI."
+    },
+    {
+      "start": 93.12,
+      "end": 99.634,
+      "text": "Vera Rubin provides 40 million times more compute in just 10 years."
+    },
+    {
+      "start": 122.56,
+      "end": 140.55,
+      "text": "This is Vera Rubin: the entire system is vertically integrated completely with software, end to end optimized as one giant system."
+    },
+    {
+      "start": 140.56,
+      "end": 156.87,
+      "text": "It is designed for agentic systems because large language models are going to get larger and generate more tokens more quickly."
+    },
+    {
+      "start": 156.88,
+      "end": 173.27,
+      "text": "Large language models also have to access memory, including KV cache and structured and unstructured data."
+    },
+    {
+      "start": 173.28,
+      "end": 194.15,
+      "text": "Agents use tools that need to be as fast as possible, which is why NVIDIA reinvented the storage system."
+    },
+    {
+      "start": 194.16,
+      "end": 220.003,
+      "text": "NVIDIA created a brand new CPU designed for extremely high single-threaded performance, high data output, data processing, and energy efficiency."
+    }
+  ]
+}

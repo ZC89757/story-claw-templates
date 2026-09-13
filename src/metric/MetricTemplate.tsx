@@ -19,7 +19,7 @@ const METRIC_STYLES = [
 ] as const;
 
 type MetricStyle = (typeof METRIC_STYLES)[number];
-type SfxName = "click-camera.mp3" | "gear-lock-metallic.mp3" | "impact-cine.mp3" | "pop.mp3" | "sparkle.mp3" | "whoosh-big.mp3" | "whoosh-fast.mp3";
+type SfxName = "click-shutter.mp3" | "gear-lock-metallic.mp3" | "impact-cine.mp3" | "pop.mp3" | "sparkle.mp3" | "whoosh-big.mp3" | "whoosh-fast.mp3";
 type MetricRenderer = MetricStyle;
 
 type MetricRecipe = {
@@ -41,7 +41,7 @@ const METRIC_RECIPES = {
   "axis-rescale-shock": {renderer: "axis-rescale-shock", sfx: "impact-cine.mp3", volume: 0.15, background: "#101923", accent: "#fc7658", secondary: "#81cce2"},
   "counter-confetti": {renderer: "counter-confetti", sfx: "pop.mp3", volume: 0.17, background: "#111426", accent: "#adc3ff", secondary: "#ffca5c"},
   "needle-sweep-selftest": {renderer: "needle-sweep-selftest", sfx: "gear-lock-metallic.mp3", volume: 0.18, background: "#11191e", accent: "#f0714b", secondary: "#8ed6df"},
-  "tape-scroll-fixed-pointer": {renderer: "tape-scroll-fixed-pointer", sfx: "click-camera.mp3", volume: 0.15, background: "#eef0eb", accent: "#b45309", secondary: "#263342", light: true},
+  "tape-scroll-fixed-pointer": {renderer: "tape-scroll-fixed-pointer", sfx: "click-shutter.mp3", volume: 0.15, background: "#eef0eb", accent: "#b45309", secondary: "#263342", light: true},
   "hatch-depth": {renderer: "hatch-depth", sfx: "pop.mp3", volume: 0.12, background: "#0a0a0c", accent: "#5b8def", secondary: "#8fb2f7"},
   "odometer-digit-roll": {renderer: "odometer-digit-roll", sfx: "gear-lock-metallic.mp3", volume: 0.16, background: "#101417", accent: "#f4f1e9", secondary: "#f0714b"},
   "confetti-crossfire": {renderer: "confetti-crossfire", sfx: "impact-cine.mp3", volume: 0.18, background: "#171023", accent: "#ffcd5f", secondary: "#79d8ff"},
@@ -51,7 +51,7 @@ const METRIC_RECIPES = {
   "brake-reticle-lock": {renderer: "brake-reticle-lock", sfx: "gear-lock-metallic.mp3", volume: 0.16, background: "#10151a", accent: "#f27b5b", secondary: "#9ce1ca"},
   "timeline-travel": {renderer: "timeline-travel", sfx: "whoosh-big.mp3", volume: 0.16, background: "#111827", accent: "#99b9ff", secondary: "#efc15b"},
   "radial-ripple-phone-chips": {renderer: "radial-ripple-phone-chips", sfx: "sparkle.mp3", volume: 0.12, background: "#eef0f1", accent: "#5f78e8", secondary: "#ed7863", light: true},
-  "gauge-readout-moves": {renderer: "gauge-readout-moves", sfx: "click-camera.mp3", volume: 0.15, background: "#0f161d", accent: "#6ed7c5", secondary: "#f2a75a"},
+  "gauge-readout-moves": {renderer: "gauge-readout-moves", sfx: "click-shutter.mp3", volume: 0.15, background: "#0f161d", accent: "#6ed7c5", secondary: "#f2a75a"},
   "avatar-grid-radial-build-colorize": {renderer: "avatar-grid-radial-build-colorize", sfx: "pop.mp3", volume: 0.11, background: "#f3f3f1", accent: "#f0453a", secondary: "#37c46b", light: true},
   "voice-waveform-live": {renderer: "voice-waveform-live", sfx: "sparkle.mp3", volume: 0.10, background: "#08080a", accent: "#f1f1f8", secondary: "#b9a6ff"},
 } as const satisfies Record<MetricStyle, MetricRecipe>;

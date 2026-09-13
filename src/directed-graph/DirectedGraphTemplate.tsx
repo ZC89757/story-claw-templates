@@ -1,7 +1,7 @@
 import dagre from "@dagrejs/dagre";
 import {CSSProperties, useMemo} from "react";
 import {AbsoluteFill, Audio, useCurrentFrame, useVideoConfig} from "remotion";
-import {evaluateDirectedGraphEdge} from "./evaluate";
+import {evaluateDirectedGraphEdge, evaluateDirectedGraphNode} from "./evaluate";
 import {DirectedGraphSpec} from "./types";
 
 type Props = {spec: DirectedGraphSpec; audioSrc?: string; style?: CSSProperties};
@@ -24,12 +24,12 @@ const makeLayout = (spec: DirectedGraphSpec) => {
   const graph = new dagre.graphlib.Graph();
   graph.setGraph({rankdir: "LR", ranksep: 155, nodesep: 48, marginx: 70, marginy: 70});
   graph.setDefaultEdgeLabel(() => ({}));
-  const ids = [...new Set(spec.edges.flatMap((edge) => [edge.from, edge.to]))];
+  const ids = spec.nodes.map((node) => node.id);
   ids.forEach((id) => graph.setNode(id, {width: NODE_WIDTH, height: NODE_HEIGHT}));
   spec.edges.forEach((edge, index) => graph.setEdge(edge.from, edge.to, {index}));
   dagre.layout(graph);
   const nodes = new Map<string, LayoutNode>();
-  const root = spec.edges[0].from;
+  const root = spec.nodes[0]?.id ?? spec.edges[0].from;
   const isStar = spec.edges.every((edge) => edge.from === root) && !spec.edges.some((edge) => edge.to === root);
   const isLongChain = spec.edges.length >= 4 && spec.edges.every((edge, index) => index === 0 || edge.from === spec.edges[index - 1].to);
   if (isLongChain) {
@@ -61,10 +61,8 @@ export const DirectedGraphTemplate = ({spec, audioSrc, style}: Props) => {
   const seconds = frame / fps;
   const layout = useMemo(() => makeLayout(spec), [spec]);
   const edgeStates = spec.edges.map((edge) => evaluateDirectedGraphEdge(edge, seconds));
-  const nodeProgress = new Map<string, number>([[spec.edges[0].from, 1]]);
-  spec.edges.forEach((edge, index) => {
-    nodeProgress.set(edge.to, Math.max(nodeProgress.get(edge.to) ?? 0, edgeStates[index].nodeProgress));
-  });
+  const nodeProgress = new Map(spec.nodes.map((node) => [node.id, evaluateDirectedGraphNode(node, seconds)]));
+  const labels = new Map(spec.nodes.map((node) => [node.id, node.label]));
   const offsetX = (SCENE_WIDTH - layout.width * layout.scale) / 2;
   const offsetY = 120 + (SCENE_HEIGHT - 160 - layout.height * layout.scale) / 2;
 
@@ -117,7 +115,7 @@ export const DirectedGraphTemplate = ({spec, audioSrc, style}: Props) => {
           return <g key={node.id} opacity={progress} transform={`translate(${node.x} ${node.y}) scale(${0.72 + progress * 0.28})`}>
             <circle r={node.width / 2} fill="#eef1ef" stroke={progress < 1 ? "#ef6334" : "#b8c2c5"} strokeWidth={4} />
             <foreignObject x={-node.width / 2 + 12} y={-node.height / 2 + 8} width={node.width - 24} height={node.height - 16}>
-              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", color: "#1e292e", fontSize, lineHeight: 1.15, fontWeight: 900, overflowWrap: "anywhere"}}>{node.id}</div>
+              <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", color: "#1e292e", fontSize, lineHeight: 1.15, fontWeight: 900, overflowWrap: "anywhere"}}>{labels.get(node.id) ?? node.id}</div>
             </foreignObject>
           </g>;
         })}

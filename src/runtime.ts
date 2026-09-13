@@ -1,5 +1,7 @@
 export type MgTemplateName =
   | "sc-video"
+  | "sc-longtake"
+  | "video-footage"
   | "progress-timeline"
   | "timed-table"
   | "directed-graph"
@@ -14,12 +16,15 @@ export type MgTemplateName =
   | "collage-network"
   | "image-stack"
   | "image-grid"
+  | "news-report"
+  | "news-flashback"
+  | "era-shift"
+  | "route-shift"
   | "showcase"
   | "metric"
   | "transition"
   | "rhythm"
-  | "effect"
-  | "camera";
+  | "effect";
 
 export type MgOverlayTemplateName = "title" | "emphasis" | "transition" | "rhythm" | "effect";
 

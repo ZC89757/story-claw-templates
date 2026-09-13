@@ -17,6 +17,7 @@ import {
   TypewriterTitleTemplate,
 } from "../src/title";
 import {EmphasisTextTemplate} from "../src/emphasis";
+import {NewsFlashbackTemplate} from "../src/news-flashback";
 import {XYChartTemplate} from "../src/xy-chart";
 import {MultiSeriesChartTemplate} from "../src/multi-series-chart";
 import {ContainmentTemplate} from "../src/containment";
@@ -25,12 +26,17 @@ import {BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/we
 import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
+import {NewsReportTemplate} from "../src/news-report";
+import {EraShiftTemplate} from "../src/era-shift";
+import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
 import {MetricTemplate} from "../src/metric";
 import {TransitionTemplate} from "../src/transition";
 import {RhythmTemplate} from "../src/rhythm";
 import {EffectTemplate} from "../src/effect";
-import {CameraTemplate, CameraPreviewPlate} from "../src/camera";
+import {ScVideoPreviewPlate} from "../src/sc-video/preview";
+import {ScLongtakeTemplate} from "../src/sc-longtake";
+import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
 
 type PreviewProps = {previewKind: string; style: string};
 
@@ -52,10 +58,16 @@ const progressSpec = {
 
 const directedGraphSpec = {
   title: "能力关系",
+  nodes: [
+    {id: "n0", label: "数据", at: 0},
+    {id: "n1", label: "训练", at: 0.65},
+    {id: "n2", label: "模型", at: 1.35},
+    {id: "n3", label: "产品", at: 2.05},
+  ],
   edges: [
-    {at: 0, from: "数据", to: "训练", relation: "提供基础"},
-    {at: 0.65, from: "训练", to: "模型", relation: "形成能力"},
-    {at: 1.35, from: "模型", to: "产品", relation: "进入场景"},
+    {at: 0.8, from: "n0", to: "n1", relation: "提供基础"},
+    {at: 1.5, from: "n1", to: "n2", relation: "形成能力"},
+    {at: 2.2, from: "n2", to: "n3", relation: "进入场景"},
   ],
 };
 
@@ -153,6 +165,47 @@ const imageGridSpec = {
   ],
 };
 
+const newsReportSpec = {
+  at: 0.2,
+  pages: [
+    {image: "web-news/nvidia-newsroom.png", source: "NVIDIA NEWSROOM", title: "GeForce 256 enters the market"},
+    {image: "web-news/techtimes.png", source: "TECH TIMES", title: "The first GPU changes 3D graphics"},
+    {image: "web-news/rcr-clean.png", source: "RCR WIRELESS", title: "Performance leads the benchmark"},
+    {image: "web-news/accelerated-clean.png", source: "AI REPORT", title: "A new class of graphics processor"},
+  ],
+};
+
+const eraShiftSpec = {
+  image: "era-shift/foreground/jensen-huang.png",
+  foreground: {
+    mode: "existing" as const,
+    image: "jensen-huang.png",
+    person: null,
+    references: [],
+  },
+  switchAt: 2.7,
+  startItems: [
+    {text: "游戏显卡", logo: "nvidia.svg"},
+    {text: "3D 图形"},
+    {text: "并行计算"},
+    {text: "GPU", logo: "nvidia.svg"},
+  ],
+  endItems: [
+    {text: "OpenAI", logo: "openai.svg"},
+    {text: "Anthropic", logo: "anthropic.svg"},
+    {text: "AI 基础设施"},
+    {text: "NVIDIA 系统", logo: "nvidia.svg"},
+  ],
+};
+
+const routeShiftSpec = {
+  title: "NV1 失败后，英伟达重新选择路线",
+  first: "NV1 路线",
+  second: "三角形渲染",
+  switchTime: 2.55,
+  switch: "切换到三角形渲染",
+};
+
 const showcaseSpec = {
   title: "功能逐项显现",
   items: [
@@ -181,19 +234,42 @@ const effectSpec = {
   ],
 };
 
-const cameraSpec = {
-  text: "原画底片运镜",
-  at: 0,
+const effectAssetPreviewSpec = (style: string) => style === "object-drop"
+  ? {text: "NV1", at: 0.15, impactAt: 1.15, image: "mg-effect/object-drop/nv1-gpu-reference.jpg"}
+  : style === "glass-fracture"
+    ? {text: "计划失败", at: 0.15, crackAt: 0.85, image: "mg-effect/glass-fracture/nvidia-eye.svg"}
+    : effectSpec;
+
+const scLongtakeSpec = {
+  group: "relay" as const,
+  order: null,
+  at: 0.2,
+  reference_image_state: "generate" as const,
+  reference_image_prompt: "A researcher at a glowing GPU workstation in a dark laboratory",
+  segments: [
+    {at: 0.2, video_prompt: "The camera slowly pushes toward the researcher and the illuminated GPU workstation."},
+    {at: 1.55, video_prompt: "Continue exactly from the supplied tail frame as the camera glides past the workstation toward the connected server racks."},
+    {at: 2.9, video_prompt: "Continue the same uninterrupted movement into the server room, preserving lighting, lens, camera axis, and spatial direction."},
+  ],
+};
+
+const videoFootagePreviewSpec = {
+  source: "video-footage/sources/nvidia-gtc-2026-vera-rubin.mp4",
+  sourceStart: 0,
+  sourceEnd: 6,
+  assetVersion: "preview",
 };
 
 const Preview = ({previewKind, style}: PreviewProps) => {
   let content: ReactNode;
   switch (previewKind) {
-    case "sc-video-normal": content = <CameraPreviewPlate
+    case "sc-video-normal": content = <ScVideoPreviewPlate
       accent="#8ad3df"
       secondary="#ad8cff"
       label="<sc-video>"
     />; break;
+    case "sc-longtake-relay": content = <ScLongtakeTemplate spec={scLongtakeSpec} />; break;
+    case "video-footage-full-bleed": content = <VideoFootageTemplate spec={videoFootagePreviewSpec} durationInFrames={135} />; break;
     case "timeline-horizontal": content = <ProgressTimelineTemplate spec={progressSpec} />; break;
     case "timeline-vertical": content = <VerticalProgressTimelineTemplate spec={progressSpec} />; break;
     case "table": content = <TimedTableTemplate spec={tableSpec} />; break;
@@ -209,6 +285,9 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "collage": content = <CollageNetworkTemplate spec={collageSpec} />; break;
     case "image-stack": content = <ImageStackTemplate spec={imageStackSpec} />; break;
     case "image-grid": content = <ImageGridTemplate spec={imageGridSpec} />; break;
+    case "news-report-paper-stack": content = <NewsReportTemplate spec={newsReportSpec} />; break;
+    case "era-shift-foreground-with-background": content = <EraShiftTemplate spec={eraShiftSpec} />; break;
+    case "route-shift-road-transfer": content = <RouteShiftTemplate spec={routeShiftSpec} />; break;
     case "title-fade": content = <FadeTitleTemplate spec={{text: "一条关键结论", at: 0.15}} />; break;
     case "title-slide": content = <SlideTitleTemplate spec={{text: "一条关键结论", at: 0.15}} />; break;
     case "title-typewriter": content = <TypewriterTitleTemplate spec={{text: "一条关键结论", at: 0.15}} />; break;
@@ -217,13 +296,21 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "title-scramble": content = <ScrambleTitleTemplate spec={{text: "MODEL READY 2026", at: 0.15}} />; break;
     case "title-split-flap": content = <SplitFlapTitleTemplate spec={{text: "SHIP FASTER", at: 0.15}} />; break;
     case "emphasis": content = <EmphasisTextTemplate spec={{text: "关键变化", at: 0.2}} />; break;
+    case "news-flashback-project": content = <NewsFlashbackTemplate spec={{
+      text: "NVIDIA Rubin GPU",
+      at: 0.2,
+      pages: [
+        {image: "web-news/nvidia-newsroom.png", source: "NVIDIA NEWSROOM", title: "Rubin platform announcement"},
+        {image: "web-news/nvidia-arch.png", source: "TECH REPORT", title: "Next-generation GPU architecture"},
+        {image: "web-news/accelerated-clean.png", source: "AI REPORT", title: "Accelerated computing expands"},
+      ],
+    }} />; break;
     case "title-shotcraft": content = <ShotcraftTitleTemplate spec={{text: "从数据到行动", at: 0.15}} style={style} />; break;
     case "showcase": content = <ShowcaseTemplate spec={showcaseSpec} style={style} />; break;
     case "metric": content = <MetricTemplate spec={metricSpec} style={style} />; break;
     case "transition": content = <TransitionTemplate spec={{text: "NEXT", at: 0.15}} style={style} />; break;
     case "rhythm": content = <RhythmTemplate spec={{text: "ON BEAT", at: 0.15}} style={style} />; break;
-    case "effect": content = <EffectTemplate spec={effectSpec} style={style} />; break;
-    case "camera": content = <CameraTemplate spec={cameraSpec} style={style} />; break;
+    case "effect": content = <EffectTemplate spec={effectAssetPreviewSpec(style)} style={style} />; break;
     default: throw new Error(`Unknown preview kind: ${previewKind} (${style})`);
   }
   return <div style={{position: "absolute", inset: 0, overflow: "hidden"}}><ScaledCanvas>{content}</ScaledCanvas></div>;

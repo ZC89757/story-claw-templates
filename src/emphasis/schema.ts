@@ -9,7 +9,9 @@ import {
 import {EmphasisSpec} from "./types";
 import {assertEmphasisSpec} from "./validate";
 
-export type EmphasisFunctionArgs = FunctionCallEnvelope & {text: string};
+export type EmphasisFunctionArgs = FunctionCallEnvelope & {
+  text: string;
+};
 
 export const emphasisParametersSchema = {
   type: "object",
@@ -26,7 +28,7 @@ export const emphasisParametersSchema = {
 export const emphasisFunctionDefinition = {
   type: "function",
   name: "create_emphasis_text_cue",
-  description: "Create one emphasis-text animation for an HTML group. at is the absolute episode timestamp. Text layout and motion are fixed by the template.",
+  description: "Create one emphasis-text animation for an HTML group. at is the absolute episode timestamp and text is the exact HTML cue text. The template only scales one short sentence up and stays transparent over the original footage; it never needs images.",
   strict: true,
   parameters: emphasisParametersSchema,
 } as const;

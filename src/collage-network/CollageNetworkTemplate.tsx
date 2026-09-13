@@ -108,11 +108,11 @@ export const CollageNetworkTemplate = ({spec, audioSrc, style}: Props) => {
     : WORLD_CENTER;
   const activeDistance = activeFrom && activeTo ? Math.hypot(activeTo.x - activeFrom.x, activeTo.y - activeFrom.y) : 700;
   const desiredScale = Math.min(1.18, Math.max(1.045, 760 / Math.max(activeDistance, 1)));
-  const cameraScale = 1 + (desiredScale - 1) * focus;
+  const viewportScale = 1 + (desiredScale - 1) * focus;
   const targetX = WORLD_CENTER.x + (focusTarget.x - WORLD_CENTER.x) * focus * 0.34;
   const targetY = WORLD_CENTER.y + (focusTarget.y - WORLD_CENTER.y) * focus * 0.26;
-  const cameraX = WORLD_CENTER.x - targetX * cameraScale;
-  const cameraY = WORLD_CENTER.y - targetY * cameraScale;
+  const viewportX = WORLD_CENTER.x - targetX * viewportScale;
+  const viewportY = WORLD_CENTER.y - targetY * viewportScale;
   const intro = clamp01(seconds / 0.7);
 
   return <AbsoluteFill style={{background: "#eee9de", color: "#1e302d", fontFamily: '"Microsoft YaHei", "Noto Sans SC", Arial, sans-serif', overflow: "hidden", ...style}}>
@@ -128,9 +128,8 @@ export const CollageNetworkTemplate = ({spec, audioSrc, style}: Props) => {
         </div>
       </div>
     </div>
-    <div style={{position: "absolute", right: 58, top: 49, zIndex: 10, borderTop: "3px solid #273c38", paddingTop: 8, width: 198, fontSize: 15, fontWeight: 900, textAlign: "right", color: "#273c38"}}>RELATION MAP<br/><span style={{color: "#b44337"}}>EDITORIAL / 01</span></div>
 
-    <div style={{position: "absolute", width: WIDTH, height: HEIGHT, transformOrigin: "0 0", transform: `translate(${cameraX}px, ${cameraY}px) scale(${cameraScale})`}}>
+    <div style={{position: "absolute", width: WIDTH, height: HEIGHT, transformOrigin: "0 0", transform: `translate(${viewportX}px, ${viewportY}px) scale(${viewportScale})`}}>
       <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} style={{position: "absolute", inset: 0, overflow: "visible"}}>
         {spec.edges.map((edge, index) => {
           const from = layout.get(edge.from)!;
@@ -210,11 +209,5 @@ export const CollageNetworkTemplate = ({spec, audioSrc, style}: Props) => {
       })}
     </div>
 
-    <div style={{position: "absolute", left: 62, bottom: 38, zIndex: 12, display: "flex", gap: 24, padding: "10px 15px", background: "#f5efe4dd", borderTop: "2px solid #273d38"}}>
-      {(Object.keys(EDGE_STYLES) as CollageNetworkEdgeType[]).map((type) => <div key={type} style={{display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 900, color: "#444c48"}}>
-        <span style={{display: "inline-block", width: 27, borderTop: `${type === "competition" ? "3px dashed" : "4px solid"} ${EDGE_STYLES[type].color}`}} />{EDGE_STYLES[type].label}
-      </div>)}
-    </div>
-    <div style={{position: "absolute", right: 60, bottom: 43, zIndex: 12, fontSize: 15, fontWeight: 900, color: "#777268"}}>{String(spec.edges.filter((edge) => edge.at <= seconds).length).padStart(2, "0")} / {String(spec.edges.length).padStart(2, "0")}</div>
   </AbsoluteFill>;
 };

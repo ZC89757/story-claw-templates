@@ -1,6 +1,28 @@
 node_modules/
 dist/
 out/
-.tmp-preview-qa/
 graphify-out/
 .DS_Store
+.idea/
+
+# 本地临时文件与历史展示稿：只留在本地，不进发布仓库
+.tmp-*
+demo/
+test-mg-calling.ts
+mg-planning-prompt.txt
+scripts/generate_*.py
+public/route-shift/
+public/google-pilot/
+public/google-optimized/
+public/mg-previews/era-shift-gaming-to-ai.mp4
+public/era-shift/*.png
+public/*-narration.mp3
+
+# examples/ 下只有 tests/ 直接 import 的 spec 是有效测试夹具，其余是旧展示稿数据
+examples/*.timestamps.json
+examples/*.generated.json
+examples/abstract-relations.spec.json
+examples/company-output.spec.json
+examples/gemini-gpt-table.spec.json
+examples/multi-series-chart.spec.json
+examples/nvidia-directed-graph.spec.json

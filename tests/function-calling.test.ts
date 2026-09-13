@@ -5,9 +5,10 @@ import {
   resolveProgressTimelineFunctionArgs,
 } from "../src/progress-timeline/schema";
 import {timedTableFunctionDefinition, resolveTimedTableFunctionArgs} from "../src/timed-table/schema";
-import {directedGraphFunctionDefinition} from "../src/directed-graph/schema";
+import {directedGraphFunctionDefinition, resolveDirectedGraphFunctionArgs} from "../src/directed-graph/schema";
 import {titleFunctionDefinition} from "../src/title/schema";
 import {emphasisFunctionDefinition} from "../src/emphasis/schema";
+import {newsFlashbackFunctionDefinition} from "../src/news-flashback/schema";
 import {xyChartFunctionDefinition} from "../src/xy-chart/schema";
 import {resolveXYChartFunctionArgs} from "../src/xy-chart/schema";
 import {multiSeriesChartFunctionDefinition} from "../src/multi-series-chart/schema";
@@ -20,18 +21,29 @@ import {
 } from "../src/weighted-comparison/schema";
 import {collageNetworkFunctionDefinition, resolveCollageNetworkFunctionArgs} from "../src/collage-network/schema";
 import {imageGridFunctionDefinition, imageStackFunctionDefinition} from "../src/image-media/schema";
-import {cameraFunctionDefinition} from "../src/camera/schema";
-import {effectFunctionDefinition} from "../src/effect/schema";
+import {
+  effectFunctionDefinition,
+  glassFractureEffectFunctionDefinition,
+  objectDropEffectFunctionDefinition,
+} from "../src/effect/schema";
+import {scLongtakeFunctionDefinition} from "../src/sc-longtake/schema";
+import {videoFootageFunctionDefinition} from "../src/video-footage/schema";
 import {MG_STYLE_CATALOG, MG_TEMPLATE_USAGE, formatMgTemplateUsage} from "../src/catalog";
 
 type Definition = {name: string; parameters: {properties: Record<string, unknown>; required: readonly string[]}};
+type DefinitionExpectation = [Definition, string[], string[]?];
 
-const definitions: Array<[Definition, string[]]> = [
+const definitions: DefinitionExpectation[] = [
   [progressTimelineFunctionDefinition, ["group", "order", "at", "title", "nodes"]],
   [timedTableFunctionDefinition, ["group", "order", "at", "rows", "columns", "cells"]],
-  [directedGraphFunctionDefinition, ["group", "order", "at", "title", "edges"]],
+  [directedGraphFunctionDefinition, ["group", "order", "at", "title", "nodes", "edges"]],
   [titleFunctionDefinition, ["group", "order", "at", "text"]],
   [emphasisFunctionDefinition, ["group", "order", "at", "text"]],
+  [newsFlashbackFunctionDefinition, ["group", "order", "at", "text", "pages"]],
+  [scLongtakeFunctionDefinition, [
+    "group", "order", "at", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
+  ], ["group", "order", "at", "reference_image_state", "segments"]],
+  [videoFootageFunctionDefinition, ["group", "order", "at", "source", "sourceStart", "sourceEnd"]],
   [xyChartFunctionDefinition, ["group", "order", "at", "title", "axes", "keyframes"]],
   [multiSeriesChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
   [containmentFunctionDefinition, ["group", "order", "at", "title", "root", "relations", "highlights"]],
@@ -42,7 +54,8 @@ const definitions: Array<[Definition, string[]]> = [
   [imageStackFunctionDefinition, ["group", "order", "at", "title", "images"]],
   [imageGridFunctionDefinition, ["group", "order", "at", "title", "images"]],
   [effectFunctionDefinition, ["group", "order", "at", "text", "items"]],
-  [cameraFunctionDefinition, ["group", "order", "at", "text", "items"]],
+  [objectDropEffectFunctionDefinition, ["group", "order", "at", "impactAt", "image"]],
+  [glassFractureEffectFunctionDefinition, ["group", "order", "at", "crackAt", "image"]],
 ];
 
 const exposedPropertyNames = (schema: unknown, names = new Set<string>()): Set<string> => {
@@ -62,14 +75,14 @@ const exposedPropertyNames = (schema: unknown, names = new Set<string>()): Set<s
 };
 
 test("every Function Call exposes group, absolute at and only its intended root fields", () => {
-  for (const [definition, expected] of definitions) {
-    assert.deepEqual(Object.keys(definition.parameters.properties), expected, definition.name);
-    assert.deepEqual([...definition.parameters.required], expected, definition.name);
+  for (const [definition, expectedProperties, expectedRequired = expectedProperties] of definitions) {
+    assert.deepEqual(Object.keys(definition.parameters.properties), expectedProperties, definition.name);
+    assert.deepEqual([...definition.parameters.required], expectedRequired, definition.name);
   }
 });
 
 test("Function Calls do not expose template-owned or pipeline-owned fields", () => {
-  const forbidden = ["action", "detail", "motion", "progress", "kind", "assetSrc", "chartType", "sequence", "source", "mode"];
+  const forbidden = ["action", "detail", "motion", "progress", "kind", "assetSrc", "chartType", "sequence", "mode"];
   for (const [definition] of definitions) {
     const names = exposedPropertyNames(definition.parameters);
     for (const field of forbidden) assert.equal(names.has(field), false, `${definition.name} exposes ${field}`);
@@ -107,6 +120,25 @@ test("resolvers convert absolute episode timestamps to scene-local timestamps", 
   });
   assert.deepEqual(decomposition.spec.events.map((event) => event.at), [1, 3, 4]);
   assert.equal("detail" in decomposition.spec.events[0], false);
+});
+
+test("directed graph keeps the reviewed topology and localizes node and edge times", () => {
+  const resolved = resolveDirectedGraphFunctionArgs({
+    group: "flow",
+    order: null,
+    at: 10,
+    title: "能力链路",
+    nodes: [
+      {id: "n0", label: "起点", at: 10},
+      {id: "n1", label: "终点", at: 12},
+    ],
+    edges: [{at: 13, from: "n0", to: "n1", relation: "连接"}],
+  });
+  assert.deepEqual(resolved.spec.nodes.map((node) => ({id: node.id, label: node.label, at: node.at})), [
+    {id: "n0", label: "起点", at: 0},
+    {id: "n1", label: "终点", at: 2},
+  ]);
+  assert.deepEqual(resolved.spec.edges, [{at: 3, from: "n0", to: "n1", relation: "连接"}]);
 });
 
 test("XY year axes do not get stretched back to zero", () => {

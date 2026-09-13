@@ -32,7 +32,7 @@ export const VerticalProgressTimelineTemplate = ({spec, audioSrc, style}: Props)
   const seconds = frame / fps;
   const state = evaluateProgressTimeline(spec, seconds);
   const active = spec.nodes[state.activeIndex];
-  const cameraY = spec.followViewport ? FOCUS_Y - nodeY(state.progress) : 0;
+  const viewportOffsetY = spec.followViewport ? FOCUS_Y - nodeY(state.progress) : 0;
   const reveal = smooth(clamp((seconds - active.at) / 0.4, 0, 1));
   const activeY = nodeY(state.progress);
 
@@ -42,7 +42,7 @@ export const VerticalProgressTimelineTemplate = ({spec, audioSrc, style}: Props)
     <div style={{position: "absolute", left: 700, top: -155, width: 1370, height: 1370, borderRadius: "50%", background: "#35515d", border: "2px solid rgba(255,255,255,.08)"}} />
     <div style={{position: "absolute", left: 1080, top: 88, color: "#c8d4d8", fontSize: 22, fontWeight: 800, letterSpacing: 0}}>{Math.round(state.progress)}%</div>
 
-    <div style={{position: "absolute", left: 0, top: 0, width: 680, height: TRACK_TOP + TRACK_HEIGHT + 400, transform: `translateY(${cameraY}px)`}}>
+    <div style={{position: "absolute", left: 0, top: 0, width: 680, height: TRACK_TOP + TRACK_HEIGHT + 400, transform: `translateY(${viewportOffsetY}px)`}}>
       <div style={{position: "absolute", left: TRACK_X - 2, top: TRACK_TOP, width: 4, height: TRACK_HEIGHT, background: "#596168"}} />
       <div style={{position: "absolute", left: TRACK_X - 3, top: TRACK_TOP, width: 6, height: Math.max(0, activeY - TRACK_TOP), background: "#ef5b2a"}} />
 

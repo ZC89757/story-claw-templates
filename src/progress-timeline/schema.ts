@@ -12,7 +12,7 @@ import {assertProgressTimelineSpec} from "./validate";
 
 export type ProgressTimelineFunctionArgs = FunctionCallEnvelope & {
   title: string;
-  nodes: Array<{at: number; title: string}>;
+  nodes: Array<{at: number; year?: string; title: string}>;
 };
 
 export const progressTimelineParametersSchema = {
@@ -31,9 +31,10 @@ export const progressTimelineParametersSchema = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["at", "title"],
+        required: ["at", "year", "title"],
         properties: {
           at: functionAtSchema,
+          year: {type: "string", minLength: 1, maxLength: 24},
           title: {type: "string", minLength: 1, maxLength: 100},
         },
       },
@@ -44,12 +45,10 @@ export const progressTimelineParametersSchema = {
 export const progressTimelineFunctionDefinition = {
   type: "function",
   name: "create_progress_timeline",
-  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. Provide only the visible title and timed node titles; node position, size, detail panel, camera behavior and motion are fixed by the template.",
+  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. For each node, pass year as the short year/date shown below the node (for example, '1993年'), and pass title as only the concise event summary shown above the node (for example, '三位创始人共同创办英伟达'). Do not put the year into title. The template displays these values exactly as provided; node position, size, detail panel, viewport behavior and motion are fixed by the template.",
   strict: true,
   parameters: progressTimelineParametersSchema,
 } as const;
-
-const nodeLabel = (title: string, index: number) => title.match(/\d{4}年?/)?.[0] ?? `节点 ${index + 1}`;
 
 export const resolveProgressTimelineFunctionArgs = (
   input: ProgressTimelineFunctionArgs,
@@ -66,7 +65,7 @@ export const resolveProgressTimelineFunctionArgs = (
       progress: count === 1 ? 0 : index / (count - 1) * 100,
       kind: "major" as const,
       title: node.title,
-      eyebrow: nodeLabel(node.title, index),
+      eyebrow: node.year ?? "",
       detail: {type: "text" as const, value: node.title},
       motion: index === 0 ? "instant" as const : "ease" as const,
     })),

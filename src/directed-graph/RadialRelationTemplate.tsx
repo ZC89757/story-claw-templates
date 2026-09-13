@@ -1,6 +1,6 @@
 import {CSSProperties, useMemo} from "react";
 import {AbsoluteFill, Audio, useCurrentFrame, useVideoConfig} from "remotion";
-import {evaluateDirectedGraphEdge} from "./evaluate";
+import {evaluateDirectedGraphEdge, evaluateDirectedGraphNode} from "./evaluate";
 import {DirectedGraphSpec} from "./types";
 
 type Props = {spec: DirectedGraphSpec; audioSrc?: string; style?: CSSProperties};
@@ -14,11 +14,11 @@ const NODE_RADIUS = 78;
 const COLORS = ["#ef6841", "#2f8f83", "#e0a43a", "#527eb5", "#8c68a9"];
 
 const makeLayout = (spec: DirectedGraphSpec) => {
-  const root = spec.edges[0].from;
+  const root = spec.nodes[0]?.id ?? spec.edges[0].from;
   const depths = new Map<string, number>([[root, 0]]);
   spec.edges.forEach((edge) => depths.set(edge.to, Math.min(depths.get(edge.to) ?? Infinity, (depths.get(edge.from) ?? 0) + 1)));
   const rings = new Map<number, string[]>();
-  [...new Set(spec.edges.flatMap((edge) => [edge.from, edge.to]))].forEach((id) => {
+  spec.nodes.map((node) => node.id).forEach((id) => {
     const depth = depths.get(id) ?? 1;
     rings.set(depth, [...(rings.get(depth) ?? []), id]);
   });
@@ -56,8 +56,8 @@ export const RadialRelationTemplate = ({spec, audioSrc, style}: Props) => {
   const seconds = frame / fps;
   const layout = useMemo(() => makeLayout(spec), [spec]);
   const states = spec.edges.map((edge) => evaluateDirectedGraphEdge(edge, seconds));
-  const nodeProgress = new Map<string, number>([[layout.root, 1]]);
-  spec.edges.forEach((edge, index) => nodeProgress.set(edge.to, Math.max(nodeProgress.get(edge.to) ?? 0, states[index].nodeProgress)));
+  const nodeProgress = new Map(spec.nodes.map((node) => [node.id, evaluateDirectedGraphNode(node, seconds)]));
+  const labels = new Map(spec.nodes.map((node) => [node.id, node.label]));
 
   return <AbsoluteFill style={{background: "#f4f0e8", color: "#20292c", fontFamily: '"Microsoft YaHei", Arial, sans-serif', overflow: "hidden", ...style}}>
     {audioSrc ? <Audio src={audioSrc} /> : null}
@@ -93,7 +93,7 @@ export const RadialRelationTemplate = ({spec, audioSrc, style}: Props) => {
           <circle r={radius + 12 * (1 - progress)} fill="none" stroke={color} strokeWidth={2} opacity={0.25 * progress} />
           <circle r={radius} fill={root ? "#20292c" : "#fffdf8"} stroke={color} strokeWidth={root ? 7 : 4} />
           <foreignObject x={-radius + 12} y={-radius + 8} width={(radius - 12) * 2} height={(radius - 8) * 2}>
-            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, boxSizing: "border-box", color: root ? "#fff" : "#20292c", fontSize: root ? 28 : node.id.length > 8 ? 20 : 24, lineHeight: 1.15, fontWeight: 900, textAlign: "center", overflowWrap: "anywhere"}}>{node.id}</div>
+            <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, boxSizing: "border-box", color: root ? "#fff" : "#20292c", fontSize: root ? 28 : (labels.get(node.id) ?? node.id).length > 8 ? 20 : 24, lineHeight: 1.15, fontWeight: 900, textAlign: "center", overflowWrap: "anywhere"}}>{labels.get(node.id) ?? node.id}</div>
           </foreignObject>
         </g>;
       })}

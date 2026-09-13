@@ -14,6 +14,7 @@ const fontSizeFor = (text: string) => {
   return 125;
 };
 
+/** 重点大字：在透明图层上短暂放大一句关键信息，不覆盖原画。 */
 export const EmphasisTextTemplate = ({spec, style}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
