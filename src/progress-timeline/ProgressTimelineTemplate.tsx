@@ -77,10 +77,6 @@ export const ProgressTimelineTemplate = ({spec, audioSrc, style}: Props) => {
           </div>
         </div>;
       })}
-      <div style={{position: "absolute", left: nodeX(state.progress), top: TRACK_Y - 60, transform: "translateX(-50%)"}}>
-        <div style={{width: 3, height: 52, background: "#17201b", margin: "0 auto"}} />
-        <div style={{width: 18, height: 18, borderRadius: "50%", background: "#17201b", margin: "0 auto"}} />
-      </div>
     </div>
   </AbsoluteFill>;
 };
