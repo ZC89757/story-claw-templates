@@ -2,6 +2,21 @@
 
 供 Story Claw 使用的 Remotion MG 动画模板库。模板固定视觉样式、布局、运动方式和事件动作；AI 只填写叙事内容、数据以及它们在整集视频中的绝对时间戳。
 
+## Windows 安装包
+
+普通用户可从 [GitHub Releases](https://github.com/ZC89757/story-claw-templates/releases) 下载 `Story-Claw-MG-Template-Pack-Setup-<版本>.exe`。模板包默认安装到 `%LOCALAPPDATA%\StoryClaw\mg-templates`，与 [Story Claw 主程序](https://github.com/ZC89757/story-claw/releases) 分开安装和升级。安装或更新模板包后重启 Story Claw 即可识别。
+
+本模板包提供 Provider、Function Calling JSON Schema、参数解析器、Remotion 入口、预览和运行素材。它不包含主程序、Python、模型或 GPU 环境。
+
+本地构建 Windows 安装包需要 Node.js 22 和 NSIS：
+
+```powershell
+npm ci
+npm run dist:win
+```
+
+输出位于 `release/`。推送 `v*` 标签后，本仓库的 GitHub Actions 会自动测试、构建并上传对应 Release。
+
 ## 两阶段流程
 
 ### 1. AI 输出 MG 标注 HTML

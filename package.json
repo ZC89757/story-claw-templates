@@ -38,6 +38,8 @@
     "@dagrejs/dagre": "^1.1.5"
   },
   "scripts": {
+    "build:pack": "node scripts/build-template-pack.mjs",
+    "dist:win": "npm run build:pack && node scripts/package-template-pack.mjs",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/xy-chart.test.ts tests/progress-timeline.test.ts tests/directed-graph.test.ts tests/title.test.ts tests/emphasis.test.ts tests/news-flashback.test.ts tests/timed-table.test.ts tests/multi-series-chart.test.ts tests/containment.test.ts tests/decomposition.test.ts tests/weighted-comparison.test.ts tests/collage-network.test.ts tests/image-media.test.ts tests/function-calling.test.ts tests/sc-longtake.test.ts tests/video-footage.test.ts tests/shotcraft-mg.test.ts tests/provider.test.ts tests/era-shift.test.ts",
     "render:previews": "tsx scripts/render-previews.ts",
@@ -56,6 +58,7 @@
     "@types/node": "22.15.30",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "esbuild": "^0.28.1",
     "remotion": "4.0.512",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
