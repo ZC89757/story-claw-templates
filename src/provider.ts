@@ -59,6 +59,16 @@ import {scVideoFunctionDefinition, resolveScVideoFunctionArgs} from "./sc-video/
 import {scLongtakeFunctionDefinition, resolveScLongtakeFunctionArgs} from "./sc-longtake/schema.js";
 import {videoFootageFunctionDefinition, resolveVideoFootageFunctionArgs} from "./video-footage/schema.js";
 import {formatVideoFootageLibraryForAgent, resolveVideoFootageAsset} from "./video-footage/library.js";
+import {aiHotOpeningFunctionDefinition, resolveAiHotOpeningFunctionArgs} from "./ai-hot-opening/schema.js";
+import {AI_HOT_OPENING_GROUP} from "./ai-hot-opening/types.js";
+import {aiHotOpeningPlanningInstructions} from "./ai-hot-opening/prompt.js";
+import {aiHotFocusStageFunctionDefinition, resolveAiHotFocusStageFunctionArgs} from "./ai-hot-focus-stage/schema.js";
+import {AI_HOT_FOCUS_STAGE_GROUP} from "./ai-hot-focus-stage/types.js";
+import {aiHotFocusStagePlanningInstructions} from "./ai-hot-focus-stage/prompt.js";
+import {MG_CUTOUT_GROUP, mgCutoutRiseFunctionDefinition, resolveMgCutoutRiseFunctionArgs} from "./mg-cutout/schema.js";
+import {MG_CUTOUT_CHROMA_COLOR, MG_CUTOUT_GENERATED_ASPECT_RATIO, mgCutoutGenerationPrompt, mgCutoutPlanningInstructions} from "./mg-cutout/prompt.js";
+import {assertMgCutoutRiseSpec} from "./mg-cutout/validate.js";
+import type {MgCutoutSource} from "./mg-cutout/types.js";
 import {
   ERA_SHIFT_ASSET_DIRS,
   ERA_SHIFT_GROUP,
@@ -78,6 +88,11 @@ import {routeShiftFunctionDefinition, resolveRouteShiftFunctionArgs} from "./rou
 import {newsFlashbackPlanningInstructions} from "./news-flashback/prompt.js";
 import {newsReportFunctionDefinition, resolveNewsReportFunctionArgs} from "./news-report/schema.js";
 import {newsReportPlanningInstructions} from "./news-report/prompt.js";
+import {webNewsFocusFunctionDefinition, resolveWebNewsFocusFunctionArgs} from "./web-news-focus/schema.js";
+import {WEB_NEWS_FOCUS_GROUP, type WebNewsFocusSpec} from "./web-news-focus/types.js";
+import {webNewsFocusPlanningInstructions} from "./web-news-focus/prompt.js";
+import {captureWebNewsFocus} from "./web-news-focus/capture.js";
+import {assertWebNewsFocusSpec} from "./web-news-focus/validate.js";
 import {multiSeriesChartPlanningInstructions} from "./multi-series-chart/prompt.js";
 import {
   findLogoAsset,
@@ -186,6 +201,8 @@ const elementAts = {
     ...(args.edges ?? []).map((item: any) => item.at),
   ],
   root: (args: Record<string, any>) => [args.at],
+  opening: (args: Record<string, any>) => [args.at, args.endTime],
+  focusStage: (args: Record<string, any>) => [args.at, ...(args.items ?? []).map((item: any) => item.time)],
   xy: (args: Record<string, any>) => [args.at, ...(args.keyframes ?? []).map((item: any) => item.at)],
   multi: (args: Record<string, any>) => [args.at, ...(args.series ?? []).flatMap((series: any) => (series.data ?? []).map((item: any) => item.at))],
   relation: (args: Record<string, any>) => [args.at, ...(args.relations ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
@@ -202,9 +219,14 @@ const elementAts = {
     args.at,
     args.switchAt,
   ],
+  mgCutoutRise: (args: Record<string, any>) => [args.at],
   routeShift: (args: Record<string, any>) => [
     args.at,
     args.switchTime,
+  ],
+  webNewsFocus: (args: Record<string, any>) => [
+    args.at,
+    ...(args.highlights ?? []).map((item: any) => item.at),
   ],
   longtake: (args: Record<string, any>) => [
     args.at,
@@ -235,6 +257,8 @@ const bindings: readonly Binding[] = Object.freeze([
   {name: scVideoFunctionDefinition.name, label: "普通 AI 视频", template: "sc-video", definition: scVideoFunctionDefinition, resolve: resolveScVideoFunctionArgs, elementAts: elementAts.root},
   {name: scLongtakeFunctionDefinition.name, label: "接力一镜到底", template: "sc-longtake", definition: scLongtakeFunctionDefinition, resolve: resolveScLongtakeFunctionArgs, elementAts: elementAts.longtake},
   {name: videoFootageFunctionDefinition.name, label: "素材视频截取", template: "video-footage", definition: videoFootageFunctionDefinition, resolve: resolveVideoFootageFunctionArgs, elementAts: elementAts.root},
+  {name: aiHotOpeningFunctionDefinition.name, label: "AI 热点开场", template: "ai-hot-opening", definition: aiHotOpeningFunctionDefinition, resolve: resolveAiHotOpeningFunctionArgs, elementAts: elementAts.opening, groups: [AI_HOT_OPENING_GROUP]},
+  {name: aiHotFocusStageFunctionDefinition.name, label: "AI 热点章节舞台", template: "ai-hot-focus-stage", definition: aiHotFocusStageFunctionDefinition, resolve: resolveAiHotFocusStageFunctionArgs, elementAts: elementAts.focusStage, groups: [AI_HOT_FOCUS_STAGE_GROUP]},
   {name: progressTimelineFunctionDefinition.name, label: "时间进度条", template: "progress-timeline", definition: progressTimelineFunctionDefinition, resolve: (input) => resolveProgressTimelineFunctionArgs(input as never), elementAts: elementAts.progress},
   {name: timedTableFunctionDefinition.name, label: "动态表格", template: "timed-table", definition: timedTableFunctionDefinition, resolve: (input) => resolveTimedTableFunctionArgs(input as never), elementAts: elementAts.table},
   {name: directedGraphFunctionDefinition.name, label: "有向关系图", template: "directed-graph", definition: directedGraphFunctionDefinition, resolve: (input) => resolveDirectedGraphFunctionArgs(input as never), elementAts: elementAts.graph},
@@ -251,7 +275,9 @@ const bindings: readonly Binding[] = Object.freeze([
   {name: imageStackFunctionDefinition.name, label: "图片叠加", template: "image-stack", definition: imageStackFunctionDefinition, resolve: (input) => resolveImageStackFunctionArgs(input as never), elementAts: elementAts.images},
   {name: imageGridFunctionDefinition.name, label: "图片并列", template: "image-grid", definition: imageGridFunctionDefinition, resolve: (input) => resolveImageGridFunctionArgs(input as never), elementAts: elementAts.images},
   {name: newsReportFunctionDefinition.name, label: "新闻报道纸张", template: "news-report", definition: newsReportFunctionDefinition, resolve: (input) => resolveNewsReportFunctionArgs(input as never), elementAts: elementAts.root},
+  {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input) => resolveWebNewsFocusFunctionArgs(input as never), elementAts: elementAts.webNewsFocus, groups: [WEB_NEWS_FOCUS_GROUP]},
   {name: eraShiftFunctionDefinition.name, label: "策略转向", template: "era-shift", definition: eraShiftFunctionDefinition, resolve: resolveEraShiftCall, elementAts: elementAts.eraShift},
+  {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", definition: mgCutoutRiseFunctionDefinition, resolve: (input) => resolveMgCutoutRiseFunctionArgs(input as never), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
   {name: routeShiftFunctionDefinition.name, label: "路线切换", template: "route-shift", definition: routeShiftFunctionDefinition, resolve: (input) => resolveRouteShiftFunctionArgs(input as never), elementAts: elementAts.routeShift},
   {name: showcaseFunctionDefinition.name, label: "界面陈列", template: "showcase", definition: showcaseFunctionDefinition, resolve: (input) => resolveShowcaseFunctionArgs(input as never), elementAts: elementAts.showcase},
   {name: metricFunctionDefinition.name, label: "指标动画", template: "metric", definition: metricFunctionDefinition, resolve: (input) => resolveMetricFunctionArgs(input as never), elementAts: elementAts.metric},
@@ -301,6 +327,8 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
     "sc-video": "#000000",
     "sc-longtake": "#071014",
     "video-footage": "#000000",
+    "ai-hot-opening": "transparent",
+    "ai-hot-focus-stage": "#020306",
     "progress-timeline": "#f4f1ea",
     "timed-table": "#171c20",
     "directed-graph": "#191d21",
@@ -316,8 +344,10 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
     "image-stack": "#f3f0e9",
     "image-grid": "#f3f0e9",
     "news-report": "transparent",
+    "web-news-focus": "#070b0d",
     "news-flashback": "#0a0f13",
     "era-shift": "#0a1117",
+    "mg-cutout": "transparent",
     "route-shift": "#071118",
     showcase: "#10171b",
     metric: "#0e1519",
@@ -329,7 +359,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
 };
 
 /** 这些模板自带整屏画面，必须是 full canvas 而不是 safe 内缩画布。 */
-const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["video-footage", "news-flashback"]);
+const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus"]);
 
 const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown): MgRuntimeLayer => {
   const descriptor = descriptorByHtmlTag.get(htmlTagByTemplate.get(template) ?? "");
@@ -356,6 +386,8 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - 每个动画实例必须调用一次对应工具，包括嵌套实例；实例由“HTML 标签名 + group + order”确定
 - 同标签、同 group 的单实例在 HTML 中没有 order 时，Function Call 的 order 填 null；重复实例必须原样复制其 order
 - group 必须从 HTML 原样复制，不得自行改写；value 顺序对应同一实例的元素顺序
+- <ai-hot-opening> 是例外：create_ai_hot_opening 不传 group 或 order，模板内部固定使用 color-orb
+- <ai-hot-focus-stage> 是例外：create_ai_hot_focus_stage 不传 group、order 或 endTime，模板内部固定使用 focus-stage
 - 只调用输入 HTML 中实际存在标签所对应的工具，不得合并、遗漏或创建不存在的实例
 
 有向关系图规则：
@@ -370,6 +402,8 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - <sc-video> 的时间窗口由宿主代码根据标签文字绑定，其工具参数不填写 at
 - <sc-longtake> 的时间窗口由宿主代码根据标签文字绑定；工具参数中的根 at 和 segments.at 必须来自同一实例的真实字级时间轴
 - <video-footage> 的 at 使用标签首字在整集的绝对时间；sourceStart/sourceEnd 是所选源视频内部的秒数，不得与 at 混用
+- <ai-hot-opening> 的 at 使用标签首字 start，endTime 使用标签末字 end，二者至少间隔 7 秒
+- <ai-hot-focus-stage> 的 at 使用标签首字 start；items[].time 使用各章节标题首字的绝对 start，第一项至少晚于 at 5 秒，后续至少间隔 2.5 秒
 
 连续视频规则：
 - <sc-video> 是普通短视频片段；<sc-longtake group="relay"> 是接力式一镜到底，二者不能混用
@@ -386,6 +420,8 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 策略转向规则：
 - <era-shift group="foreground-with-background"> 调用 create_era_shift；foreground 选择 existing 或 generate，startItems/endItems 只填语义文字和可选 logo 文件名
 - switchAt 是背景从 startItems 切换到 endItems 的绝对时间；不要给 item 填 at，也不要输出 assetDir、title、label 或视觉参数
+- <mg-cutout group="rise"> 调用 create_cutout_rise；at 是主体入场时间，source 依工具说明选择透明图、已有绿幕图或参考图生成
+- 主体从画面下方上升并自然减速停住；图层只有透明主体，不绘制或替换任何背景，不添加回弹、烟雾、标题或装饰
 
 内容规则：
 - 根据标签文字及其所在段落填写工具参数，保留原文数字、正负号、年份、单位和系列关系
@@ -400,6 +436,8 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.sele
 ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.groups.join("、")}`).join("\n")}
 
 标注协议：
+- <article> 内只能保留原文文本节点和本 Provider 注册的自定义标签；禁止使用 p、div、span、br、strong 等原生 HTML 正文标签
+- 必须逐字保留原文及其换行，不得为排版添加、删除或移动空白，也不得自行增加标题、加粗或段落样式
 - group 必须从该标签的可用 group 中选择；首次生成使用默认样式：${defaultGroups()}
 - 实例身份是“HTML 标签名 + group + order”。不同 group 本身已能区分实例，不需要共用 order
 - 只有相同 HTML 标签且相同 group 出现两个或更多独立实例时，才给这组实例按首次出现顺序填写连续 order=1、2、3；单实例不写 order
@@ -407,13 +445,17 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <sc-video> 只允许 group="normal" 和可选 order，不使用 mode 或 value
 - <sc-longtake> 只允许 group="relay" 和可选 order，不使用 mode 或 value
 - <video-footage> 只允许 group="full-bleed"、可选 order 和 mode="together"，不使用 value；一个标签覆盖一个完整的连续素材片段
+- <ai-hot-opening> 只允许 group="color-orb" 和 mode="together"，不使用 order 或 value；一集最多标注一次，标签范围必须覆盖至少 7 秒
+- <ai-hot-focus-stage> 只允许 group="focus-stage" 和 mode="together"，不使用 order 或外层 value；一集最多标注一次，标签必须覆盖整集正文，values 属性按新闻顺序逐项填写数据库标题，并用连续编号的 <mg-value value="N"> 在正文中标出相同标题
 - <directed-graph> 必须在 HTML 标注阶段同时写入 nodes 和 edges：nodes 是按显示顺序排列的非空节点文字 JSON 数组，edges 是引用 nodes 下标的 [from,to] JSON 数组；这套拓扑供人工审核，规划阶段不得改动
 - value 是当前实例内部元素的正文顺序，从 1 连续编号；同一实例的 group、order、mode 必须一致
 - mode 只能是 together 或 split；标签可嵌套，但不能嵌套同一个动画实例
 - mode="split" 时每个节点独立标注；mode="together" 时一个标签覆盖完整范围，并用 values JSON 字符串数组列出需要显示的节点词
 - <era-shift group="foreground-with-background"> 用于一个固定或可生成的前景人物/物体与两套背景生态的策略转向；每个实例只用一个 mode="together" 标签，标注时只保留正文原文，不写 foreground、switchAt、startItems 或 endItems，这些在规划阶段根据时间轴、搜索结果和 Provider 素材规则填写
+- <mg-cutout group="rise"> 用于把一个人物或完整物体作为透明前景从下方升入原视频；每个实例一个 mode="together" 标签，标注时只保留正文原文，图片来源在规划阶段选择
 - <mg-effect group="object-drop"> 只用于正文明确出现产品或实体物体落下/砸落的节点；<mg-effect group="glass-fracture"> 只用于计划、方案或屏幕明确失败/破碎的节点。图片在后续规划阶段从模板固定目录选择，标注 HTML 不写 image。
 - <news-flashback group="project"> 用于“这句话有公开报道为证”的节点：规划阶段会先联网检索真实网页截图再生成动画；标注 HTML 只写标签和原文，不写 pages。它是整屏画面，会盖住该时间窗口内的原画，一段原文只标注一次。
+- <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和原文，不写 url、highlights、entrance 或坐标；规划阶段再搜索 canonical URL 并从原文中选择重点短语。
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
 export type MgTemplateProvider = Readonly<{
@@ -541,6 +583,14 @@ const eraShiftAssetToolInstructions = (): string => {
   ].join("\n");
 };
 
+const mgCutoutSourceToolInstructions = (): string => [
+  "source 只描述图片来源，入场动作和视觉参数均由模板固定：",
+  "- mode=transparent：image 只能是已经带透明通道的图片 URL 或本地图片路径；subject=null，references=[]。",
+  "- mode=chroma：image 必须是已有绿幕图片的绝对本地文件路径；模板固定抠除 #00ff00；subject=null，references=[]。",
+  "- mode=generate：若需要生成新主体，先用 search_web 搜索可靠肖像或产品图片，选择 1-3 个直接 imageUrl；填写 subject 和 references，image=null。宿主会先按模板提示词生成纯绿背景图，再自动抠除为透明 PNG。",
+  "不要输出色键颜色、抠图阈值、背景、烟雾、阴影、音效或其他视觉参数。",
+].join("\n");
+
 const resolveEraShiftAssetPath = async (kind: EraShiftAssetKind, source: string): Promise<string> => {
   let value = source.trim().replace(/^(["'])(.*)\1$/, "$2");
   if (!value) throw new Error(`era-shift ${kind} asset is required`);
@@ -618,6 +668,52 @@ const prepareLayerAssets = async (
     spec.source = asset.runtimeSource;
     spec.assetVersion = asset.assetVersion;
     layer.spec = spec;
+    return;
+  }
+  if (layer.kind === "mg-cutout") {
+    if (layer.group !== MG_CUTOUT_GROUP) throw new Error(`mg-cutout group must be ${MG_CUTOUT_GROUP}`);
+    if (!layer.spec || typeof layer.spec !== "object" || Array.isArray(layer.spec)) {
+      throw new Error("mg-cutout 缺少有效 spec");
+    }
+    const spec = assertMgCutoutRiseSpec(layer.spec);
+    if (spec.prepared) return;
+    const source = spec.source as MgCutoutSource;
+    if (source.mode === "transparent") {
+      spec.image = await resolveImage(source.image);
+    } else {
+      if (!removeSolidBackground) {
+        throw new Error("mg-cutout 需要宿主提供纯色背景抠除能力");
+      }
+      let sourcePath: string;
+      if (source.mode === "chroma") {
+        try {
+          sourcePath = /^file:\/\//i.test(source.image) ? fileURLToPath(source.image) : source.image;
+        } catch {
+          throw new Error("mg-cutout chroma 图片的 file URL 无效");
+        }
+        if (!path.isAbsolute(sourcePath) && !/^[A-Za-z]:[\\/]/.test(sourcePath)) {
+          throw new Error("mg-cutout chroma 模式必须提供已有绿幕图片的绝对本地文件路径");
+        }
+      } else {
+        if (!generateImageFromReferences) {
+          throw new Error("mg-cutout generate 模式需要宿主提供参考图生图能力");
+        }
+        sourcePath = await generateImageFromReferences({
+          prompt: mgCutoutGenerationPrompt(source.subject),
+          references: source.references,
+          aspectRatio: MG_CUTOUT_GENERATED_ASPECT_RATIO,
+          cacheKey: `mg-cutout:${source.subject}:${source.references.join("|")}`,
+        });
+      }
+      const cutoutPath = await removeSolidBackground({
+        sourcePath,
+        backgroundColor: MG_CUTOUT_CHROMA_COLOR,
+        cacheKey: `mg-cutout:${source.mode}:${sourcePath}:${source.mode === "generate" ? source.subject : ""}`,
+      });
+      spec.image = await resolveImage(cutoutPath);
+    }
+    spec.prepared = true;
+    assertMgCutoutRiseSpec(spec);
     return;
   }
   if (layer.kind === "era-shift") {
@@ -769,6 +865,30 @@ const prepareLayerAssets = async (
     }
     return;
   }
+  if (layer.kind === "web-news-focus") {
+    if (!layer.spec || typeof layer.spec !== "object" || Array.isArray(layer.spec)) {
+      throw new Error("web-news-focus 缺少有效 spec");
+    }
+    const spec = assertWebNewsFocusSpec(layer.spec) as WebNewsFocusSpec;
+    const capture = await captureWebNewsFocus({
+      url: spec.url,
+      highlights: spec.highlights.map((highlight) => highlight.text),
+    });
+    try {
+      const [baseImage, highlightedImage] = await Promise.all([
+        resolveImage(capture.basePath),
+        resolveImage(capture.highlightedPath),
+      ]);
+      spec.capture = {
+        ...capture.metadata,
+        baseImage,
+        highlightedImage,
+      };
+    } finally {
+      await fs.rm(capture.temporaryDirectory, {recursive: true, force: true}).catch(() => undefined);
+    }
+    return;
+  }
   if (layer.kind !== "image-stack" && layer.kind !== "image-grid") return;
   if (!layer.spec || typeof layer.spec !== "object") return;
   const media = layer.spec as {images?: Array<{image?: unknown}>};
@@ -800,8 +920,12 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
     return [
       requested.has("news-flashback") ? newsFlashbackPlanningInstructions : "",
       requested.has("news-report") ? newsReportPlanningInstructions : "",
+      requested.has("web-news-focus") ? webNewsFocusPlanningInstructions : "",
       requested.has("multi-series-chart") ? multiSeriesChartPlanningInstructions : "",
       requested.has("era-shift") ? eraShiftPlanningInstructions : "",
+      requested.has("mg-cutout") ? mgCutoutPlanningInstructions : "",
+      requested.has("ai-hot-opening") ? aiHotOpeningPlanningInstructions : "",
+      requested.has("ai-hot-focus-stage") ? aiHotFocusStagePlanningInstructions : "",
     ].filter(Boolean).join("\n\n");
   },
   listStylePreviews: () => MG_STYLE_CATALOG.map((entry) => Object.freeze({
@@ -833,6 +957,9 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
           }
           if (binding.template === "era-shift") {
             return `${binding.definition.description}\n\n${eraShiftAssetToolInstructions()}`;
+          }
+          if (binding.template === "mg-cutout") {
+            return `${binding.definition.description}\n\n${mgCutoutSourceToolInstructions()}`;
           }
           if (binding.template === "collage-network") {
             return `${binding.definition.description}\n\n${formatLogoAssetInventory("any")}\n关系图节点只填写实体语义字段；不要新增 logo、assetDir 或视觉参数。`;
@@ -884,7 +1011,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   validateAnnotatedInstance: ({htmlTag, tagCount}) => {
     const template = templateByHtmlTag.get(htmlTag);
     if (!template) throw new Error(`不支持的 MG 标签 <${htmlTag}>`);
-    if ((template === "sc-video" || template === "sc-longtake" || template === "video-footage" || template === "era-shift") && tagCount !== 1) {
+    if ((template === "sc-video" || template === "sc-longtake" || template === "video-footage" || template === "era-shift" || template === "ai-hot-opening" || template === "ai-hot-focus-stage") && tagCount !== 1) {
       throw new Error(`<${htmlTag}> 的单个动画实例只能出现一次`);
     }
     if ((template === "title" || template === "emphasis" || template === "news-flashback") && tagCount !== 1) {

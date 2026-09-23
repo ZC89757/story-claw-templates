@@ -35,7 +35,12 @@ export const progressTimelineParametersSchema = {
         properties: {
           at: functionAtSchema,
           year: {type: "string", minLength: 1, maxLength: 24},
-          title: {type: "string", minLength: 1, maxLength: 100},
+          title: {
+            type: "string",
+            minLength: 1,
+            maxLength: 100,
+            description: "左侧说明框唯一显示的节点概述，不包含年份，请控制在50字以内。",
+          },
         },
       },
     },
@@ -45,7 +50,7 @@ export const progressTimelineParametersSchema = {
 export const progressTimelineFunctionDefinition = {
   type: "function",
   name: "create_progress_timeline",
-  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. For each node, pass year as the short year/date shown below the node (for example, '1993年'), and pass title as only the concise event summary shown above the node (for example, '三位创始人共同创办英伟达'). Do not put the year into title. The template displays these values exactly as provided; node position, size, detail panel, viewport behavior and motion are fixed by the template.",
+  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. For each node, pass year as the short year/date shown below the node (for example, '1993年'), and pass title as the single concise event overview shown in the left description panel (for example, '三位创始人共同创办英伟达'). Do not put the year into title. The template displays these values exactly as provided; node position, size, description panel, viewport behavior and motion are fixed by the template.",
   strict: true,
   parameters: progressTimelineParametersSchema,
 } as const;

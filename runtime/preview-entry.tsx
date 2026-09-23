@@ -1,6 +1,8 @@
 import {
+  AbsoluteFill,
   Composition,
   registerRoot,
+  useCurrentFrame,
 } from "remotion";
 import type {ReactNode} from "react";
 import {ProgressTimelineTemplate, VerticalProgressTimelineTemplate} from "../src/progress-timeline";
@@ -27,6 +29,7 @@ import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
 import {NewsReportTemplate} from "../src/news-report";
+import {WebNewsFocusTemplate} from "../src/web-news-focus";
 import {EraShiftTemplate} from "../src/era-shift";
 import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
@@ -37,6 +40,9 @@ import {EffectTemplate} from "../src/effect";
 import {ScVideoPreviewPlate} from "../src/sc-video/preview";
 import {ScLongtakeTemplate} from "../src/sc-longtake";
 import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
+import {AiHotOpeningTemplate} from "../src/ai-hot-opening";
+import {AiHotFocusStageTemplate} from "../src/ai-hot-focus-stage";
+import {MgCutoutTemplate} from "../src/mg-cutout";
 
 type PreviewProps = {previewKind: string; style: string};
 
@@ -50,9 +56,9 @@ const progressSpec = {
   subtitle: "关键节点逐步展开",
   followViewport: true,
   nodes: [
-    {id: "start", at: 0, progress: 0, kind: "major" as const, title: "研究起点", eyebrow: "阶段 01", detail: {type: "text" as const, value: "从基础研究开始"}, motion: "instant" as const},
-    {id: "model", at: 0.65, progress: 50, kind: "major" as const, title: "模型突破", eyebrow: "阶段 02", detail: {type: "text" as const, value: "能力快速增长"}, motion: "ease" as const},
-    {id: "product", at: 1.35, progress: 100, kind: "major" as const, title: "产品落地", eyebrow: "阶段 03", detail: {type: "text" as const, value: "进入真实场景"}, motion: "ease" as const},
+    {id: "start", at: 0, progress: 0, kind: "major" as const, title: "研究起点", eyebrow: "2018年", detail: {type: "text" as const, value: "从基础研究开始"}, motion: "instant" as const},
+    {id: "model", at: 0.65, progress: 50, kind: "major" as const, title: "模型突破", eyebrow: "2022年", detail: {type: "text" as const, value: "能力快速增长"}, motion: "ease" as const},
+    {id: "product", at: 1.35, progress: 100, kind: "major" as const, title: "产品落地", eyebrow: "2025年", detail: {type: "text" as const, value: "进入真实场景"}, motion: "ease" as const},
   ],
 };
 
@@ -175,6 +181,26 @@ const newsReportSpec = {
   ],
 };
 
+const webNewsFocusSpec = {
+  at: 0,
+  url: "https://tokenstead.ai/guides/zcode-silent-git-history-upload",
+  entrance: "slide-right" as const,
+  highlights: [{text: "313MB encrypted archive", at: 1.1}],
+  capture: {
+    url: "https://tokenstead.ai/guides/zcode-silent-git-history-upload",
+    title: "ZCode uploads your git history; Z.ai holds the only key",
+    viewport: {width: 1400, height: 900, deviceScaleFactor: 1},
+    scroll: {x: 0, y: 186},
+    highlights: [{
+      text: "313MB encrypted archive",
+      rects: [{x: 555.96875, y: 511.5, width: 185.625, height: 17}],
+      unionRect: {x: 555.96875, y: 511.5, width: 185.625, height: 17},
+    }],
+    baseImage: "web-news/dom-demo/base.png",
+    highlightedImage: "web-news/dom-demo/highlighted.png",
+  },
+};
+
 const eraShiftSpec = {
   image: "era-shift/foreground/jensen-huang.png",
   foreground: {
@@ -260,6 +286,58 @@ const videoFootagePreviewSpec = {
   assetVersion: "preview",
 };
 
+const aiHotOpeningPreviewSpec = {
+  title: "AI热点",
+  subTitle: "2026/09/21",
+  durationSeconds: 7,
+  items: [
+    "OpenAI 发布全新模型能力升级",
+    "多模态生成迈向实时交互",
+    "国产大模型迎来推理效率突破",
+    "机器人具身智能持续升温",
+    "AI 智能体加速进入真实业务",
+    "芯片厂商加码下一代 AI 算力",
+  ],
+};
+
+const aiHotFocusStagePreviewSpec = {
+  title: "AI热点",
+  subTitle: "2026/09/21",
+  items: [
+    {title: "OpenAI 发布全新推理模型", time: 5.2},
+    {title: "多模态交互进入实时生成阶段", time: 10.4},
+    {title: "智能体开始接管复杂工作流", time: 15.6},
+  ],
+};
+
+const mgCutoutRisePreviewSpec = {
+  image: "era-shift/foreground/jensen-huang.png",
+  source: {mode: "transparent" as const, image: "era-shift/foreground/jensen-huang.png", subject: null, references: [] as []},
+  at: 0,
+};
+
+/** Preview-only moving plate so the template's transparent pixels are visible. */
+const MgCutoutDemoPlate = () => {
+  const frame = useCurrentFrame();
+  const drift = (frame * 11) % 520;
+  return <AbsoluteFill style={{background: "linear-gradient(180deg, #a7d4e1 0%, #d8d2b5 53%, #607c76 54%, #17272a 100%)", overflow: "hidden"}}>
+    <div style={{position: "absolute", left: 0, right: 0, top: 0, height: 590, background: "linear-gradient(180deg, rgba(244,247,228,.42), transparent)"}} />
+    <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{position: "absolute", inset: 0}}>
+      <path d="M0 638 C230 570 390 592 630 638 C830 677 1010 570 1240 614 C1500 665 1690 570 1920 610 L1920 1080 L0 1080 Z" fill="#72847a" />
+      <path d="M0 734 C300 681 490 748 730 713 C1030 670 1250 744 1510 702 C1690 674 1810 692 1920 710 L1920 1080 L0 1080 Z" fill="#435a55" />
+      <path d="M0 868 C260 824 455 892 670 858 C930 817 1170 893 1410 850 C1630 812 1780 833 1920 850 L1920 1080 L0 1080 Z" fill="#20383a" />
+      {Array.from({length: 10}, (_, index) => <path
+        key={index}
+        d={`M${-300 + ((drift + index * 230) % 2500)} ${900 + index * 17} q 180 -24 360 0`}
+        fill="none"
+        stroke={index % 3 === 0 ? "#d0c7a4" : "#88aaa0"}
+        strokeOpacity={index % 3 === 0 ? 0.36 : 0.22}
+        strokeWidth={index % 3 === 0 ? 4 : 2}
+      />)}
+    </svg>
+  </AbsoluteFill>;
+};
+
 const Preview = ({previewKind, style}: PreviewProps) => {
   let content: ReactNode;
   switch (previewKind) {
@@ -270,6 +348,9 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     />; break;
     case "sc-longtake-relay": content = <ScLongtakeTemplate spec={scLongtakeSpec} />; break;
     case "video-footage-full-bleed": content = <VideoFootageTemplate spec={videoFootagePreviewSpec} durationInFrames={135} />; break;
+    case "ai-hot-opening-color-orb": content = <AiHotOpeningTemplate spec={aiHotOpeningPreviewSpec} />; break;
+    case "ai-hot-focus-stage": content = <AiHotFocusStageTemplate spec={aiHotFocusStagePreviewSpec} />; break;
+    case "mg-cutout-rise": content = <><MgCutoutDemoPlate /><MgCutoutTemplate spec={mgCutoutRisePreviewSpec} /></>; break;
     case "timeline-horizontal": content = <ProgressTimelineTemplate spec={progressSpec} />; break;
     case "timeline-vertical": content = <VerticalProgressTimelineTemplate spec={progressSpec} />; break;
     case "table": content = <TimedTableTemplate spec={tableSpec} />; break;
@@ -286,6 +367,7 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "image-stack": content = <ImageStackTemplate spec={imageStackSpec} />; break;
     case "image-grid": content = <ImageGridTemplate spec={imageGridSpec} />; break;
     case "news-report-paper-stack": content = <NewsReportTemplate spec={newsReportSpec} />; break;
+    case "web-news-focus": content = <WebNewsFocusTemplate spec={webNewsFocusSpec} />; break;
     case "era-shift-foreground-with-background": content = <EraShiftTemplate spec={eraShiftSpec} />; break;
     case "route-shift-road-transfer": content = <RouteShiftTemplate spec={routeShiftSpec} />; break;
     case "title-fade": content = <FadeTitleTemplate spec={{text: "一条关键结论", at: 0.15}} />; break;
@@ -324,6 +406,13 @@ const Root = () => <Composition
   height={540}
   fps={30}
   durationInFrames={150}
+  calculateMetadata={({props}) => ({
+    durationInFrames: props.previewKind === "ai-hot-opening-color-orb"
+      ? 210
+      : props.previewKind === "ai-hot-focus-stage" ? 630
+        : props.previewKind === "mg-cutout-rise" ? 180
+          : props.previewKind === "web-news-focus" ? 180 : 150,
+  })}
 />;
 
 registerRoot(Root);

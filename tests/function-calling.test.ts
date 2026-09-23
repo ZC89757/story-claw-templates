@@ -28,6 +28,7 @@ import {
 } from "../src/effect/schema";
 import {scLongtakeFunctionDefinition} from "../src/sc-longtake/schema";
 import {videoFootageFunctionDefinition} from "../src/video-footage/schema";
+import {webNewsFocusFunctionDefinition} from "../src/web-news-focus/schema";
 import {MG_STYLE_CATALOG, MG_TEMPLATE_USAGE, formatMgTemplateUsage} from "../src/catalog";
 
 type Definition = {name: string; parameters: {properties: Record<string, unknown>; required: readonly string[]}};
@@ -44,6 +45,7 @@ const definitions: DefinitionExpectation[] = [
     "group", "order", "at", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
   ], ["group", "order", "at", "reference_image_state", "segments"]],
   [videoFootageFunctionDefinition, ["group", "order", "at", "source", "sourceStart", "sourceEnd"]],
+  [webNewsFocusFunctionDefinition, ["group", "order", "at", "url", "highlights", "entrance"]],
   [xyChartFunctionDefinition, ["group", "order", "at", "title", "axes", "keyframes"]],
   [multiSeriesChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
   [containmentFunctionDefinition, ["group", "order", "at", "title", "root", "relations", "highlights"]],

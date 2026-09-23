@@ -33,6 +33,7 @@ import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
 import {NewsReportTemplate} from "../src/news-report";
+import {WebNewsFocusTemplate} from "../src/web-news-focus";
 import {EraShiftTemplate} from "../src/era-shift";
 import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
@@ -42,6 +43,9 @@ import {RhythmTemplate} from "../src/rhythm";
 import {EffectTemplate} from "../src/effect";
 import {ScLongtakeTemplate} from "../src/sc-longtake";
 import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
+import {AiHotOpeningTemplate} from "../src/ai-hot-opening";
+import {AiHotFocusStageTemplate} from "../src/ai-hot-focus-stage";
+import {MgCutoutTemplate} from "../src/mg-cutout";
 import type {
   MgRenderInput,
   MgRuntimeCompositionNode,
@@ -81,6 +85,7 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
     case "image-stack": return <ImageStackTemplate spec={spec} />;
     case "image-grid": return <ImageGridTemplate spec={spec} />;
     case "news-report": return <NewsReportTemplate spec={spec} />;
+    case "web-news-focus": return <WebNewsFocusTemplate spec={spec} />;
     case "era-shift": return <EraShiftTemplate spec={spec} />;
     case "route-shift": return <RouteShiftTemplate spec={spec} />;
     case "showcase": return <ShowcaseTemplate spec={spec} style={layer.group} />;
@@ -90,6 +95,9 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
     case "effect": return <EffectTemplate spec={spec} style={layer.group} />;
     case "sc-longtake": return <ScLongtakeTemplate spec={spec} />;
     case "video-footage": return <VideoFootageTemplate spec={spec} durationInFrames={durationInFrames} />;
+    case "ai-hot-opening": return <AiHotOpeningTemplate spec={spec} />;
+    case "ai-hot-focus-stage": return <AiHotFocusStageTemplate spec={spec} />;
+    case "mg-cutout": return <MgCutoutTemplate spec={spec} />;
     case "title": {
       if (layer.group === "blur-slide") return <BlurSlideTitleTemplate spec={spec} />;
       if (layer.group === "scramble") return <ScrambleTitleTemplate spec={spec} />;

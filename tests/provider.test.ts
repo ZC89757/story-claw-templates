@@ -150,3 +150,34 @@ test("multi-series chart groups share one Function Call and remain runtime group
     assert.equal(provider.isToolAllowed({htmlTag: "multi-series-chart", group, name: "create_multi_series_chart"}), true);
   }
 });
+
+test("web-news-focus uses a scene layer and keeps camera geometry provider-owned", () => {
+  const descriptor = provider.templates.find((item) => item.htmlTag === "web-news-focus");
+  assert.deepEqual(Object.keys(descriptor ?? {}).sort(), ["groups", "htmlTag", "layerRole", "selectionHint"]);
+  assert.deepEqual(descriptor?.groups, ["focus"]);
+  assert.equal(descriptor?.layerRole, "scene");
+  const tools = provider.getPlanningTools(["web-news-focus"]);
+  assert.deepEqual(tools.map((tool) => tool.name), ["create_web_news_focus"]);
+  assert.match(provider.getTemplatePlanningInstructions(["web-news-focus"]), /DOM Range/);
+  assert.match(tools[0].description, /canonical URL/);
+  assert.deepEqual(Object.keys((tools[0].parameters as {properties: Record<string, unknown>}).properties), [
+    "group", "order", "at", "url", "highlights", "entrance",
+  ]);
+
+  const call = provider.resolveCall({
+    name: "create_web_news_focus",
+    arguments: {
+      group: "focus",
+      order: null,
+      at: 12,
+      url: "https://example.com/article",
+      entrance: "fade",
+      highlights: [{text: "真实重点", at: 12}, {text: "第二重点", at: 14.5}],
+    },
+  });
+  assert.equal(call.render.kind, "web-news-focus");
+  assert.equal(call.render.canvas, "full");
+  assert.equal(call.layerRole, "scene");
+  assert.deepEqual(call.elementAts, [12, 12, 14.5]);
+  assert.equal((call.render.spec as {highlights: Array<{at: number}>}).highlights[1].at, 2.5);
+});
