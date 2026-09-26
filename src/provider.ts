@@ -455,7 +455,7 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <mg-cutout group="rise"> 用于把一个人物或完整物体作为透明前景从下方升入原视频；每个实例一个 mode="together" 标签，标注时只保留正文原文，图片来源在规划阶段选择
 - <mg-effect group="object-drop"> 只用于正文明确出现产品或实体物体落下/砸落的节点；<mg-effect group="glass-fracture"> 只用于计划、方案或屏幕明确失败/破碎的节点。图片在后续规划阶段从模板固定目录选择，标注 HTML 不写 image。
 - <news-flashback group="project"> 用于“这句话有公开报道为证”的节点：规划阶段会先联网检索真实网页截图再生成动画；标注 HTML 只写标签和原文，不写 pages。它是整屏画面，会盖住该时间窗口内的原画，一段原文只标注一次。
-- <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和原文，不写 url、highlights、entrance 或坐标；规划阶段再搜索 canonical URL 并从原文中选择重点短语。
+- <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、highlights、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择重点短语，并把高亮时间对齐清稿中对应语义。
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
 export type MgTemplateProvider = Readonly<{
@@ -870,10 +870,16 @@ const prepareLayerAssets = async (
       throw new Error("web-news-focus 缺少有效 spec");
     }
     const spec = assertWebNewsFocusSpec(layer.spec) as WebNewsFocusSpec;
-    const capture = await captureWebNewsFocus({
-      url: spec.url,
-      highlights: spec.highlights.map((highlight) => highlight.text),
-    });
+    let capture;
+    try {
+      capture = await captureWebNewsFocus({
+        url: spec.url,
+        highlights: spec.highlights.map((highlight) => highlight.text),
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(`WEB_NEWS_FOCUS_CAPTURE_FAILED url=${spec.url} ${detail}`);
+    }
     try {
       const [baseImage, highlightedImage] = await Promise.all([
         resolveImage(capture.basePath),

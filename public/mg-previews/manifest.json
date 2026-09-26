@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceHash": "720c14e98fed74b4c0d87e7ce9e523b501badba66d10a200222e4c0ae51e8e5b",
-  "generatedAt": "2026-09-23T16:04:58.011Z",
+  "sourceHash": "d9e16e8e25d8b7f2828072cf1276565924c671603de60410da8cbf22f7c5783b",
+  "generatedAt": "2026-09-23T17:39:20.208Z",
   "files": [
     "examples/abstract-relations.spec.json",
     "examples/ai-company-network.spec.json",
@@ -450,7 +450,7 @@
     "news-flashback-project.mp4": "5486bed0f8ad8a9396a6b04395734814760eb1ab420bd85f9ac17762d0e5c3ff",
     "ai-hot-opening-color-orb.mp4": "d62eb5d01dbf410bb77c8f98405a7ce072850262b0f717cb1cb062671b8ccea8",
     "ai-hot-focus-stage-focus-stage.mp4": "e48ee31ed47b16998d323cb0006b57183644a35db1be64ef69e4ab8b294273ee",
-    "mg-cutout-rise.mp4": "76b6080894daf4f43267f227b15f90a235ace742615d5d4207e5390ad0e89cf4",
+    "mg-cutout-rise.mp4": "d9e16e8e25d8b7f2828072cf1276565924c671603de60410da8cbf22f7c5783b",
     "web-news-focus-focus.mp4": "720c14e98fed74b4c0d87e7ce9e523b501badba66d10a200222e4c0ae51e8e5b"
   }
 }

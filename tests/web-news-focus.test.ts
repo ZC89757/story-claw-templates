@@ -4,6 +4,7 @@ import {
   resolveWebNewsFocusFunctionArgs,
   webNewsFocusFunctionDefinition,
 } from "../src/web-news-focus/schema";
+import {webNewsFocusPlanningInstructions} from "../src/web-news-focus/prompt";
 import {assertWebNewsFocusSpec, validateWebNewsFocusSpec} from "../src/web-news-focus/validate";
 
 test("web-news-focus exposes only URL, exact highlights and fixed entrance", () => {
@@ -14,6 +15,31 @@ test("web-news-focus exposes only URL, exact highlights and fixed entrance", () 
     "group", "order", "at", "url", "highlights", "entrance",
   ]);
   assert.deepEqual(webNewsFocusFunctionDefinition.parameters.properties.entrance.enum, ["fade", "slide-right", "cut"]);
+});
+
+test("web-news-focus instructs the planner to read webpage text and time it against narration", () => {
+  assert.match(webNewsFocusPlanningInstructions, /search_web\(\{query\}\)/);
+  assert.match(webNewsFocusPlanningInstructions, /search_web\(\{url\}\)/);
+  assert.match(webNewsFocusPlanningInstructions, /不要求在清稿或 HTML 标签原文中出现/);
+  assert.match(webNewsFocusPlanningInstructions, /以网页文字填写 text，以清稿对应语义的时间填写 at/);
+  const highlightSchema = webNewsFocusFunctionDefinition.parameters.properties.highlights.items.properties;
+  assert.match(highlightSchema.text.description, /selected webpage content/);
+  assert.match(highlightSchema.at.description, /corresponding meaning in the narrated article/);
+});
+
+test("web-news-focus accepts a literal webpage phrase absent from the narration", () => {
+  const narration = "它不生成聊天文本";
+  const webpagePhrase = "Jev 不生成文本";
+  assert.equal(narration.includes(webpagePhrase), false);
+  const resolved = resolveWebNewsFocusFunctionArgs({
+    group: "focus",
+    order: null,
+    at: 20,
+    url: "https://example.com/article",
+    entrance: "fade",
+    highlights: [{text: webpagePhrase, at: 20.8}],
+  });
+  assert.deepEqual(resolved.spec.highlights, [{text: webpagePhrase, at: 0.8}]);
 });
 
 test("web-news-focus localizes absolute highlight times and keeps DOM coordinates out of the call", () => {

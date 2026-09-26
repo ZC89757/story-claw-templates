@@ -13,6 +13,9 @@ await fs.mkdir(path.join(payloadRoot, "src"), {recursive: true});
 for (const name of ["src", "runtime", "public"]) {
   await fs.cp(path.join(projectRoot, name), path.join(payloadRoot, name), {recursive: true});
 }
+// The Provider is bundled below. Keeping its TypeScript source makes tsx resolve
+// provider.js back to provider.ts when the desktop host imports the package.
+await fs.rm(path.join(payloadRoot, "src", "provider.ts"));
 await fs.mkdir(path.join(payloadRoot, "tools", "mg-template-gallery", "public"), {recursive: true});
 for (const name of ["index.html", "gallery.css"]) {
   await fs.copyFile(
@@ -34,6 +37,8 @@ await esbuild({
   platform: "node",
   format: "esm",
   target: "node22",
+  // ws is CommonJS and its bundled Node built-ins use require at runtime.
+  banner: {js: 'import {createRequire} from "node:module"; const require = createRequire(import.meta.url);'},
   sourcemap: false,
   logLevel: "info",
   plugins: [{

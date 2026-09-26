@@ -46,8 +46,8 @@ export const webNewsFocusParametersSchema = {
         additionalProperties: false,
         required: ["text", "at"],
         properties: {
-          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact text copied from the tagged article, including punctuation when present."},
-          at: {...functionAtSchema, description: "Absolute episode timestamp when this phrase should be highlighted and focused."},
+          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact contiguous phrase copied from the selected webpage content, preserving punctuation and internal spaces. It need not appear in the tagged narration."},
+          at: {...functionAtSchema, description: "Absolute episode timestamp of the corresponding meaning in the narrated article, even when the webpage uses different words."},
         },
       },
     },
