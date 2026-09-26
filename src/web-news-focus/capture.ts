@@ -36,7 +36,7 @@ type CdpMessage = {
 
 const DEFAULT_VIEWPORT = {width: 1400, height: 900, deviceScaleFactor: 1};
 const BROWSER_METRICS = {...DEFAULT_VIEWPORT, mobile: false};
-const MAX_FULL_PAGE_HEIGHT = 5200;
+const MAX_FULL_PAGE_HEIGHT = 12000;
 
 const sleep = (milliseconds: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -280,14 +280,9 @@ const setupPage = async (client: CdpClient, request: CaptureRequest) => {
     const documentRects = atScroll(0);
     const allRects = documentRects.flat();
     if (!allRects.length) return {ok: false, reason: 'empty-rects'};
-    const minY = Math.min(...allRects.map((rect) => rect.y));
-    const maxY = Math.max(...allRects.map((rect) => rect.y + rect.height));
-    const useFullPage = contentHeight <= ${MAX_FULL_PAGE_HEIGHT} && maxY - minY > viewportHeight * 0.76;
-    const targetScroll = useFullPage ? 0 : Math.max(0, Math.min(Math.max(0, contentHeight - viewportHeight), (minY + maxY) / 2 - viewportHeight / 2));
-    window.scrollTo(0, targetScroll);
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    const visibleRects = ranges.map((entry) => [...entry.range.getClientRects()].filter((rect) => rect.width > 0 && rect.height > 0).map((rect) => ({x: rect.x, y: rect.y, width: rect.width, height: rect.height})));
-    const rects = useFullPage ? documentRects : visibleRects;
+    if (contentHeight > ${MAX_FULL_PAGE_HEIGHT}) {
+      return {ok: false, reason: 'page-too-long', contentHeight, maxHeight: ${MAX_FULL_PAGE_HEIGHT}, title: document.title};
+    }
     const makeUnion = (items) => {
       const valid = items.filter((rect) => rect.width > 0 && rect.height > 0);
       const left = Math.min(...valid.map((rect) => rect.x));
@@ -299,11 +294,11 @@ const setupPage = async (client: CdpClient, request: CaptureRequest) => {
     return {
       ok: true,
       title: document.title,
-      mode: useFullPage ? 'full-page' : 'viewport',
+      mode: 'full-page',
       screenshotWidth: viewportWidth,
-      screenshotHeight: useFullPage ? contentHeight : viewportHeight,
-      scroll: {x: scrollX, y: useFullPage ? 0 : scrollY},
-      highlights: ranges.map((entry, index) => ({text: targets[index], rects: rects[index], unionRect: makeUnion(rects[index])})),
+      screenshotHeight: Math.ceil(contentHeight),
+      scroll: {x: 0, y: 0},
+      highlights: ranges.map((entry, index) => ({text: targets[index], rects: documentRects[index], unionRect: makeUnion(documentRects[index])})),
     };
   })(${targets})`;
   const result = await client.call("Runtime.evaluate", {expression, awaitPromise: true, returnByValue: true}, 45000);
