@@ -1,4 +1,4 @@
-import type {ReactNode} from "react";
+import {useMemo, type ReactNode} from "react";
 import {
   AbsoluteFill,
   Composition,
@@ -8,6 +8,7 @@ import {
   Sequence,
   staticFile,
   useVideoConfig,
+  useCurrentFrame,
 } from "remotion";
 import {ProgressTimelineTemplate, VerticalProgressTimelineTemplate} from "../src/progress-timeline";
 import {TimedTableTemplate} from "../src/timed-table";
@@ -34,6 +35,7 @@ import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
 import {NewsReportTemplate} from "../src/news-report";
 import {WebNewsFocusTemplate} from "../src/web-news-focus";
+import {WebPageFocusTemplate} from "../src/web-page-focus";
 import {EraShiftTemplate} from "../src/era-shift";
 import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
@@ -47,6 +49,7 @@ import {AiHotOpeningTemplate} from "../src/ai-hot-opening";
 import {AiHotFocusStageTemplate} from "../src/ai-hot-focus-stage";
 import {MgCutoutTemplate} from "../src/mg-cutout";
 import type {
+  MgCompositionBounds,
   MgRenderInput,
   MgRuntimeCompositionNode,
   MgRuntimeEpisodeInput,
@@ -54,6 +57,7 @@ import type {
   MgRuntimeLayerPlacement,
   MgRuntimeScene,
 } from "../src/runtime";
+import {findInheritedCompositionBounds} from "../src/composition-layout";
 
 const ScaledCanvas = ({children, full = false}: {children: ReactNode; full?: boolean}) => {
   const {width, height} = useVideoConfig();
@@ -86,6 +90,7 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
     case "image-grid": return <ImageGridTemplate spec={spec} />;
     case "news-report": return <NewsReportTemplate spec={spec} />;
     case "web-news-focus": return <WebNewsFocusTemplate spec={spec} />;
+    case "web-page-focus": return <WebPageFocusTemplate spec={spec} />;
     case "era-shift": return <EraShiftTemplate spec={spec} />;
     case "route-shift": return <RouteShiftTemplate spec={spec} />;
     case "showcase": return <ShowcaseTemplate spec={spec} style={layer.group} />;
@@ -144,59 +149,104 @@ const Layer = ({layer}: {layer: MgRuntimeLayerPlacement}) => <Sequence
   </AbsoluteFill>
 </Sequence>;
 
-const CompositionVideo = ({videoPath, muted = false, transparent = false}: {
+const CompositionVideo = ({videoPath, muted = false, transparent = false, fit = "cover"}: {
   videoPath: string;
   muted?: boolean;
   transparent?: boolean;
+  fit?: "contain" | "cover";
 }) => <OffthreadVideo
   src={staticFile(videoPath)}
   muted={muted}
   transparent={transparent}
-  style={{width: "100%", height: "100%", objectFit: "cover"}}
+  style={{width: "100%", height: "100%", objectFit: fit}}
 />;
 
 const isTransparentVideo = (node: MgRuntimeCompositionNode): boolean =>
   node.layerRole === "overlay" || /\.mov(?:$|[?#])/i.test(node.videoPath);
 
-const NodeContent = ({node, durationInFrames}: {node: MgRuntimeCompositionNode; durationInFrames: number}) => {
-  const timelineOffsetFrames = node.timelineOffsetFrames ?? 0;
-  if (node.videoPath) {
-    return <CompositionVideo videoPath={node.videoPath} transparent={isTransparentVideo(node)} />;
-  }
-  if (!node.render) return null;
-  return <AbsoluteFill style={{
-    background: node.render.layerRole === "scene" ? node.render.background : node.render.overlayBackdrop ?? "transparent",
-    overflow: "hidden",
-    pointerEvents: "none",
-  }}>
-    <RuntimeLayerCanvas
-      layer={node.render}
-      timelineOffsetFrames={timelineOffsetFrames}
-      durationInFrames={durationInFrames}
-    />
-  </AbsoluteFill>;
-};
+type LocalFrameWindow = {startFrame: number; endFrame: number};
 
-const Node = ({node}: {node: MgRuntimeCompositionNode}) => {
-  const durationInFrames = Math.max(1, node.endFrame - node.startFrame);
-  const activeWindows = node.activeWindows?.map((window) => ({
+const normalizeWindows = (windows: readonly LocalFrameWindow[] | undefined, durationInFrames: number): LocalFrameWindow[] | undefined => {
+  if (!windows) return undefined;
+  return windows.map((window) => ({
     startFrame: Math.max(0, Math.min(durationInFrames, Math.trunc(window.startFrame))),
     endFrame: Math.max(0, Math.min(durationInFrames, Math.trunc(window.endFrame))),
   })).filter((window) => window.endFrame > window.startFrame);
-  const content = activeWindows?.length
-    ? activeWindows.map((window, index) => <Sequence
+};
+
+const CompositionVisibility = ({windows, children}: {
+  windows?: readonly LocalFrameWindow[];
+  children: ReactNode;
+}) => {
+  const frame = useCurrentFrame();
+  const visible = !windows || windows.some((window) => frame >= window.startFrame && frame < window.endFrame);
+  return <div style={{
+    position: "absolute",
+    inset: 0,
+    opacity: visible ? 1 : 0,
+    pointerEvents: "none",
+  }}>{children}</div>;
+};
+
+const NodeContent = ({node, durationInFrames, bounds}: {
+  node: MgRuntimeCompositionNode;
+  durationInFrames: number;
+  bounds?: MgCompositionBounds;
+}) => {
+  const timelineOffsetFrames = node.timelineOffsetFrames ?? 0;
+  const content = node.videoPath
+    ? <CompositionVideo
+      videoPath={node.videoPath}
+      transparent={isTransparentVideo(node)}
+      fit={bounds ? "contain" : "cover"}
+    />
+    : node.render
+      ? <AbsoluteFill style={{
+        background: node.render.layerRole === "scene" ? node.render.background : node.render.overlayBackdrop ?? "transparent",
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}>
+        <RuntimeLayerCanvas
+          layer={node.render}
+          timelineOffsetFrames={timelineOffsetFrames}
+          durationInFrames={durationInFrames}
+        />
+      </AbsoluteFill>
+      : null;
+
+  if (!content || !bounds) return content;
+  return <div style={{
+    position: "absolute",
+    left: `${bounds.x * 100}%`,
+    top: `${bounds.y * 100}%`,
+    width: `${bounds.width * 100}%`,
+    height: `${bounds.height * 100}%`,
+    overflow: "hidden",
+    pointerEvents: "none",
+  }}>{content}</div>;
+};
+
+const Node = ({node, bounds}: {
+  node: MgRuntimeCompositionNode;
+  bounds?: MgCompositionBounds;
+}) => {
+  const durationInFrames = Math.max(1, node.endFrame - node.startFrame);
+  const rawActiveWindows = normalizeWindows(node.activeWindows, durationInFrames);
+  const compositionWindows = normalizeWindows(node.compositionWindows, durationInFrames);
+  const content = rawActiveWindows?.length
+    ? rawActiveWindows.map((window, index) => <Sequence
       key={`${node.nodeId}-active-${index}`}
       from={window.startFrame}
       durationInFrames={window.endFrame - window.startFrame}
       layout="none"
     >
       <Sequence from={-window.startFrame} layout="none">
-        <NodeContent node={node} durationInFrames={durationInFrames} />
+        <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} />
       </Sequence>
     </Sequence>)
-    : activeWindows
+    : rawActiveWindows
       ? null
-      : <NodeContent node={node} durationInFrames={durationInFrames} />;
+      : <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} />;
   return <Sequence
     from={node.startFrame}
     durationInFrames={durationInFrames}
@@ -204,7 +254,7 @@ const Node = ({node}: {node: MgRuntimeCompositionNode}) => {
     style={{zIndex: node.zIndex}}
   >
     <AbsoluteFill style={{overflow: "hidden", pointerEvents: "none"}}>
-      {content}
+      <CompositionVisibility windows={compositionWindows}>{content}</CompositionVisibility>
     </AbsoluteFill>
   </Sequence>;
 };
@@ -218,14 +268,25 @@ const stableNodes = (nodes: readonly MgRuntimeCompositionNode[]): MgRuntimeCompo
 
 /** One composition owns every video node and template layer. */
 const EpisodeComposition = ({episode}: {episode: MgRuntimeEpisodeInput}) => {
-  const nodes = stableNodes(episode.nodes ?? []);
+  const placedNodes = useMemo(() => {
+    const nodes = stableNodes(episode.nodes ?? []);
+    const nodesById = new Map<string, MgRuntimeCompositionNode>(
+      nodes.map((node): [string, MgRuntimeCompositionNode] => [node.nodeId, node]),
+    );
+    if (nodesById.size !== nodes.length) throw new Error("MG 合成节点 nodeId 重复");
+    return nodes.map((node) => ({node, bounds: findInheritedCompositionBounds(node, nodesById)}));
+  }, [episode.nodes]);
   return <AbsoluteFill style={{
     background: episode.transparentBackground ? "transparent" : "#000",
     overflow: "hidden",
   }}>
     {episode.baseFile ? <CompositionVideo videoPath={episode.baseFile} muted /> : null}
     {(episode.layers ?? []).map((layer) => <Layer key={layer.id} layer={layer} />)}
-    {nodes.map((node) => <Node key={node.nodeId} node={node} />)}
+    {placedNodes.map(({node, bounds}) => <Node
+      key={node.nodeId}
+      node={node}
+      bounds={bounds}
+    />)}
   </AbsoluteFill>;
 };
 

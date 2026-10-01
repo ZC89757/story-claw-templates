@@ -30,6 +30,7 @@ import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
 import {NewsReportTemplate} from "../src/news-report";
 import {WebNewsFocusTemplate} from "../src/web-news-focus";
+import {WebPageFocusTemplate} from "../src/web-page-focus";
 import {EraShiftTemplate} from "../src/era-shift";
 import {RouteShiftTemplate} from "../src/route-shift";
 import {ShowcaseTemplate} from "../src/showcase";
@@ -201,6 +202,25 @@ const webNewsFocusSpec = {
   },
 };
 
+const webPageFocusSpec = {
+  at: 0,
+  url: "https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/",
+  entrance: "slide-right" as const,
+  focus: [{text: "AI factories", at: 1.1}],
+  capture: {
+    url: "https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/",
+    title: "Inside NVIDIA Rubin GPU Architecture: Powering the Era of Agentic AI",
+    viewport: {width: 1280, height: 1400, deviceScaleFactor: 1},
+    scroll: {x: 0, y: 0},
+    focus: [{
+      text: "AI factories",
+      rects: [{x: 255, y: 883, width: 90, height: 20}],
+      unionRect: {x: 255, y: 883, width: 90, height: 20},
+    }],
+    baseImage: "web-news/nvidia-arch.png",
+  },
+};
+
 const eraShiftSpec = {
   image: "era-shift/foreground/jensen-huang.png",
   foreground: {
@@ -368,6 +388,7 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "image-grid": content = <ImageGridTemplate spec={imageGridSpec} />; break;
     case "news-report-paper-stack": content = <NewsReportTemplate spec={newsReportSpec} />; break;
     case "web-news-focus": content = <WebNewsFocusTemplate spec={webNewsFocusSpec} />; break;
+    case "web-page-focus": content = <WebPageFocusTemplate spec={webPageFocusSpec} />; break;
     case "era-shift-foreground-with-background": content = <EraShiftTemplate spec={eraShiftSpec} />; break;
     case "route-shift-road-transfer": content = <RouteShiftTemplate spec={routeShiftSpec} />; break;
     case "title-fade": content = <FadeTitleTemplate spec={{text: "一条关键结论", at: 0.15}} />; break;
@@ -411,7 +432,7 @@ const Root = () => <Composition
       ? 210
       : props.previewKind === "ai-hot-focus-stage" ? 630
         : props.previewKind === "mg-cutout-rise" ? 180
-          : props.previewKind === "web-news-focus" ? 180 : 150,
+          : props.previewKind === "web-news-focus" || props.previewKind === "web-page-focus" ? 180 : 150,
   })}
 />;
 

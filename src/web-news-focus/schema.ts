@@ -34,7 +34,7 @@ export const webNewsFocusParametersSchema = {
       pattern: "^https?://",
       minLength: 12,
       maxLength: 2000,
-      description: "The canonical original article URL. Do not pass a search result page or screenshot URL.",
+      description: "The canonical original article URL from a mainstream news outlet. No official company pages, X posts, personal blogs, search result pages, or screenshot URLs.",
     },
     highlights: {
       type: "array",

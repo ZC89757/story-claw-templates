@@ -1,0 +1,20 @@
+{
+  "source": "stepfun-step5-preview-demo.mp4",
+  "duration": 20,
+  "sourceUrl": "https://www.youtube.com/watch?v=jNnIwNo4YwM",
+  "sourceTitle": "Step 5 Preview 测评报告！究竟有多能打呢？#ai",
+  "sourceChannel": "AI产品狙击手 kzhu",
+  "sourceRange": "00:00–00:20",
+  "subtitles": [
+    {
+      "start": 0,
+      "end": 4,
+      "text": "画面：Step 5 Preview 测评开场，Pi 命令行工具显示模型输入。"
+    },
+    {
+      "start": 4,
+      "end": 20,
+      "text": "画面：在 Pi 中向 Step 5 Preview 输入中文文字任务，终端逐步显示模型的思考和输出。"
+    }
+  ]
+}

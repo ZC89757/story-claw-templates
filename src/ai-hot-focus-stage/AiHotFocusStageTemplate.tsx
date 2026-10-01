@@ -10,6 +10,11 @@ import {
   useVideoConfig,
 } from "remotion";
 import {layoutAiHotOpeningItems, type AiHotOpeningItemLayout} from "../ai-hot-opening/layout";
+import {
+  AI_HOT_FOCUS_STAGE_EXPAND_START_PROGRESS,
+  AI_HOT_FOCUS_STAGE_MORPH_DURATION_SECONDS,
+  AI_HOT_FOCUS_STAGE_SUBSEQUENT_ENTER_DELAY_SECONDS,
+} from "./composition-layout";
 import type {AiHotFocusStageSpec} from "./types";
 
 const WIDTH = 1920;
@@ -287,8 +292,13 @@ const GlassButton = ({
 
 const morphForItem = (seconds: number, items: AiHotFocusStageSpec["items"], index: number): number => {
   const item = items[index];
-  const enterStart = item.time + (index === 0 ? 0 : 0.42);
-  const enter = progress(seconds, enterStart, enterStart + 1.3, Easing.inOut(Easing.cubic));
+  const enterStart = item.time + (index === 0 ? 0 : AI_HOT_FOCUS_STAGE_SUBSEQUENT_ENTER_DELAY_SECONDS);
+  const enter = progress(
+    seconds,
+    enterStart,
+    enterStart + AI_HOT_FOCUS_STAGE_MORPH_DURATION_SECONDS,
+    Easing.inOut(Easing.cubic),
+  );
   const next = items[index + 1];
   const exit = next
     ? progress(seconds, next.time, next.time + 0.78, Easing.inOut(Easing.cubic))
@@ -309,7 +319,7 @@ const MorphingChapter = ({
 }) => {
   const frame = useCurrentFrame();
   const travel = progress(morph, 0, 0.34, Easing.inOut(Easing.cubic));
-  const expand = progress(morph, 0.28, 1, Easing.inOut(Easing.cubic));
+  const expand = progress(morph, AI_HOT_FOCUS_STAGE_EXPAND_START_PROGRESS, 1, Easing.inOut(Easing.cubic));
   const moveLeft = mix(layout.left, CENTER_BUTTON.left, travel);
   const moveTop = mix(layout.top, CENTER_BUTTON.top, travel);
   const moveWidth = mix(layout.width, CENTER_BUTTON.width, travel);

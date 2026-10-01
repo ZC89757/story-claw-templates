@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {findInheritedCompositionBounds} from "../src/composition-layout";
+import type {MgCompositionNodeReference} from "../src/composition-layout";
 import {getMgTemplateProvider} from "../src/provider";
 
 const provider = getMgTemplateProvider();
@@ -11,6 +13,50 @@ test("provider exposes only the host-facing static template protocol", () => {
   assert.ok(effect?.groups.includes("scanline-annotate-focus"));
 });
 
+test("ai-hot-focus-stage declares one normalized descendant composition bounds", () => {
+  const stage = provider.templates.find((item) => item.htmlTag === "ai-hot-focus-stage");
+  assert.deepEqual(stage?.compositionLayout, {
+    bounds: {x: 0.035, y: 0.17, width: 0.93, height: 0.83},
+  });
+  assert.deepEqual(Object.keys(stage ?? {}).sort(), [
+    "compositionLayout", "groups", "htmlTag", "layerRole", "selectionHint",
+  ]);
+  assert.equal(provider.templates.find((item) => item.htmlTag === "mg-effect")?.compositionLayout, undefined);
+});
+
+test("composition bounds inherit through nested nodes, but not across unrelated nodes", () => {
+  const stage: MgCompositionNodeReference = {nodeId: "stage", htmlTag: "ai-hot-focus-stage"};
+  const child: MgCompositionNodeReference = {nodeId: "child", parentNodeId: "stage", htmlTag: "emphasis"};
+  const grandchild: MgCompositionNodeReference = {nodeId: "grandchild", parentNodeId: "child", htmlTag: "mg-effect"};
+  const unrelated: MgCompositionNodeReference = {nodeId: "unrelated", htmlTag: "mg-effect"};
+  const nodesById = new Map<string, MgCompositionNodeReference>(
+    [stage, child, grandchild, unrelated].map((node): [string, MgCompositionNodeReference] => [node.nodeId, node]),
+  );
+  const expectedBounds = {x: 0.035, y: 0.17, width: 0.93, height: 0.83};
+
+  assert.deepEqual(findInheritedCompositionBounds(child, nodesById), expectedBounds);
+  assert.deepEqual(findInheritedCompositionBounds(grandchild, nodesById), expectedBounds);
+  assert.equal(findInheritedCompositionBounds(unrelated, nodesById), undefined);
+});
+
+test("composition bounds reject broken parent references and cycles", () => {
+  const missing: MgCompositionNodeReference = {nodeId: "child", parentNodeId: "missing"};
+  assert.throws(() => findInheritedCompositionBounds(
+    missing,
+    new Map<string, MgCompositionNodeReference>([[missing.nodeId, missing]]),
+  ), /找不到父节点/);
+
+  const first: MgCompositionNodeReference = {nodeId: "first", parentNodeId: "second"};
+  const second: MgCompositionNodeReference = {nodeId: "second", parentNodeId: "first"};
+  assert.throws(
+    () => findInheritedCompositionBounds(
+      first,
+      new Map<string, MgCompositionNodeReference>([[first.nodeId, first], [second.nodeId, second]]),
+    ),
+    /存在循环/,
+  );
+});
+
 test("provider instance keys use HTML tag plus group plus optional order", () => {
   assert.equal(provider.instanceKey({htmlTag: "mg-effect", group: "scanline-annotate-focus"}), "mg-effect::scanline-annotate-focus::one");
   assert.equal(provider.instanceKey({htmlTag: "mg-effect", group: "scanline-annotate-focus", order: 2}), "mg-effect::scanline-annotate-focus::02");
@@ -18,6 +64,12 @@ test("provider instance keys use HTML tag plus group plus optional order", () =>
     provider.instanceKey({htmlTag: "mg-effect", group: "scanline-annotate-focus"}),
     provider.instanceKey({htmlTag: "mg-effect", group: "reticle-lock-on"}),
   );
+});
+
+test("mg-cutout declares its template-owned minimum source duration", () => {
+  const cutout = provider.templates.find((item) => item.htmlTag === "mg-cutout");
+  assert.equal(cutout?.minDurationSeconds, 1.5);
+  assert.equal(provider.templates.find((item) => item.htmlTag === "mg-effect")?.minDurationSeconds, undefined);
 });
 
 test("provider selects only tools needed by HTML and returns opaque runtime payload", () => {
@@ -170,7 +222,7 @@ test("web-news-focus uses a scene layer and keeps camera geometry provider-owned
       group: "focus",
       order: null,
       at: 12,
-      url: "https://example.com/article",
+      url: "https://www.reuters.com/technology/article",
       entrance: "fade",
       highlights: [{text: "真实重点", at: 12}, {text: "第二重点", at: 14.5}],
     },
@@ -180,4 +232,22 @@ test("web-news-focus uses a scene layer and keeps camera geometry provider-owned
   assert.equal(call.layerRole, "scene");
   assert.deepEqual(call.elementAts, [12, 12, 14.5]);
   assert.equal((call.render.spec as {highlights: Array<{at: number}>}).highlights[1].at, 2.5);
+});
+
+test("web-page-focus is a separate scene tool with unhighlighted focus anchors", () => {
+  const descriptor = provider.templates.find((item) => item.htmlTag === "web-page-focus");
+  assert.deepEqual(descriptor?.groups, ["focus"]);
+  assert.equal(descriptor?.layerRole, "scene");
+  const tools = provider.getPlanningTools(["web-page-focus"]);
+  assert.deepEqual(tools.map((tool) => tool.name), ["create_web_page_focus"]);
+  const call = provider.resolveCall({
+    name: "create_web_page_focus",
+    arguments: {
+      group: "focus", order: null, at: 12, url: "https://openai.com/index/announcement",
+      entrance: "fade", focus: [{text: "Official announcement", at: 12.75}],
+    },
+  });
+  assert.equal(call.render.kind, "web-page-focus");
+  assert.equal(call.render.canvas, "full");
+  assert.deepEqual(call.elementAts, [12, 12.75]);
 });

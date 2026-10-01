@@ -17,6 +17,7 @@ export * from "./image-stack/index";
 export * from "./image-grid/index";
 export * from "./news-report/index";
 export * from "./web-news-focus/index";
+export * from "./web-page-focus/index";
 export * from "./news-flashback/index";
 export * from "./era-shift/index";
 export * from "./route-shift/index";

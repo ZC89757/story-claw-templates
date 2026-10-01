@@ -20,6 +20,7 @@ export type MgTemplateName =
   | "image-grid"
   | "news-report"
   | "web-news-focus"
+  | "web-page-focus"
   | "news-flashback"
   | "era-shift"
   | "mg-cutout"
@@ -77,6 +78,26 @@ export type MgRenderInput = {
  * teaching the host their names.
  */
 export type MgLayerRole = "scene" | "overlay";
+
+/** A normalized rectangular region in which descendant MG layers are composed. */
+export type MgCompositionBounds = Readonly<{
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}>;
+
+/** A template-owned local frame window in which one nested composition slot is ready. */
+export type MgCompositionSlot = Readonly<{
+  slotId: string;
+  openFrame: number;
+  closeFrame: number;
+}>;
+
+/** Optional template-owned composition constraints for nested MG layers. */
+export type MgCompositionLayout = Readonly<{
+  bounds: MgCompositionBounds;
+}>;
 
 export type MgRuntimeLayer = {
   kind: string;
@@ -142,6 +163,10 @@ export type MgRuntimeCompositionNode = CompositionNode & {
   render?: MgRuntimeLayer;
   /** Local clip-frame windows in which the rendered template is visible. */
   activeWindows?: MgActiveWindow[];
+  /** Template-owned readiness windows inherited from a parent composition slot. */
+  compositionWindows?: MgActiveWindow[];
+  /** Stable slot identifier assigned by the host runtime for diagnostics. */
+  compositionSlotId?: string;
 };
 
 export type MgRuntimeEpisodeInput = {

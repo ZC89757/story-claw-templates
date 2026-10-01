@@ -5,7 +5,7 @@ export const AI_HOT_FOCUS_STAGE_MIN_GAP_SECONDS = 2.5;
 
 export type AiHotFocusStageItem = {
   title: string;
-  /** Local seconds from the template start. */
+  /** Local chapter-switch trigger in seconds from the template start. */
   time: number;
 };
 

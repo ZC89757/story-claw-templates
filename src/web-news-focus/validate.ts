@@ -3,6 +3,7 @@ import {
   WEB_NEWS_FOCUS_GROUP,
   type WebNewsFocusSpec,
 } from "./types";
+import {isMajorNewsSource} from "./source-policy";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -24,6 +25,8 @@ export const validateWebNewsFocusSpec = (input: unknown): string[] => {
   }
   if (typeof input.url !== "string" || !input.url.trim() || !isHttpUrl(input.url)) {
     errors.push("url must be a valid http(s) URL");
+  } else if (!isMajorNewsSource(input.url)) {
+    errors.push("url must belong to a recognized mainstream news outlet");
   }
   if (input.entrance !== undefined && !WEB_NEWS_FOCUS_ENTRANCES.includes(input.entrance as never)) {
     errors.push(`entrance must be one of ${WEB_NEWS_FOCUS_ENTRANCES.join(", ")}`);

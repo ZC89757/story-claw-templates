@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceHash": "d9e16e8e25d8b7f2828072cf1276565924c671603de60410da8cbf22f7c5783b",
-  "generatedAt": "2026-09-23T17:39:20.208Z",
+  "sourceHash": "bae2aa97a76193380350f819f0468130149deb0ba03ed5634c2207f250f402f8",
+  "generatedAt": "2026-09-29T16:40:05.977Z",
   "files": [
     "examples/abstract-relations.spec.json",
     "examples/ai-company-network.spec.json",
@@ -25,6 +25,7 @@
     "examples/product-decomposition.spec.json",
     "runtime/preview-entry.tsx",
     "src/ai-hot-focus-stage/AiHotFocusStageTemplate.tsx",
+    "src/ai-hot-focus-stage/composition-layout.ts",
     "src/ai-hot-focus-stage/index.ts",
     "src/ai-hot-focus-stage/prompt.ts",
     "src/ai-hot-focus-stage/schema.ts",
@@ -46,6 +47,7 @@
     "src/collage-network/schema.ts",
     "src/collage-network/types.ts",
     "src/collage-network/validate.ts",
+    "src/composition-layout.ts",
     "src/containment/ContainmentTemplate.tsx",
     "src/containment/evaluate.ts",
     "src/containment/index.ts",
@@ -208,8 +210,15 @@
     "src/web-news-focus/index.ts",
     "src/web-news-focus/prompt.ts",
     "src/web-news-focus/schema.ts",
+    "src/web-news-focus/source-policy.ts",
     "src/web-news-focus/types.ts",
     "src/web-news-focus/validate.ts",
+    "src/web-page-focus/WebPageFocusTemplate.tsx",
+    "src/web-page-focus/index.ts",
+    "src/web-page-focus/prompt.ts",
+    "src/web-page-focus/schema.ts",
+    "src/web-page-focus/types.ts",
+    "src/web-page-focus/validate.ts",
     "src/weighted-comparison/BalanceComparisonTemplate.tsx",
     "src/weighted-comparison/SideBySideComparisonTemplate.tsx",
     "src/weighted-comparison/evaluate.ts",
@@ -451,6 +460,7 @@
     "ai-hot-opening-color-orb.mp4": "d62eb5d01dbf410bb77c8f98405a7ce072850262b0f717cb1cb062671b8ccea8",
     "ai-hot-focus-stage-focus-stage.mp4": "e48ee31ed47b16998d323cb0006b57183644a35db1be64ef69e4ab8b294273ee",
     "mg-cutout-rise.mp4": "d9e16e8e25d8b7f2828072cf1276565924c671603de60410da8cbf22f7c5783b",
-    "web-news-focus-focus.mp4": "720c14e98fed74b4c0d87e7ce9e523b501badba66d10a200222e4c0ae51e8e5b"
+    "web-news-focus-focus.mp4": "720c14e98fed74b4c0d87e7ce9e523b501badba66d10a200222e4c0ae51e8e5b",
+    "web-page-focus-focus.mp4": "bae2aa97a76193380350f819f0468130149deb0ba03ed5634c2207f250f402f8"
   }
 }

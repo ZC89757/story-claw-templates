@@ -4,6 +4,7 @@ import {
   aiHotFocusStageFunctionDefinition,
   resolveAiHotFocusStageFunctionArgs,
 } from "../src/ai-hot-focus-stage/schema";
+import {resolveAiHotFocusStageCompositionSlots} from "../src/ai-hot-focus-stage/composition-layout";
 import {getMgTemplateProvider} from "../src/provider";
 
 const validArgs = {
@@ -20,6 +21,7 @@ const validArgs = {
 test("focus stage exposes only four content and timing fields", () => {
   assert.deepEqual(Object.keys(aiHotFocusStageFunctionDefinition.parameters.properties).sort(), ["at", "items", "sub_title", "title"]);
   assert.deepEqual([...aiHotFocusStageFunctionDefinition.parameters.required].sort(), ["at", "items", "sub_title", "title"]);
+  assert.match(aiHotFocusStageFunctionDefinition.parameters.properties.items.items.properties.time.description, /switch animation is triggered/);
 });
 
 test("focus stage converts absolute item times to local component times", () => {
@@ -36,6 +38,22 @@ test("focus stage converts absolute item times to local component times", () => 
     ],
   });
   assert.equal(resolveAiHotFocusStageFunctionArgs({...validArgs, sub_title: null}).spec.subTitle, null);
+});
+
+test("focus stage exposes readiness slots from its local item times", () => {
+  const resolved = resolveAiHotFocusStageFunctionArgs(validArgs);
+  assert.deepEqual(resolveAiHotFocusStageCompositionSlots(resolved.spec, 25, 1000), [
+    {slotId: "item-1", openFrame: 163, closeFrame: 260},
+    {slotId: "item-2", openFrame: 303, closeFrame: 390},
+    {slotId: "item-3", openFrame: 433, closeFrame: 1000},
+  ]);
+  assert.deepEqual(resolveAiHotFocusStageCompositionSlots(resolved.spec, 25, 400), [
+    {slotId: "item-1", openFrame: 163, closeFrame: 260},
+    {slotId: "item-2", openFrame: 303, closeFrame: 390},
+  ]);
+  assert.deepEqual(resolveAiHotFocusStageCompositionSlots(resolved.spec, 30, 1200).map(({openFrame}) => openFrame), [
+    195, 364, 520,
+  ]);
 });
 
 test("focus stage rejects invalid timing and expanded parameter surfaces", () => {
@@ -60,6 +78,13 @@ test("provider registers focus stage as one fixed full-canvas scene", () => {
   assert.equal(call.render.kind, "ai-hot-focus-stage");
   assert.equal(call.render.canvas, "full");
   assert.equal(call.render.layerRole, "scene");
+  assert.deepEqual(provider.resolveCompositionSlots({
+    htmlTag: "ai-hot-focus-stage",
+    spec: call.render.spec,
+    fps: 25,
+    durationFrames: 1000,
+  })[0], {slotId: "item-1", openFrame: 163, closeFrame: 260});
   assert.match(provider.getTemplatePlanningInstructions(["ai-hot-focus-stage"]), /不要传 endTime/);
+  assert.match(provider.getTemplatePlanningInstructions(["ai-hot-focus-stage"]), /新闻切换动作的触发时间/);
   assert.throws(() => provider.validateAnnotatedInstance({htmlTag: "ai-hot-focus-stage", tagCount: 2}), /只能出现一次/);
 });

@@ -1,0 +1,25 @@
+{
+  "source": "stepfun-step5-preview-news.mp4",
+  "duration": 17.5,
+  "sourceUrl": "https://www.youtube.com/watch?v=fo6gPeIOgGk",
+  "sourceTitle": "Qwen-Image-2.1开源；Step 5 Preview发布；Jev开放并赠新用户$5【AI 早报 2026-09-21】",
+  "sourceChannel": "橘鸦Juya",
+  "sourceRange": "00:40–00:57.5",
+  "subtitles": [
+    {
+      "start": 0,
+      "end": 7.5,
+      "text": "画面：阶跃发布 Step 5 Preview；API 与在线体验已开放，模型权重计划 10 月 15 日开源。"
+    },
+    {
+      "start": 7.5,
+      "end": 13.5,
+      "text": "画面：Step 5 Preview 的编程、智能体和金融分析相关评测图表。"
+    },
+    {
+      "start": 13.5,
+      "end": 17.5,
+      "text": "画面：Step 5 Preview 信息卡片再次出现，标明 600B 总参数、27B 激活参数和百万 token 上下文。"
+    }
+  ]
+}

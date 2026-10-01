@@ -414,6 +414,18 @@ export const MG_STYLE_CATALOG = Object.freeze([
     isDefault: true,
   },
   {
+    template: "web-page-focus",
+    htmlTag: "web-page-focus",
+    style: "focus",
+    name: "网页重点推近",
+    structureName: "网页重点",
+    category: "素材",
+    renderMode: "replace",
+    description: "打开真实可靠网页，用网页重点锚点计算推近和跟随，但不渲染高亮、下划线或勾选。",
+    previewKind: "web-page-focus",
+    isDefault: true,
+  },
+  {
     template: "era-shift",
     htmlTag: "era-shift",
     style: "foreground-with-background",

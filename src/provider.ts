@@ -4,8 +4,12 @@ import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {MG_STYLE_CATALOG, MG_TEMPLATE_USAGE, isMgStyleForTemplate} from "./catalog.js";
 import type {MgStyleCatalogEntry} from "./catalog-data.js";
-import type {MgLayerRole, MgRuntimeLayer, MgRuntimeLayerPlacement, MgTemplateName} from "./runtime.js";
+import type {MgCompositionLayout, MgCompositionSlot, MgLayerRole, MgRuntimeLayer, MgRuntimeLayerPlacement, MgTemplateName} from "./runtime.js";
+import {getCompositionLayoutForHtmlTag, getCompositionSlotResolverForHtmlTag} from "./composition-layout.js";
 export type {
+  MgCompositionBounds,
+  MgCompositionLayout,
+  MgCompositionSlot,
   MgLayerRole,
   MgRuntimeEpisodeInput,
   MgRuntimeLayer,
@@ -66,6 +70,7 @@ import {aiHotFocusStageFunctionDefinition, resolveAiHotFocusStageFunctionArgs} f
 import {AI_HOT_FOCUS_STAGE_GROUP} from "./ai-hot-focus-stage/types.js";
 import {aiHotFocusStagePlanningInstructions} from "./ai-hot-focus-stage/prompt.js";
 import {MG_CUTOUT_GROUP, mgCutoutRiseFunctionDefinition, resolveMgCutoutRiseFunctionArgs} from "./mg-cutout/schema.js";
+import {MG_CUTOUT_MIN_DURATION_SECONDS} from "./mg-cutout/evaluate.js";
 import {MG_CUTOUT_CHROMA_COLOR, MG_CUTOUT_GENERATED_ASPECT_RATIO, mgCutoutGenerationPrompt, mgCutoutPlanningInstructions} from "./mg-cutout/prompt.js";
 import {assertMgCutoutRiseSpec} from "./mg-cutout/validate.js";
 import type {MgCutoutSource} from "./mg-cutout/types.js";
@@ -93,6 +98,11 @@ import {WEB_NEWS_FOCUS_GROUP, type WebNewsFocusSpec} from "./web-news-focus/type
 import {webNewsFocusPlanningInstructions} from "./web-news-focus/prompt.js";
 import {captureWebNewsFocus} from "./web-news-focus/capture.js";
 import {assertWebNewsFocusSpec} from "./web-news-focus/validate.js";
+import {webPageFocusFunctionDefinition, resolveWebPageFocusFunctionArgs} from "./web-page-focus/schema.js";
+import {WEB_PAGE_FOCUS_GROUP, type WebPageFocusSpec} from "./web-page-focus/types.js";
+import {webPageFocusPlanningInstructions} from "./web-page-focus/prompt.js";
+import {captureWebPageFocus} from "./web-news-focus/capture.js";
+import {assertWebPageFocusSpec} from "./web-page-focus/validate.js";
 import {multiSeriesChartPlanningInstructions} from "./multi-series-chart/prompt.js";
 import {
   findLogoAsset,
@@ -109,6 +119,9 @@ export type MgTemplateDescriptor = Readonly<{
   selectionHint: string;
   groups: readonly string[];
   layerRole: MgLayerRole;
+  /** Optional minimum source window required by the template's animation. */
+  minDurationSeconds?: number;
+  compositionLayout?: MgCompositionLayout;
 }>;
 
 export type MgPlanningTool = Readonly<{
@@ -180,6 +193,7 @@ type Binding = {
   name: string;
   label: string;
   template: MgTemplateName;
+  minDurationSeconds?: number;
   definition: {name: string; description: string; parameters: unknown};
   resolve: (input: unknown) => ResolveResult;
   elementAts: (input: Record<string, any>) => number[];
@@ -227,6 +241,10 @@ const elementAts = {
   webNewsFocus: (args: Record<string, any>) => [
     args.at,
     ...(args.highlights ?? []).map((item: any) => item.at),
+  ],
+  webPageFocus: (args: Record<string, any>) => [
+    args.at,
+    ...(args.focus ?? []).map((item: any) => item.at),
   ],
   longtake: (args: Record<string, any>) => [
     args.at,
@@ -276,8 +294,9 @@ const bindings: readonly Binding[] = Object.freeze([
   {name: imageGridFunctionDefinition.name, label: "图片并列", template: "image-grid", definition: imageGridFunctionDefinition, resolve: (input) => resolveImageGridFunctionArgs(input as never), elementAts: elementAts.images},
   {name: newsReportFunctionDefinition.name, label: "新闻报道纸张", template: "news-report", definition: newsReportFunctionDefinition, resolve: (input) => resolveNewsReportFunctionArgs(input as never), elementAts: elementAts.root},
   {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input) => resolveWebNewsFocusFunctionArgs(input as never), elementAts: elementAts.webNewsFocus, groups: [WEB_NEWS_FOCUS_GROUP]},
+  {name: webPageFocusFunctionDefinition.name, label: "网页重点推近", template: "web-page-focus", definition: webPageFocusFunctionDefinition, resolve: (input) => resolveWebPageFocusFunctionArgs(input as never), elementAts: elementAts.webPageFocus, groups: [WEB_PAGE_FOCUS_GROUP]},
   {name: eraShiftFunctionDefinition.name, label: "策略转向", template: "era-shift", definition: eraShiftFunctionDefinition, resolve: resolveEraShiftCall, elementAts: elementAts.eraShift},
-  {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", definition: mgCutoutRiseFunctionDefinition, resolve: (input) => resolveMgCutoutRiseFunctionArgs(input as never), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
+  {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", minDurationSeconds: MG_CUTOUT_MIN_DURATION_SECONDS, definition: mgCutoutRiseFunctionDefinition, resolve: (input) => resolveMgCutoutRiseFunctionArgs(input as never), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
   {name: routeShiftFunctionDefinition.name, label: "路线切换", template: "route-shift", definition: routeShiftFunctionDefinition, resolve: (input) => resolveRouteShiftFunctionArgs(input as never), elementAts: elementAts.routeShift},
   {name: showcaseFunctionDefinition.name, label: "界面陈列", template: "showcase", definition: showcaseFunctionDefinition, resolve: (input) => resolveShowcaseFunctionArgs(input as never), elementAts: elementAts.showcase},
   {name: metricFunctionDefinition.name, label: "指标动画", template: "metric", definition: metricFunctionDefinition, resolve: (input) => resolveMetricFunctionArgs(input as never), elementAts: elementAts.metric},
@@ -308,11 +327,15 @@ const descriptors: readonly MgTemplateDescriptor[] = Object.freeze(
     const roles = new Set(entries.map((entry) => entry.renderMode === "overlay" ? "overlay" : "scene"));
     if (roles.size !== 1) throw new Error(`<${htmlTag}> 的 group 不能混用 scene 和 overlay 图层职责`);
     templateByHtmlTag.set(htmlTag, template);
+    const compositionLayout = getCompositionLayoutForHtmlTag(htmlTag);
+    const minDurationSeconds = bindings.find((binding) => binding.template === template)?.minDurationSeconds;
     return Object.freeze({
       htmlTag,
       selectionHint: usageByTemplate.get(template) ?? "原文存在适合该动画结构的明确语义",
       groups: Object.freeze(entries.map((entry) => entry.style)),
       layerRole: [...roles][0] as MgLayerRole,
+      ...(minDurationSeconds === undefined ? {} : {minDurationSeconds}),
+      ...(compositionLayout ? {compositionLayout} : {}),
     });
   }),
 );
@@ -345,6 +368,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
     "image-grid": "#f3f0e9",
     "news-report": "transparent",
     "web-news-focus": "#070b0d",
+    "web-page-focus": "#070b0d",
     "news-flashback": "#0a0f13",
     "era-shift": "#0a1117",
     "mg-cutout": "transparent",
@@ -359,7 +383,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
 };
 
 /** 这些模板自带整屏画面，必须是 full canvas 而不是 safe 内缩画布。 */
-const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus"]);
+const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus", "web-page-focus"]);
 
 const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown): MgRuntimeLayer => {
   const descriptor = descriptorByHtmlTag.get(htmlTagByTemplate.get(template) ?? "");
@@ -403,7 +427,7 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - <sc-longtake> 的时间窗口由宿主代码根据标签文字绑定；工具参数中的根 at 和 segments.at 必须来自同一实例的真实字级时间轴
 - <video-footage> 的 at 使用标签首字在整集的绝对时间；sourceStart/sourceEnd 是所选源视频内部的秒数，不得与 at 混用
 - <ai-hot-opening> 的 at 使用标签首字 start，endTime 使用标签末字 end，二者至少间隔 7 秒
-- <ai-hot-focus-stage> 的 at 使用标签首字 start；items[].time 使用各章节标题首字的绝对 start，第一项至少晚于 at 5 秒，后续至少间隔 2.5 秒
+- <ai-hot-focus-stage> 的 at 使用标签首字 start；items[].time 使用各章节标题首字的绝对 start，作为新闻切换动作的触发时间，不要加动画时长；第一项至少晚于 at 5 秒，后续至少间隔 2.5 秒
 
 连续视频规则：
 - <sc-video> 是普通短视频片段；<sc-longtake group="relay"> 是接力式一镜到底，二者不能混用
@@ -456,10 +480,11 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <mg-effect group="object-drop"> 只用于正文明确出现产品或实体物体落下/砸落的节点；<mg-effect group="glass-fracture"> 只用于计划、方案或屏幕明确失败/破碎的节点。图片在后续规划阶段从模板固定目录选择，标注 HTML 不写 image。
 - <news-flashback group="project"> 用于“这句话有公开报道为证”的节点：规划阶段会先联网检索真实网页截图再生成动画；标注 HTML 只写标签和原文，不写 pages。它是整屏画面，会盖住该时间窗口内的原画，一段原文只标注一次。
 - <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、highlights、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择重点短语，并把高亮时间对齐清稿中对应语义。
+- <web-page-focus group="focus"> 用于“直接阅读可靠官网、公告、技术博客、产品文档或研究页面并跟随重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、focus、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择定位短语，并把推近时间对齐清稿中对应语义；该模板不显示高亮、下划线或勾选。
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
 export type MgTemplateProvider = Readonly<{
-  protocolVersion: 1;
+  protocolVersion: 2;
   templates: readonly MgTemplateDescriptor[];
   runtimeEntryUrl: URL;
   getAnnotationInstructions(): string;
@@ -470,6 +495,12 @@ export type MgTemplateProvider = Readonly<{
   supportsGroup(htmlTag: string, group: string): boolean;
   instanceKey(input: Pick<MgProviderInstance, "htmlTag" | "group" | "order">): string;
   getPlanningTools(htmlTags: readonly string[]): readonly MgPlanningTool[];
+  resolveCompositionSlots(input: {
+    htmlTag: string;
+    spec: unknown;
+    fps: number;
+    durationFrames: number;
+  }): readonly MgCompositionSlot[];
   resolveCall(input: {name: string; arguments: Record<string, unknown>}): MgResolvedProviderCall;
   isToolAllowed(input: {htmlTag: string; group: string; name: string}): boolean;
   validateAnnotatedInstance(input: {htmlTag: string; tagCount: number}): void;
@@ -891,7 +922,33 @@ const prepareLayerAssets = async (
         highlightedImage,
       };
     } finally {
-      await fs.rm(capture.temporaryDirectory, {recursive: true, force: true}).catch(() => undefined);
+      await fs.rm(capture.temporaryDirectory, {recursive: true, force: true, maxRetries: 12, retryDelay: 250}).catch(() => undefined);
+    }
+    return;
+  }
+  if (layer.kind === "web-page-focus") {
+    if (!layer.spec || typeof layer.spec !== "object" || Array.isArray(layer.spec)) {
+      throw new Error("web-page-focus 缺少有效 spec");
+    }
+    const spec = assertWebPageFocusSpec(layer.spec) as WebPageFocusSpec;
+    let capture;
+    try {
+      capture = await captureWebPageFocus({
+        url: spec.url,
+        focus: spec.focus.map((focus) => focus.text),
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(`WEB_PAGE_FOCUS_CAPTURE_FAILED url=${spec.url} ${detail}`);
+    }
+    try {
+      const baseImage = await resolveImage(capture.basePath);
+      spec.capture = {
+        ...capture.metadata,
+        baseImage,
+      };
+    } finally {
+      await fs.rm(capture.temporaryDirectory, {recursive: true, force: true, maxRetries: 12, retryDelay: 250}).catch(() => undefined);
     }
     return;
   }
@@ -916,7 +973,7 @@ const copyDirectoryIfPresent = async (source: string, target: string): Promise<v
 };
 
 export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
-  protocolVersion: 1,
+  protocolVersion: 2,
   templates: descriptors,
   runtimeEntryUrl: new URL("../runtime/render-entry.tsx", import.meta.url),
   getAnnotationInstructions: annotationInstructions,
@@ -927,6 +984,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
       requested.has("news-flashback") ? newsFlashbackPlanningInstructions : "",
       requested.has("news-report") ? newsReportPlanningInstructions : "",
       requested.has("web-news-focus") ? webNewsFocusPlanningInstructions : "",
+      requested.has("web-page-focus") ? webPageFocusPlanningInstructions : "",
       requested.has("multi-series-chart") ? multiSeriesChartPlanningInstructions : "",
       requested.has("era-shift") ? eraShiftPlanningInstructions : "",
       requested.has("mg-cutout") ? mgCutoutPlanningInstructions : "",
@@ -977,6 +1035,8 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
         parameters: binding.definition.parameters,
       }));
   },
+  resolveCompositionSlots: ({htmlTag, spec, fps, durationFrames}) =>
+    getCompositionSlotResolverForHtmlTag(htmlTag)?.(spec, fps, durationFrames) ?? [],
   resolveCall: ({name, arguments: args}) => {
     const binding = bindingByName.get(name);
     if (!binding) throw new Error(`未知 MG Function Call: ${name}`);

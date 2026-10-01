@@ -69,11 +69,11 @@ const templateCommit = process.env.GITHUB_SHA?.trim() || (() => {
 const manifest = {
   name: "Story Claw MG Template Pack",
   version: templatePackage.version,
-  protocolVersion: 1,
+  protocolVersion: 2,
   provider: "src/provider.js",
   templateCommit,
 };
 await fs.writeFile(path.join(payloadRoot, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 
 console.log(`[template-pack] payload: ${payloadRoot}`);
-console.log(`[template-pack] version: ${templatePackage.version}; protocol: 1; commit: ${templateCommit}`);
+console.log(`[template-pack] version: ${templatePackage.version}; protocol: 2; commit: ${templateCommit}`);
