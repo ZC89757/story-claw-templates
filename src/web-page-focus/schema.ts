@@ -46,7 +46,7 @@ export const webPageFocusParametersSchema = {
         additionalProperties: false,
         required: ["text", "at"],
         properties: {
-          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact contiguous phrase copied from the selected webpage content, preserving punctuation and internal spaces."},
+          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact contiguous phrase copied from the selected webpage content returned by search_web({url}) after translation to Chinese, preserving punctuation and internal spaces. Do not translate or rewrite it yourself."},
           at: {...functionAtSchema, description: "Absolute episode timestamp of the corresponding meaning in the narrated article."},
         },
       },
@@ -62,7 +62,7 @@ export const webPageFocusParametersSchema = {
 export const webPageFocusFunctionDefinition = {
   type: "function",
   name: "create_web_page_focus",
-  description: "Create one readable landscape webpage shot without visual highlighting. The Provider opens the canonical URL, locates exact focus phrases with DOM Range, and the template performs fixed entrance, zoom and focus-follow motion. Never provide camera coordinates, zoom, easing, or screenshots.",
+  description: "Create one readable landscape webpage shot without visual highlighting. Read search_web({url}) first. The Provider finds that URL's saved Chinese webpage snapshot, locates exact focus phrases with DOM Range, and performs fixed entrance, zoom and focus-follow motion. Never provide camera coordinates, zoom, easing, or screenshots.",
   strict: true,
   parameters: webPageFocusParametersSchema,
 } as const;

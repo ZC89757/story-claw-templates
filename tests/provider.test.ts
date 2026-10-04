@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 import {findInheritedCompositionBounds} from "../src/composition-layout";
 import type {MgCompositionNodeReference} from "../src/composition-layout";
@@ -250,4 +253,31 @@ test("web-page-focus is a separate scene tool with unhighlighted focus anchors",
   assert.equal(call.render.kind, "web-page-focus");
   assert.equal(call.render.canvas, "full");
   assert.deepEqual(call.elementAts, [12, 12.75]);
+});
+
+test("web focus preparation rejects missing snapshots instead of refetching the website", async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "web-focus-missing-"));
+  try {
+    for (const kind of ["news", "page"] as const) {
+      const call = provider.resolveCall({
+        name: `create_web_${kind}_focus`,
+        arguments: {
+          group: "focus", order: null, at: 12,
+          url: "https://www.reuters.com/technology/report", entrance: "fade",
+          [kind === "news" ? "highlights" : "focus"]: [{text: "网页重点", at: 12}],
+        },
+      });
+      await assert.rejects(() => provider.prepareRuntimeAssets({
+        layers: [{
+          id: `web-${kind}`, instance: call.instanceKey, htmlTag: `web-${kind}-focus`,
+          group: call.group, layerRole: call.layerRole, startFrame: 0, endFrame: 30,
+          durationFrames: 30, timelineOffsetFrames: 0, sourceText: "网页重点", render: call.render,
+        }],
+        resolveImage: async (source) => source,
+        webSnapshotDirectory: directory,
+      }), /WEB_(?:NEWS|PAGE)_FOCUS_CAPTURE_FAILED.*找不到网页快照.*search_web/);
+    }
+  } finally {
+    await fs.rm(directory, {recursive: true, force: true});
+  }
 });

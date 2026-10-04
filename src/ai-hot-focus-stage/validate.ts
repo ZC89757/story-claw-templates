@@ -26,8 +26,8 @@ export const validateAiHotFocusStageSpec = (input: unknown): string[] => {
         errors.push(`items[${index}] must be an object`);
         return;
       }
-      if (typeof item.title !== "string" || !item.title.trim() || item.title.length > 40) {
-        errors.push(`items[${index}].title must be a non-empty string of at most 40 characters`);
+      if (typeof item.title !== "string" || !item.title.trim() || item.title.length > 80) {
+        errors.push(`items[${index}].title must be a non-empty string of at most 80 characters`);
       }
       if (typeof item.time !== "number" || !Number.isFinite(item.time) || item.time < 0) {
         errors.push(`items[${index}].time must be a non-negative number`);

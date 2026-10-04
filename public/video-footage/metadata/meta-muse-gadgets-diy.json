@@ -1,0 +1,640 @@
+{
+  "source": "meta-muse-gadgets-diy.mp4",
+  "duration": 156.294,
+  "subtitles": [
+    {
+      "start": 0.16,
+      "end": 3.439,
+      "text": "Here's today's top story story. Meta"
+    },
+    {
+      "start": 3.439,
+      "end": 5.11,
+      "text": "Here's today's top story story. Meta wants your next gadget to be Muse"
+    },
+    {
+      "start": 5.11,
+      "end": 5.12,
+      "text": "wants your next gadget to be Muse"
+    },
+    {
+      "start": 5.12,
+      "end": 7.349,
+      "text": "wants your next gadget to be Muse infused. Techrunch."
+    },
+    {
+      "start": 7.349,
+      "end": 7.359,
+      "text": "infused. Techrunch."
+    },
+    {
+      "start": 7.359,
+      "end": 9.91,
+      "text": "infused. Techrunch. Meta's Muse, a personal AI agent that"
+    },
+    {
+      "start": 9.91,
+      "end": 9.92,
+      "text": "Meta's Muse, a personal AI agent that"
+    },
+    {
+      "start": 9.92,
+      "end": 12.629,
+      "text": "Meta's Muse, a personal AI agent that books travel, fills out forms, and shops"
+    },
+    {
+      "start": 12.629,
+      "end": 12.639,
+      "text": "books travel, fills out forms, and shops"
+    },
+    {
+      "start": 12.639,
+      "end": 15.27,
+      "text": "books travel, fills out forms, and shops on a user's behalf, has already proven"
+    },
+    {
+      "start": 15.27,
+      "end": 15.28,
+      "text": "on a user's behalf, has already proven"
+    },
+    {
+      "start": 15.28,
+      "end": 17.59,
+      "text": "on a user's behalf, has already proven popular with the masses. But a new side"
+    },
+    {
+      "start": 17.59,
+      "end": 17.6,
+      "text": "popular with the masses. But a new side"
+    },
+    {
+      "start": 17.6,
+      "end": 19.429,
+      "text": "popular with the masses. But a new side project could be particularly alluring"
+    },
+    {
+      "start": 19.429,
+      "end": 19.439,
+      "text": "project could be particularly alluring"
+    },
+    {
+      "start": 19.439,
+      "end": 22.79,
+      "text": "project could be particularly alluring to tinkerers and hackers. On Friday, the"
+    },
+    {
+      "start": 22.79,
+      "end": 22.8,
+      "text": "to tinkerers and hackers. On Friday, the"
+    },
+    {
+      "start": 22.8,
+      "end": 25.029,
+      "text": "to tinkerers and hackers. On Friday, the company introduced Muse Gadgets, an"
+    },
+    {
+      "start": 25.029,
+      "end": 25.039,
+      "text": "company introduced Muse Gadgets, an"
+    },
+    {
+      "start": 25.039,
+      "end": 27.189,
+      "text": "company introduced Muse Gadgets, an open-source project that lets developers"
+    },
+    {
+      "start": 27.189,
+      "end": 27.199,
+      "text": "open-source project that lets developers"
+    },
+    {
+      "start": 27.199,
+      "end": 28.95,
+      "text": "open-source project that lets developers build their own hardware that connects"
+    },
+    {
+      "start": 28.95,
+      "end": 28.96,
+      "text": "build their own hardware that connects"
+    },
+    {
+      "start": 28.96,
+      "end": 32.229,
+      "text": "build their own hardware that connects to Muse. Meta is providing open-source"
+    },
+    {
+      "start": 32.229,
+      "end": 32.239,
+      "text": "to Muse. Meta is providing open-source"
+    },
+    {
+      "start": 32.239,
+      "end": 34.47,
+      "text": "to Muse. Meta is providing open-source firmware, the low-level software that"
+    },
+    {
+      "start": 34.47,
+      "end": 34.48,
+      "text": "firmware, the low-level software that"
+    },
+    {
+      "start": 34.48,
+      "end": 36.549,
+      "text": "firmware, the low-level software that runs a device, and a Linux software"
+    },
+    {
+      "start": 36.549,
+      "end": 36.559,
+      "text": "runs a device, and a Linux software"
+    },
+    {
+      "start": 36.559,
+      "end": 39.51,
+      "text": "runs a device, and a Linux software development kit SDK, along with a few"
+    },
+    {
+      "start": 39.51,
+      "end": 39.52,
+      "text": "development kit SDK, along with a few"
+    },
+    {
+      "start": 39.52,
+      "end": 42.47,
+      "text": "development kit SDK, along with a few project ideas to get users started."
+    },
+    {
+      "start": 42.47,
+      "end": 42.48,
+      "text": "project ideas to get users started."
+    },
+    {
+      "start": 42.48,
+      "end": 44.63,
+      "text": "project ideas to get users started. These include giving Muse a color ink"
+    },
+    {
+      "start": 44.63,
+      "end": 44.64,
+      "text": "These include giving Muse a color ink"
+    },
+    {
+      "start": 44.64,
+      "end": 46.63,
+      "text": "These include giving Muse a color ink display or loading it onto a stick that"
+    },
+    {
+      "start": 46.63,
+      "end": 46.64,
+      "text": "display or loading it onto a stick that"
+    },
+    {
+      "start": 46.64,
+      "end": 50.47,
+      "text": "display or loading it onto a stick that plugs into a TV's HDMI port. There don't"
+    },
+    {
+      "start": 50.47,
+      "end": 50.48,
+      "text": "plugs into a TV's HDMI port. There don't"
+    },
+    {
+      "start": 50.48,
+      "end": 53.51,
+      "text": "plugs into a TV's HDMI port. There don't appear to be many limits either. Users"
+    },
+    {
+      "start": 53.51,
+      "end": 53.52,
+      "text": "appear to be many limits either. Users"
+    },
+    {
+      "start": 53.52,
+      "end": 55.75,
+      "text": "appear to be many limits either. Users can set up a lowcost hobbyist computer"
+    },
+    {
+      "start": 55.75,
+      "end": 55.76,
+      "text": "can set up a lowcost hobbyist computer"
+    },
+    {
+      "start": 55.76,
+      "end": 58.15,
+      "text": "can set up a lowcost hobbyist computer like a Raspberry Pi or an off-the-shelf"
+    },
+    {
+      "start": 58.15,
+      "end": 58.16,
+      "text": "like a Raspberry Pi or an off-the-shelf"
+    },
+    {
+      "start": 58.16,
+      "end": 61.189,
+      "text": "like a Raspberry Pi or an off-the-shelf ESP32 board and then connect Muse to"
+    },
+    {
+      "start": 61.189,
+      "end": 61.199,
+      "text": "ESP32 board and then connect Muse to"
+    },
+    {
+      "start": 61.199,
+      "end": 63.67,
+      "text": "ESP32 board and then connect Muse to your displays, buttons, sensors,"
+    },
+    {
+      "start": 63.67,
+      "end": 63.68,
+      "text": "your displays, buttons, sensors,"
+    },
+    {
+      "start": 63.68,
+      "end": 65.83,
+      "text": "your displays, buttons, sensors, actuators, and whatever else you've got"
+    },
+    {
+      "start": 65.83,
+      "end": 65.84,
+      "text": "actuators, and whatever else you've got"
+    },
+    {
+      "start": 65.84,
+      "end": 68.87,
+      "text": "actuators, and whatever else you've got lying on your workbench, Metaotes."
+    },
+    {
+      "start": 68.87,
+      "end": 68.88,
+      "text": "lying on your workbench, Metaotes."
+    },
+    {
+      "start": 68.88,
+      "end": 71.109,
+      "text": "lying on your workbench, Metaotes. The company has also set up a Discord"
+    },
+    {
+      "start": 71.109,
+      "end": 71.119,
+      "text": "The company has also set up a Discord"
+    },
+    {
+      "start": 71.119,
+      "end": 73.51,
+      "text": "The company has also set up a Discord channel to support users."
+    },
+    {
+      "start": 73.51,
+      "end": 73.52,
+      "text": "channel to support users."
+    },
+    {
+      "start": 73.52,
+      "end": 75.83,
+      "text": "channel to support users. Meta has already tried the code itself."
+    },
+    {
+      "start": 75.83,
+      "end": 75.84,
+      "text": "Meta has already tried the code itself."
+    },
+    {
+      "start": 75.84,
+      "end": 77.429,
+      "text": "Meta has already tried the code itself. Naturally,"
+    },
+    {
+      "start": 77.429,
+      "end": 77.439,
+      "text": "Naturally,"
+    },
+    {
+      "start": 77.439,
+      "end": 79.83,
+      "text": "Naturally, Nat Friedman, head of product at Meta's"
+    },
+    {
+      "start": 79.83,
+      "end": 79.84,
+      "text": "Nat Friedman, head of product at Meta's"
+    },
+    {
+      "start": 79.84,
+      "end": 82.149,
+      "text": "Nat Friedman, head of product at Meta's Super Intelligence Labs, said in a post"
+    },
+    {
+      "start": 82.149,
+      "end": 82.159,
+      "text": "Super Intelligence Labs, said in a post"
+    },
+    {
+      "start": 82.159,
+      "end": 84.149,
+      "text": "Super Intelligence Labs, said in a post on X that the company built a gadget"
+    },
+    {
+      "start": 84.149,
+      "end": 84.159,
+      "text": "on X that the company built a gadget"
+    },
+    {
+      "start": 84.159,
+      "end": 87.749,
+      "text": "on X that the company built a gadget called Muse Home Link. The USBC powered"
+    },
+    {
+      "start": 87.749,
+      "end": 87.759,
+      "text": "called Muse Home Link. The USBC powered"
+    },
+    {
+      "start": 87.759,
+      "end": 89.749,
+      "text": "called Muse Home Link. The USBC powered device lets Muse connect to a home"
+    },
+    {
+      "start": 89.749,
+      "end": 89.759,
+      "text": "device lets Muse connect to a home"
+    },
+    {
+      "start": 89.759,
+      "end": 91.83,
+      "text": "device lets Muse connect to a home network and talk to the smart devices on"
+    },
+    {
+      "start": 91.83,
+      "end": 91.84,
+      "text": "network and talk to the smart devices on"
+    },
+    {
+      "start": 91.84,
+      "end": 94.789,
+      "text": "network and talk to the smart devices on it, including speakers and smart TVs."
+    },
+    {
+      "start": 94.789,
+      "end": 94.799,
+      "text": "it, including speakers and smart TVs."
+    },
+    {
+      "start": 94.799,
+      "end": 97.51,
+      "text": "it, including speakers and smart TVs. Meta made 5,000 of these home links, in"
+    },
+    {
+      "start": 97.51,
+      "end": 97.52,
+      "text": "Meta made 5,000 of these home links, in"
+    },
+    {
+      "start": 97.52,
+      "end": 99.67,
+      "text": "Meta made 5,000 of these home links, in fact, and is giving them away for free"
+    },
+    {
+      "start": 99.67,
+      "end": 99.68,
+      "text": "fact, and is giving them away for free"
+    },
+    {
+      "start": 99.68,
+      "end": 102.23,
+      "text": "fact, and is giving them away for free to muse subscribers while supplies last,"
+    },
+    {
+      "start": 102.23,
+      "end": 102.24,
+      "text": "to muse subscribers while supplies last,"
+    },
+    {
+      "start": 102.24,
+      "end": 104.87,
+      "text": "to muse subscribers while supplies last, according to Freriedman. Considering"
+    },
+    {
+      "start": 104.87,
+      "end": 104.88,
+      "text": "according to Freriedman. Considering"
+    },
+    {
+      "start": 104.88,
+      "end": 106.63,
+      "text": "according to Freriedman. Considering Freriedman's post about Home Link"
+    },
+    {
+      "start": 106.63,
+      "end": 106.64,
+      "text": "Freriedman's post about Home Link"
+    },
+    {
+      "start": 106.64,
+      "end": 109.03,
+      "text": "Freriedman's post about Home Link received nearly 30,000 views in a few"
+    },
+    {
+      "start": 109.03,
+      "end": 109.04,
+      "text": "received nearly 30,000 views in a few"
+    },
+    {
+      "start": 109.04,
+      "end": 111.03,
+      "text": "received nearly 30,000 views in a few hours, we're guessing those freebies"
+    },
+    {
+      "start": 111.03,
+      "end": 111.04,
+      "text": "hours, we're guessing those freebies"
+    },
+    {
+      "start": 111.04,
+      "end": 113.83,
+      "text": "hours, we're guessing those freebies have been claimed. Freriedman said Home"
+    },
+    {
+      "start": 113.83,
+      "end": 113.84,
+      "text": "have been claimed. Freriedman said Home"
+    },
+    {
+      "start": 113.84,
+      "end": 116.71,
+      "text": "have been claimed. Freriedman said Home Link would be ready to ship a few weeks."
+    },
+    {
+      "start": 116.71,
+      "end": 116.72,
+      "text": "Link would be ready to ship a few weeks."
+    },
+    {
+      "start": 116.72,
+      "end": 119.109,
+      "text": "Link would be ready to ship a few weeks. Muse Gadgets may not have wide appeal,"
+    },
+    {
+      "start": 119.109,
+      "end": 119.119,
+      "text": "Muse Gadgets may not have wide appeal,"
+    },
+    {
+      "start": 119.119,
+      "end": 121.19,
+      "text": "Muse Gadgets may not have wide appeal, but it fits nicely into Meta's all-in"
+    },
+    {
+      "start": 121.19,
+      "end": 121.2,
+      "text": "but it fits nicely into Meta's all-in"
+    },
+    {
+      "start": 121.2,
+      "end": 123.03,
+      "text": "but it fits nicely into Meta's all-in strategy to make Muse more than a"
+    },
+    {
+      "start": 123.03,
+      "end": 123.04,
+      "text": "strategy to make Muse more than a"
+    },
+    {
+      "start": 123.04,
+      "end": 125.19,
+      "text": "strategy to make Muse more than a standalone chatbot."
+    },
+    {
+      "start": 125.19,
+      "end": 125.2,
+      "text": "standalone chatbot."
+    },
+    {
+      "start": 125.2,
+      "end": 127.27,
+      "text": "standalone chatbot. Meta isn't content to push Muse on"
+    },
+    {
+      "start": 127.27,
+      "end": 127.28,
+      "text": "Meta isn't content to push Muse on"
+    },
+    {
+      "start": 127.28,
+      "end": 129.589,
+      "text": "Meta isn't content to push Muse on everyday consumers. It's also trying to"
+    },
+    {
+      "start": 129.589,
+      "end": 129.599,
+      "text": "everyday consumers. It's also trying to"
+    },
+    {
+      "start": 129.599,
+      "end": 132.63,
+      "text": "everyday consumers. It's also trying to woo small businesses and enterprises."
+    },
+    {
+      "start": 132.63,
+      "end": 132.64,
+      "text": "woo small businesses and enterprises."
+    },
+    {
+      "start": 132.64,
+      "end": 134.71,
+      "text": "woo small businesses and enterprises. The company earlier this week introduced"
+    },
+    {
+      "start": 134.71,
+      "end": 134.72,
+      "text": "The company earlier this week introduced"
+    },
+    {
+      "start": 134.72,
+      "end": 136.949,
+      "text": "The company earlier this week introduced Muse for small business, which is free"
+    },
+    {
+      "start": 136.949,
+      "end": 136.959,
+      "text": "Muse for small business, which is free"
+    },
+    {
+      "start": 136.959,
+      "end": 139.27,
+      "text": "Muse for small business, which is free with usage limits and connects Muse to"
+    },
+    {
+      "start": 139.27,
+      "end": 139.28,
+      "text": "with usage limits and connects Muse to"
+    },
+    {
+      "start": 139.28,
+      "end": 141.83,
+      "text": "with usage limits and connects Muse to tools such as Shopify, Dropbox, and"
+    },
+    {
+      "start": 141.83,
+      "end": 141.84,
+      "text": "tools such as Shopify, Dropbox, and"
+    },
+    {
+      "start": 141.84,
+      "end": 144.63,
+      "text": "tools such as Shopify, Dropbox, and Slack. It has also launched a new"
+    },
+    {
+      "start": 144.63,
+      "end": 144.64,
+      "text": "Slack. It has also launched a new"
+    },
+    {
+      "start": 144.64,
+      "end": 147.35,
+      "text": "Slack. It has also launched a new business unit, Meta Enterprise Platform,"
+    },
+    {
+      "start": 147.35,
+      "end": 147.36,
+      "text": "business unit, Meta Enterprise Platform,"
+    },
+    {
+      "start": 147.36,
+      "end": 149.51,
+      "text": "business unit, Meta Enterprise Platform, to help it push its AI offerings to"
+    },
+    {
+      "start": 149.51,
+      "end": 149.52,
+      "text": "to help it push its AI offerings to"
+    },
+    {
+      "start": 149.52,
+      "end": 152.309,
+      "text": "to help it push its AI offerings to businesses and corporate customers."
+    },
+    {
+      "start": 152.309,
+      "end": 152.319,
+      "text": "businesses and corporate customers."
+    },
+    {
+      "start": 152.319,
+      "end": 154.309,
+      "text": "businesses and corporate customers. That's it for today. Don't forget to"
+    },
+    {
+      "start": 154.309,
+      "end": 154.319,
+      "text": "That's it for today. Don't forget to"
+    },
+    {
+      "start": 154.319,
+      "end": 156.294,
+      "text": "That's it for today. Don't forget to like and subscribe."
+    }
+  ],
+  "sourceUrl": "https://www.youtube.com/watch?v=cIFoXehSQps",
+  "sourceTitle": "Meta Opens Muse Gadgets for DIY AI Hardware",
+  "sourceChannel": "KoMe",
+  "sourceUploadDate": "20261003"
+}

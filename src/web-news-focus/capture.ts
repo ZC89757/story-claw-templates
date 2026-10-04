@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import net from "node:net";
 import os from "node:os";
 import path from "node:path";
+import {pathToFileURL} from "node:url";
 import WebSocket from "ws";
 import type {
   WebNewsFocusCapture,
@@ -10,12 +11,12 @@ import type {
 } from "./types";
 import type {WebPageFocusCapture} from "../web-page-focus/types";
 import {isEligibleWebPageSource, isMajorNewsSource} from "./source-policy";
-import {MAX_TRANSLATION_NODE_HTML_LENGTH, translateWebText, type WebTranslationText} from "./translate";
 
 type CaptureRequest = Readonly<{
   url: string;
   highlights: readonly string[];
   applyHighlight?: boolean;
+  snapshotPath: string;
 }>;
 
 export type WebNewsFocusCaptureFiles = Readonly<{
@@ -204,7 +205,7 @@ const settlePage = async (client: CdpClient): Promise<void> => {
   await sleep(180);
 };
 
-const preparePage = async (client: CdpClient, request: CaptureRequest): Promise<WebTranslationText[]> => {
+const preparePage = async (client: CdpClient, request: CaptureRequest): Promise<void> => {
   const targets = JSON.stringify(request.highlights);
   const expression = `(async (targets) => {
     await document.fonts.ready;
@@ -225,7 +226,7 @@ const preparePage = async (client: CdpClient, request: CaptureRequest): Promise<
       if (spans.length < 20 || !spans.every((span) => !span.children.length && (span.textContent || '').length <= 3)) continue;
       block.replaceChildren(document.createTextNode(block.textContent || ''));
     }
-    const primaryRoot = document.querySelector('article') || document.querySelector('[role="main"]') || document.querySelector('main') || document.body;
+    const primaryRoot = document.querySelector('[data-sc-web-content]') || document.querySelector('article') || document.querySelector('[role="main"]') || document.querySelector('main') || document.body;
     const collectText = (root) => {
       const nodes = [];
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
@@ -290,86 +291,14 @@ const preparePage = async (client: CdpClient, request: CaptureRequest): Promise<
       start.dataset.scFocusStart = String(index);
       startRange.insertNode(start);
     }
-    const candidates = [];
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode(node) {
-        const parent = node.parentElement;
-        if (!parent || parent.closest('script, style, noscript, template, svg, code, pre, kbd, textarea, option, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
-        if (!node.data.trim() || parent.getClientRects().length === 0 || !/[A-Za-z]{2}|[\u3040-\u30ff\uac00-\ud7af]/.test(node.data)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    while (walker.nextNode()) candidates.push(walker.currentNode);
-    const nodes = [];
-    const escapedLength = (text) => text.replace(/[&<>"']/g, (character) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[character])).length;
-    for (const candidate of candidates) {
-      let node = candidate;
-      while (node.data.length > 600 || escapedLength(node.data) > ${MAX_TRANSLATION_NODE_HTML_LENGTH}) {
-        let low = 1;
-        let high = Math.min(600, node.data.length - 1);
-        while (low < high) {
-          const middle = Math.ceil((low + high) / 2);
-          if (escapedLength(node.data.slice(0, middle)) <= ${MAX_TRANSLATION_NODE_HTML_LENGTH}) low = middle;
-          else high = middle - 1;
-        }
-        const codeUnit = node.data.charCodeAt(low - 1);
-        const boundary = low > 1 && codeUnit >= 0xD800 && codeUnit <= 0xDBFF ? low - 1 : low;
-        const rest = node.splitText(boundary);
-        nodes.push(node);
-        node = rest;
-      }
-      nodes.push(node);
-    }
-    if (nodes.length > 1200 || nodes.reduce((length, node) => length + node.data.length, 0) > 100000) {
-      return {ok: false, reason: 'page-text-too-large', textNodes: nodes.length};
-    }
-    window.__storyClawWebFocusTranslationNodes = nodes;
-    const texts = nodes.map((node, id) => ({id, text: node.data}));
-    if (/[A-Za-z]{2}|[\u3040-\u30ff\uac00-\ud7af]/.test(document.title)
-      && escapedLength(document.title) <= ${MAX_TRANSLATION_NODE_HTML_LENGTH}) texts.push({id: -1, text: document.title});
-    return {ok: true, texts};
+    return {ok: true};
   })(${targets})`;
   const result = await client.call("Runtime.evaluate", {expression, awaitPromise: true, returnByValue: true}, 45000);
   const prepared = result?.result?.value;
+  if (prepared?.reason === "text-not-found") {
+    throw new Error(`WEB_FOCUS_TEXT_NOT_FOUND 高亮/定位文字不在已保存的网页正文中，请重新调用 search_web({url}) 读取正文并逐字复制：${JSON.stringify(prepared)}`);
+  }
   if (!prepared?.ok) throw new Error(`网页 DOM 原文定位失败: ${JSON.stringify(prepared)}`);
-  return prepared.texts as WebTranslationText[];
-};
-
-const applyPageTranslation = async (client: CdpClient, texts: readonly WebTranslationText[], htmlBatches: readonly string[]): Promise<void> => {
-  if (!texts.length) return;
-  const expression = `(() => {
-    const expected = ${JSON.stringify(texts)};
-    const htmlBatches = ${JSON.stringify(htmlBatches)};
-    const translations = new Map();
-    for (const html of htmlBatches) {
-      const template = document.createElement('template');
-      template.innerHTML = html;
-      for (const element of template.content.querySelectorAll('span[data-sc-id]')) {
-        const id = Number(element.getAttribute('data-sc-id'));
-        if (!Number.isInteger(id) || translations.has(id)) return {ok: false, reason: 'duplicate-or-invalid-translation-id', id};
-        translations.set(id, element.textContent || '');
-      }
-    }
-    if (translations.size !== expected.length || expected.some((item) => !translations.has(item.id))) {
-      return {ok: false, reason: 'missing-translated-text', expected: expected.length, actual: translations.size};
-    }
-    const sourceLatin = expected.reduce((count, item) => count + (item.text.match(/[A-Za-z]/g) || []).length, 0);
-    const translatedHan = [...translations.values()].reduce((count, value) => count + (value.match(/[\u4e00-\u9fff]/g) || []).length, 0);
-    if (sourceLatin > 200 && translatedHan < 15) return {ok: false, reason: 'translation-did-not-produce-chinese'};
-    const nodes = window.__storyClawWebFocusTranslationNodes;
-    if (!Array.isArray(nodes)) return {ok: false, reason: 'translation-nodes-lost'};
-    for (const item of expected) {
-      if (item.id === -1) continue;
-      const node = nodes[item.id];
-      if (!node?.isConnected) return {ok: false, reason: 'translation-node-detached', id: item.id};
-      node.data = translations.get(item.id);
-    }
-    if (translations.has(-1)) document.title = translations.get(-1);
-    document.documentElement.lang = 'zh-CN';
-    return {ok: true};
-  })()`;
-  const result = await client.call("Runtime.evaluate", {expression, returnByValue: true}, 45000);
-  if (!result?.result?.value?.ok) throw new Error(`网页翻译应用失败: ${JSON.stringify(result?.result?.value)}`);
 };
 
 const measurePage = async (client: CdpClient, request: CaptureRequest) => {
@@ -393,12 +322,6 @@ const measurePage = async (client: CdpClient, request: CaptureRequest) => {
       return range;
     });
     if (ranges.some((range) => !range)) return {ok: false, reason: 'translated-anchor-lost'};
-    for (let index = 0; index < ranges.length; index++) {
-      if ((targets[index].match(/[A-Za-z]/g) || []).length < 20) continue;
-      if (!/[\u4e00-\u9fff]/.test(ranges[index].toString())) {
-        return {ok: false, reason: 'anchor-was-not-translated', target: targets[index]};
-      }
-    }
     window.__storyClawWebNewsFocusRanges = ranges;
     window.scrollTo(0, 0);
     const documentRects = ranges.map((range) => [...range.getClientRects()].filter((rect) => rect.width > 0 && rect.height > 0).map((rect) => ({x: rect.x + scrollX, y: rect.y + scrollY, width: rect.width, height: rect.height})));
@@ -497,19 +420,29 @@ const captureWebFocus = async (request: CaptureRequest): Promise<WebNewsFocusCap
     await client.call("Runtime.enable");
     await client.call("Network.enable");
     await client.call("Emulation.setDeviceMetricsOverride", BROWSER_METRICS);
+    await client.call("Emulation.setScriptExecutionDisabled", {value: true});
+    const navigationUrl = pathToFileURL(path.resolve(request.snapshotPath)).href;
     const loadEvent = client.waitFor("Page.loadEventFired", 30000).catch(() => undefined);
-    await client.call("Page.navigate", {url: request.url}, 30000);
+    await client.call("Page.navigate", {url: navigationUrl}, 30000);
     await loadEvent;
+    // Keep original site scripts blocked while enabling our own DOM measurements.
+    await client.call("Runtime.evaluate", {
+      expression: `(() => {
+        document.querySelectorAll('script').forEach((script) => script.remove());
+        const policy = document.createElement('meta');
+        policy.httpEquiv = 'Content-Security-Policy';
+        policy.content = "script-src 'none'; object-src 'none'";
+        document.head.prepend(policy);
+      })()`,
+    });
+    await client.call("Emulation.setScriptExecutionDisabled", {value: false});
     await sleep(1200);
     await settlePage(client);
     const locationResult = await client.call("Runtime.evaluate", {expression: "location.href", returnByValue: true});
-    const finalUrl = locationResult?.result?.value;
-    if (typeof finalUrl !== "string" || !sourceIsAllowed(finalUrl)) {
-      throw new Error(`网页跳转后来源不符合模板要求: ${String(finalUrl)}`);
+    if (locationResult?.result?.value !== navigationUrl) {
+      throw new Error("网页快照发生跳转，无法保证使用已保存的正文");
     }
-    const texts = await preparePage(client, request);
-    const translatedHtml = await translateWebText(texts);
-    await applyPageTranslation(client, texts, translatedHtml);
+    await preparePage(client, request);
     await settlePage(client);
     const geometry = await measurePage(client, request);
     const base = await captureScreenshot(client, geometry);
@@ -523,7 +456,7 @@ const captureWebFocus = async (request: CaptureRequest): Promise<WebNewsFocusCap
       await fs.writeFile(highlightedPath, highlighted);
     }
     const metadata: Omit<WebNewsFocusCapture, "baseImage" | "highlightedImage"> = {
-      url: finalUrl,
+      url: request.url,
       title: geometry.title,
       viewport: {
         width: geometry.screenshotWidth,
@@ -555,8 +488,13 @@ export type WebPageFocusCaptureFiles = Readonly<{
   temporaryDirectory: string;
 }>;
 
-export const captureWebPageFocus = async (request: {url: string; focus: readonly string[]}): Promise<WebPageFocusCaptureFiles> => {
-  const captured = await captureWebFocus({url: request.url, highlights: request.focus, applyHighlight: false});
+export const captureWebPageFocus = async (request: {url: string; focus: readonly string[]; snapshotPath: string}): Promise<WebPageFocusCaptureFiles> => {
+  const captured = await captureWebFocus({
+    url: request.url,
+    highlights: request.focus,
+    applyHighlight: false,
+    snapshotPath: request.snapshotPath,
+  });
   return {
     basePath: captured.basePath,
     metadata: {

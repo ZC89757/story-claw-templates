@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
+import {requireWebSnapshot} from "./web-news-focus/snapshot.js";
 import {MG_STYLE_CATALOG, MG_TEMPLATE_USAGE, isMgStyleForTemplate} from "./catalog.js";
 import type {MgStyleCatalogEntry} from "./catalog-data.js";
 import type {MgCompositionLayout, MgCompositionSlot, MgLayerRole, MgRuntimeLayer, MgRuntimeLayerPlacement, MgTemplateName} from "./runtime.js";
@@ -484,7 +485,7 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
 export type MgTemplateProvider = Readonly<{
-  protocolVersion: 2;
+  protocolVersion: 3;
   templates: readonly MgTemplateDescriptor[];
   runtimeEntryUrl: URL;
   getAnnotationInstructions(): string;
@@ -507,6 +508,7 @@ export type MgTemplateProvider = Readonly<{
   prepareRuntimeAssets(input: {
     layers: readonly MgRuntimeLayerPlacement[];
     resolveImage(source: string): Promise<string>;
+    webSnapshotDirectory?: string;
     generateImageFromReferences?(input: MgReferenceImageGenerationRequest): Promise<string>;
     removeSolidBackground?(input: MgSolidBackgroundRemovalRequest): Promise<string>;
   }): Promise<void>;
@@ -669,6 +671,7 @@ const resolveEraShiftAssetPath = async (kind: EraShiftAssetKind, source: string)
 
 type RuntimeAssetPreparationContext = {
   resolveImage: (source: string) => Promise<string>;
+  webSnapshotDirectory?: string;
   generateImageFromReferences?: (input: MgReferenceImageGenerationRequest) => Promise<string>;
   removeSolidBackground?: (input: MgSolidBackgroundRemovalRequest) => Promise<string>;
 };
@@ -677,7 +680,7 @@ const prepareLayerAssets = async (
   layer: MgRuntimeLayer,
   context: RuntimeAssetPreparationContext,
 ): Promise<void> => {
-  const {resolveImage, generateImageFromReferences, removeSolidBackground} = context;
+  const {resolveImage, webSnapshotDirectory, generateImageFromReferences, removeSolidBackground} = context;
   if (layer.kind === "video-footage") {
     if (!layer.spec || typeof layer.spec !== "object" || Array.isArray(layer.spec)) {
       throw new Error("video-footage 缺少有效 spec");
@@ -903,9 +906,11 @@ const prepareLayerAssets = async (
     const spec = assertWebNewsFocusSpec(layer.spec) as WebNewsFocusSpec;
     let capture;
     try {
+      const snapshotPath = await requireWebSnapshot(spec.url, webSnapshotDirectory);
       capture = await captureWebNewsFocus({
         url: spec.url,
         highlights: spec.highlights.map((highlight) => highlight.text),
+        snapshotPath,
       });
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
@@ -933,9 +938,11 @@ const prepareLayerAssets = async (
     const spec = assertWebPageFocusSpec(layer.spec) as WebPageFocusSpec;
     let capture;
     try {
+      const snapshotPath = await requireWebSnapshot(spec.url, webSnapshotDirectory);
       capture = await captureWebPageFocus({
         url: spec.url,
         focus: spec.focus.map((focus) => focus.text),
+        snapshotPath,
       });
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
@@ -973,7 +980,7 @@ const copyDirectoryIfPresent = async (source: string, target: string): Promise<v
 };
 
 export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
-  protocolVersion: 2,
+  protocolVersion: 3,
   templates: descriptors,
   runtimeEntryUrl: new URL("../runtime/render-entry.tsx", import.meta.url),
   getAnnotationInstructions: annotationInstructions,
@@ -1084,9 +1091,10 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
       throw new Error(`<${htmlTag}> 的单个动画实例只能出现一次`);
     }
   },
-  prepareRuntimeAssets: async ({layers, resolveImage, generateImageFromReferences, removeSolidBackground}) => {
+  prepareRuntimeAssets: async ({layers, resolveImage, webSnapshotDirectory, generateImageFromReferences, removeSolidBackground}) => {
     const context: RuntimeAssetPreparationContext = {
       resolveImage,
+      ...(webSnapshotDirectory ? {webSnapshotDirectory} : {}),
       ...(generateImageFromReferences ? {generateImageFromReferences} : {}),
       ...(removeSolidBackground ? {removeSolidBackground} : {}),
     };

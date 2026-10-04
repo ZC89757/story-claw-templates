@@ -12,7 +12,7 @@ export const aiHotFocusStageParametersSchema = {
     items: {type: "array", minItems: 1, maxItems: 6, description: "Ordered chapter headlines with absolute switch-trigger times.", items: {
       type: "object", additionalProperties: false, required: ["title", "time"],
       properties: {
-        title: {type: "string", minLength: 1, maxLength: 40},
+        title: {type: "string", minLength: 1, maxLength: 80},
         time: {type: "number", minimum: 0, maximum: 36000, description: "Absolute episode seconds when this chapter's switch animation is triggered, taken from the matching mg-value title's first character; do not add animation delay."},
       },
     }},

@@ -46,7 +46,7 @@ export const webNewsFocusParametersSchema = {
         additionalProperties: false,
         required: ["text", "at"],
         properties: {
-          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact contiguous phrase copied from the selected webpage content, preserving punctuation and internal spaces. It need not appear in the tagged narration."},
+          text: {type: "string", minLength: 1, maxLength: 240, description: "Exact contiguous phrase copied from the selected webpage content returned by search_web({url}) after translation to Chinese, preserving punctuation and internal spaces. It need not appear in the tagged narration. Do not translate or rewrite it yourself."},
           at: {...functionAtSchema, description: "Absolute episode timestamp of the corresponding meaning in the narrated article, even when the webpage uses different words."},
         },
       },
@@ -62,7 +62,7 @@ export const webNewsFocusParametersSchema = {
 export const webNewsFocusFunctionDefinition = {
   type: "function",
   name: "create_web_news_focus",
-  description: "Create one readable landscape real-news webpage shot. The Provider opens the canonical URL in a browser, finds exact highlight phrases with DOM Range, captures the real page and CSS highlights, then the template performs fixed entrance, zoom and focus-follow motion. Never provide camera coordinates, zoom, easing, or screenshots.",
+  description: "Create one readable landscape real-news webpage shot. Read search_web({url}) first. The Provider finds the canonical URL's saved Chinese webpage snapshot, locates exact highlight phrases with DOM Range, and captures the page and CSS highlights for fixed entrance, zoom and focus-follow motion. Never provide camera coordinates, zoom, easing, or screenshots.",
   strict: true,
   parameters: webNewsFocusParametersSchema,
 } as const;

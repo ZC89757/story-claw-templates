@@ -1,0 +1,640 @@
+{
+  "source": "nvidia-dgx-spark-arrived.mp4",
+  "duration": 184.233,
+  "subtitles": [
+    {
+      "start": 0,
+      "end": 2,
+      "text": "[Music]"
+    },
+    {
+      "start": 2,
+      "end": 4.71,
+      "text": "[Music] We built Spark to give more people their"
+    },
+    {
+      "start": 4.71,
+      "end": 4.72,
+      "text": "We built Spark to give more people their"
+    },
+    {
+      "start": 4.72,
+      "end": 6.7,
+      "text": "We built Spark to give more people their own personal supercomputers"
+    },
+    {
+      "start": 6.7,
+      "end": 6.71,
+      "text": "own personal supercomputers"
+    },
+    {
+      "start": 6.71,
+      "end": 8.07,
+      "text": "own personal supercomputers [Music]"
+    },
+    {
+      "start": 8.07,
+      "end": 8.08,
+      "text": "[Music]"
+    },
+    {
+      "start": 8.08,
+      "end": 11.83,
+      "text": "[Music] so anyone can invent, explore, and build"
+    },
+    {
+      "start": 11.83,
+      "end": 11.84,
+      "text": "so anyone can invent, explore, and build"
+    },
+    {
+      "start": 11.84,
+      "end": 14.549,
+      "text": "so anyone can invent, explore, and build intelligence. I want to get the spark"
+    },
+    {
+      "start": 14.549,
+      "end": 14.559,
+      "text": "intelligence. I want to get the spark"
+    },
+    {
+      "start": 14.559,
+      "end": 17.67,
+      "text": "intelligence. I want to get the spark into the hands of researchers, artists,"
+    },
+    {
+      "start": 17.67,
+      "end": 17.68,
+      "text": "into the hands of researchers, artists,"
+    },
+    {
+      "start": 17.68,
+      "end": 20.79,
+      "text": "into the hands of researchers, artists, and innovators who are shaping AI's"
+    },
+    {
+      "start": 20.79,
+      "end": 20.8,
+      "text": "and innovators who are shaping AI's"
+    },
+    {
+      "start": 20.8,
+      "end": 23.109,
+      "text": "and innovators who are shaping AI's future."
+    },
+    {
+      "start": 23.109,
+      "end": 23.119,
+      "text": "future."
+    },
+    {
+      "start": 23.119,
+      "end": 25.59,
+      "text": "future. My name is Will Aam. I'm a musician,"
+    },
+    {
+      "start": 25.59,
+      "end": 25.6,
+      "text": "My name is Will Aam. I'm a musician,"
+    },
+    {
+      "start": 25.6,
+      "end": 28.39,
+      "text": "My name is Will Aam. I'm a musician, creator, producer, technocrat, futurist."
+    },
+    {
+      "start": 28.39,
+      "end": 28.4,
+      "text": "creator, producer, technocrat, futurist."
+    },
+    {
+      "start": 28.4,
+      "end": 30.63,
+      "text": "creator, producer, technocrat, futurist. Now I got a Spark. I can take this with"
+    },
+    {
+      "start": 30.63,
+      "end": 30.64,
+      "text": "Now I got a Spark. I can take this with"
+    },
+    {
+      "start": 30.64,
+      "end": 32.87,
+      "text": "Now I got a Spark. I can take this with me everywhere I go. This is what it's"
+    },
+    {
+      "start": 32.87,
+      "end": 32.88,
+      "text": "me everywhere I go. This is what it's"
+    },
+    {
+      "start": 32.88,
+      "end": 34.95,
+      "text": "me everywhere I go. This is what it's all about."
+    },
+    {
+      "start": 34.95,
+      "end": 34.96,
+      "text": "all about."
+    },
+    {
+      "start": 34.96,
+      "end": 36.549,
+      "text": "all about. >> One of the biggest challenges with"
+    },
+    {
+      "start": 36.549,
+      "end": 36.559,
+      "text": ">> One of the biggest challenges with"
+    },
+    {
+      "start": 36.559,
+      "end": 38.389,
+      "text": ">> One of the biggest challenges with developers today is that they want to"
+    },
+    {
+      "start": 38.389,
+      "end": 38.399,
+      "text": "developers today is that they want to"
+    },
+    {
+      "start": 38.399,
+      "end": 39.67,
+      "text": "developers today is that they want to run the biggest models, but they're"
+    },
+    {
+      "start": 39.67,
+      "end": 39.68,
+      "text": "run the biggest models, but they're"
+    },
+    {
+      "start": 39.68,
+      "end": 42.15,
+      "text": "run the biggest models, but they're often constrained by hardware. The DJX"
+    },
+    {
+      "start": 42.15,
+      "end": 42.16,
+      "text": "often constrained by hardware. The DJX"
+    },
+    {
+      "start": 42.16,
+      "end": 43.43,
+      "text": "often constrained by hardware. The DJX Spark will allow them to run the"
+    },
+    {
+      "start": 43.43,
+      "end": 43.44,
+      "text": "Spark will allow them to run the"
+    },
+    {
+      "start": 43.44,
+      "end": 44.47,
+      "text": "Spark will allow them to run the state-of-the-art models that are"
+    },
+    {
+      "start": 44.47,
+      "end": 44.48,
+      "text": "state-of-the-art models that are"
+    },
+    {
+      "start": 44.48,
+      "end": 46.229,
+      "text": "state-of-the-art models that are available in the open source community"
+    },
+    {
+      "start": 46.229,
+      "end": 46.239,
+      "text": "available in the open source community"
+    },
+    {
+      "start": 46.239,
+      "end": 48.229,
+      "text": "available in the open source community without needing to go and procure huge"
+    },
+    {
+      "start": 48.229,
+      "end": 48.239,
+      "text": "without needing to go and procure huge"
+    },
+    {
+      "start": 48.239,
+      "end": 51.19,
+      "text": "without needing to go and procure huge data center GPUs."
+    },
+    {
+      "start": 51.19,
+      "end": 51.2,
+      "text": "data center GPUs."
+    },
+    {
+      "start": 51.2,
+      "end": 54.389,
+      "text": "data center GPUs. ASU is the most innovative university in"
+    },
+    {
+      "start": 54.389,
+      "end": 54.399,
+      "text": "ASU is the most innovative university in"
+    },
+    {
+      "start": 54.399,
+      "end": 57.59,
+      "text": "ASU is the most innovative university in the land. There are dozens of AI labs at"
+    },
+    {
+      "start": 57.59,
+      "end": 57.6,
+      "text": "the land. There are dozens of AI labs at"
+    },
+    {
+      "start": 57.6,
+      "end": 60.229,
+      "text": "the land. There are dozens of AI labs at ASU. The first lab that's going to"
+    },
+    {
+      "start": 60.229,
+      "end": 60.239,
+      "text": "ASU. The first lab that's going to"
+    },
+    {
+      "start": 60.239,
+      "end": 63.349,
+      "text": "ASU. The first lab that's going to receive the DGX is a lab that works"
+    },
+    {
+      "start": 63.349,
+      "end": 63.359,
+      "text": "receive the DGX is a lab that works"
+    },
+    {
+      "start": 63.359,
+      "end": 67.03,
+      "text": "receive the DGX is a lab that works actually on visualization and imaging."
+    },
+    {
+      "start": 67.03,
+      "end": 67.04,
+      "text": "actually on visualization and imaging."
+    },
+    {
+      "start": 67.04,
+      "end": 71.03,
+      "text": "actually on visualization and imaging. >> One of the reasons I work at NYU is I"
+    },
+    {
+      "start": 71.03,
+      "end": 71.04,
+      "text": ">> One of the reasons I work at NYU is I"
+    },
+    {
+      "start": 71.04,
+      "end": 73.03,
+      "text": ">> One of the reasons I work at NYU is I really want to make all of robotics, all"
+    },
+    {
+      "start": 73.03,
+      "end": 73.04,
+      "text": "really want to make all of robotics, all"
+    },
+    {
+      "start": 73.04,
+      "end": 75.109,
+      "text": "really want to make all of robotics, all of computing, all of open source very,"
+    },
+    {
+      "start": 75.109,
+      "end": 75.119,
+      "text": "of computing, all of open source very,"
+    },
+    {
+      "start": 75.119,
+      "end": 77.429,
+      "text": "of computing, all of open source very, very, very accessible."
+    },
+    {
+      "start": 77.429,
+      "end": 77.439,
+      "text": "very, very accessible."
+    },
+    {
+      "start": 77.439,
+      "end": 80.63,
+      "text": "very, very accessible. >> That's a supercomputer on your desk."
+    },
+    {
+      "start": 80.63,
+      "end": 80.64,
+      "text": ">> That's a supercomputer on your desk."
+    },
+    {
+      "start": 80.64,
+      "end": 82.63,
+      "text": ">> That's a supercomputer on your desk. Every graduate student in AI should have"
+    },
+    {
+      "start": 82.63,
+      "end": 82.64,
+      "text": "Every graduate student in AI should have"
+    },
+    {
+      "start": 82.64,
+      "end": 89.19,
+      "text": "Every graduate student in AI should have one of those on their desk, frankly."
+    },
+    {
+      "start": 89.2,
+      "end": 92.32,
+      "text": "Zipline is building the first logistics"
+    },
+    {
+      "start": 92.32,
+      "end": 97.19,
+      "text": "Zipline is building the first logistics system that serves all people equally."
+    },
+    {
+      "start": 97.2,
+      "end": 100.24,
+      "text": "We run millions of simulations across"
+    },
+    {
+      "start": 100.24,
+      "end": 103.429,
+      "text": "We run millions of simulations across numerous edge cases to test every single"
+    },
+    {
+      "start": 103.429,
+      "end": 103.439,
+      "text": "numerous edge cases to test every single"
+    },
+    {
+      "start": 103.439,
+      "end": 106.069,
+      "text": "numerous edge cases to test every single possible thing that can happen. Getting"
+    },
+    {
+      "start": 106.069,
+      "end": 106.079,
+      "text": "possible thing that can happen. Getting"
+    },
+    {
+      "start": 106.079,
+      "end": 109.19,
+      "text": "possible thing that can happen. Getting this level of computing capacity to to"
+    },
+    {
+      "start": 109.19,
+      "end": 109.2,
+      "text": "this level of computing capacity to to"
+    },
+    {
+      "start": 109.2,
+      "end": 114.469,
+      "text": "this level of computing capacity to to people's desktop is super exciting."
+    },
+    {
+      "start": 114.479,
+      "end": 117.2,
+      "text": "So the idea is put DJ Spark as the brain"
+    },
+    {
+      "start": 117.2,
+      "end": 119.429,
+      "text": "So the idea is put DJ Spark as the brain of the installation and load the AI"
+    },
+    {
+      "start": 119.429,
+      "end": 119.439,
+      "text": "of the installation and load the AI"
+    },
+    {
+      "start": 119.439,
+      "end": 123.51,
+      "text": "of the installation and load the AI model in it and let the robot paint new"
+    },
+    {
+      "start": 123.51,
+      "end": 123.52,
+      "text": "model in it and let the robot paint new"
+    },
+    {
+      "start": 123.52,
+      "end": 125.19,
+      "text": "model in it and let the robot paint new paintings every day."
+    },
+    {
+      "start": 125.19,
+      "end": 125.2,
+      "text": "paintings every day."
+    },
+    {
+      "start": 125.2,
+      "end": 127.83,
+      "text": "paintings every day. >> What I like is this is small so I can"
+    },
+    {
+      "start": 127.83,
+      "end": 127.84,
+      "text": ">> What I like is this is small so I can"
+    },
+    {
+      "start": 127.84,
+      "end": 130.79,
+      "text": ">> What I like is this is small so I can carry it around and you can still"
+    },
+    {
+      "start": 130.79,
+      "end": 130.8,
+      "text": "carry it around and you can still"
+    },
+    {
+      "start": 130.8,
+      "end": 133.99,
+      "text": "carry it around and you can still inference and run all the big models on"
+    },
+    {
+      "start": 133.99,
+      "end": 134,
+      "text": "inference and run all the big models on"
+    },
+    {
+      "start": 134,
+      "end": 136.63,
+      "text": "inference and run all the big models on it."
+    },
+    {
+      "start": 136.63,
+      "end": 136.64,
+      "text": "it."
+    },
+    {
+      "start": 136.64,
+      "end": 138.71,
+      "text": "it. If my computer is not powerful enough to"
+    },
+    {
+      "start": 138.71,
+      "end": 138.72,
+      "text": "If my computer is not powerful enough to"
+    },
+    {
+      "start": 138.72,
+      "end": 141.11,
+      "text": "If my computer is not powerful enough to run LLMs, you know, on my laptop, I"
+    },
+    {
+      "start": 141.11,
+      "end": 141.12,
+      "text": "run LLMs, you know, on my laptop, I"
+    },
+    {
+      "start": 141.12,
+      "end": 143.43,
+      "text": "run LLMs, you know, on my laptop, I could have this box on my desk or maybe"
+    },
+    {
+      "start": 143.43,
+      "end": 143.44,
+      "text": "could have this box on my desk or maybe"
+    },
+    {
+      "start": 143.44,
+      "end": 145.43,
+      "text": "could have this box on my desk or maybe even, you know, at home or something and"
+    },
+    {
+      "start": 145.43,
+      "end": 145.44,
+      "text": "even, you know, at home or something and"
+    },
+    {
+      "start": 145.44,
+      "end": 147.91,
+      "text": "even, you know, at home or something and run LLMs that would be otherwise way too"
+    },
+    {
+      "start": 147.91,
+      "end": 147.92,
+      "text": "run LLMs that would be otherwise way too"
+    },
+    {
+      "start": 147.92,
+      "end": 149.43,
+      "text": "run LLMs that would be otherwise way too big."
+    },
+    {
+      "start": 149.43,
+      "end": 149.44,
+      "text": "big."
+    },
+    {
+      "start": 149.44,
+      "end": 151.51,
+      "text": "big. >> Vision models are pretty commonly run on"
+    },
+    {
+      "start": 151.51,
+      "end": 151.52,
+      "text": ">> Vision models are pretty commonly run on"
+    },
+    {
+      "start": 151.52,
+      "end": 153.19,
+      "text": ">> Vision models are pretty commonly run on the edge, which means in constrained"
+    },
+    {
+      "start": 153.19,
+      "end": 153.2,
+      "text": "the edge, which means in constrained"
+    },
+    {
+      "start": 153.2,
+      "end": 155.43,
+      "text": "the edge, which means in constrained compute environments. And so the Spark"
+    },
+    {
+      "start": 155.43,
+      "end": 155.44,
+      "text": "compute environments. And so the Spark"
+    },
+    {
+      "start": 155.44,
+      "end": 157.91,
+      "text": "compute environments. And so the Spark allows kind of simulating and running"
+    },
+    {
+      "start": 157.91,
+      "end": 157.92,
+      "text": "allows kind of simulating and running"
+    },
+    {
+      "start": 157.92,
+      "end": 160.309,
+      "text": "allows kind of simulating and running and creating and fine-tuning models that"
+    },
+    {
+      "start": 160.309,
+      "end": 160.319,
+      "text": "and creating and fine-tuning models that"
+    },
+    {
+      "start": 160.319,
+      "end": 163.35,
+      "text": "and creating and fine-tuning models that you might want to run on edge devices."
+    },
+    {
+      "start": 163.35,
+      "end": 163.36,
+      "text": "you might want to run on edge devices."
+    },
+    {
+      "start": 163.36,
+      "end": 165.83,
+      "text": "you might want to run on edge devices. Every generation deserves a Spark. The"
+    },
+    {
+      "start": 165.83,
+      "end": 165.84,
+      "text": "Every generation deserves a Spark. The"
+    },
+    {
+      "start": 165.84,
+      "end": 167.67,
+      "text": "Every generation deserves a Spark. The tools to turn imagination into"
+    },
+    {
+      "start": 167.67,
+      "end": 167.68,
+      "text": "tools to turn imagination into"
+    },
+    {
+      "start": 167.68,
+      "end": 170.949,
+      "text": "tools to turn imagination into discovery. With DJX Spark, the power of"
+    },
+    {
+      "start": 170.949,
+      "end": 170.959,
+      "text": "discovery. With DJX Spark, the power of"
+    },
+    {
+      "start": 170.959,
+      "end": 174.39,
+      "text": "discovery. With DJX Spark, the power of AI belongs to everyone. What was once"
+    },
+    {
+      "start": 174.39,
+      "end": 174.4,
+      "text": "AI belongs to everyone. What was once"
+    },
+    {
+      "start": 174.4,
+      "end": 180.36,
+      "text": "AI belongs to everyone. What was once impossible now fits on a desk."
+    }
+  ],
+  "sourceUrl": "https://www.youtube.com/watch?v=AvgZscNZzYw",
+  "sourceTitle": "Sparking Something Big: NVIDIA DGX Spark Has Arrived",
+  "sourceChannel": "NVIDIA",
+  "sourceUploadDate": "20251015"
+}
