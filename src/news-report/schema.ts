@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -16,11 +17,10 @@ export type NewsReportFunctionArgs = FunctionCallEnvelope & {
 export const newsReportParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "pages"],
+  required: ["group", "order", "pages"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     pages: {
       type: "array",
       minItems: 2,
@@ -42,13 +42,13 @@ export const newsReportParametersSchema = {
 export const newsReportFunctionDefinition = {
   type: "function",
   name: "create_news_report_stack",
-  description: "Create one news-report paper stack for an HTML group. at is the absolute episode timestamp. Supply 2-12 searched article page screenshots or local image paths in pages. The template shows only the papers and their stacking motion; it does not render a central title.",
+  description: "Create one news-report paper stack for an HTML group. The host supplies the annotation window. Supply 2-12 searched article page screenshots or local image paths in pages. The template shows only the papers and their stacking motion; it does not render a central title.",
   strict: true,
   parameters: newsReportParametersSchema,
 } as const;
 
-export const resolveNewsReportFunctionArgs = (input: NewsReportFunctionArgs): ResolvedFunctionCall<NewsReportSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+export const resolveNewsReportFunctionArgs = (input: NewsReportFunctionArgs, timing: FunctionCallTiming): ResolvedFunctionCall<NewsReportSpec> => {
+  const envelope = assertFunctionEnvelope(input, timing);
   const pages = input.pages.map((page) => ({
     image: page.image,
     ...(page.source === undefined ? {} : {source: page.source}),

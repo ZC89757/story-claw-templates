@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -23,11 +24,10 @@ export type WebPageFocusFunctionArgs = FunctionCallEnvelope & {
 export const webPageFocusParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "url", "focus", "entrance"],
+  required: ["group", "order", "url", "focus", "entrance"],
   properties: {
     group: {...functionGroupSchema, description: `固定填写 ${WEB_PAGE_FOCUS_GROUP}。`},
     order: functionOrderSchema,
-    at: {...functionAtSchema, description: "Absolute episode timestamp at which the real web page enters."},
     url: {
       type: "string",
       format: "uri",
@@ -68,13 +68,13 @@ export const webPageFocusFunctionDefinition = {
 } as const;
 
 export const resolveWebPageFocusFunctionArgs = (
-  input: WebPageFocusFunctionArgs,
+  input: WebPageFocusFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<WebPageFocusSpec> => {
   const rawInput = input as unknown as Record<string, unknown>;
-  const allowed = new Set(["group", "order", "at", "url", "focus", "entrance"]);
+  const allowed = new Set(["group", "order", "url", "focus", "entrance"]);
   const unknown = Object.keys(rawInput).filter((key) => !allowed.has(key));
   if (unknown.length) throw new Error(`create_web_page_focus does not accept extra fields: ${unknown.join(", ")}`);
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   assertWebPageFocusGroup(envelope.group);
   if (!WEB_PAGE_FOCUS_ENTRANCES.includes(input.entrance)) {
     throw new Error(`entrance must be one of ${WEB_PAGE_FOCUS_ENTRANCES.join(", ")}`);

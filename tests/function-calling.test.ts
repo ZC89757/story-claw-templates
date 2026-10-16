@@ -35,29 +35,29 @@ type Definition = {name: string; parameters: {properties: Record<string, unknown
 type DefinitionExpectation = [Definition, string[], string[]?];
 
 const definitions: DefinitionExpectation[] = [
-  [progressTimelineFunctionDefinition, ["group", "order", "at", "title", "nodes"]],
-  [timedTableFunctionDefinition, ["group", "order", "at", "rows", "columns", "cells"]],
-  [directedGraphFunctionDefinition, ["group", "order", "at", "title", "nodes", "edges"]],
-  [titleFunctionDefinition, ["group", "order", "at", "text"]],
-  [emphasisFunctionDefinition, ["group", "order", "at", "text"]],
-  [newsFlashbackFunctionDefinition, ["group", "order", "at", "text", "pages"]],
+  [progressTimelineFunctionDefinition, ["group", "order", "title", "nodes"]],
+  [timedTableFunctionDefinition, ["group", "order", "rows", "columns", "cells"]],
+  [directedGraphFunctionDefinition, ["group", "order", "title", "nodes", "edges"]],
+  [titleFunctionDefinition, ["group", "order", "text"]],
+  [emphasisFunctionDefinition, ["group", "order", "text"]],
+  [newsFlashbackFunctionDefinition, ["group", "order", "text", "pages"]],
   [scLongtakeFunctionDefinition, [
-    "group", "order", "at", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
-  ], ["group", "order", "at", "reference_image_state", "segments"]],
-  [videoFootageFunctionDefinition, ["group", "order", "at", "source", "sourceStart", "sourceEnd"]],
-  [webNewsFocusFunctionDefinition, ["group", "order", "at", "url", "highlights", "entrance"]],
-  [xyChartFunctionDefinition, ["group", "order", "at", "title", "axes", "keyframes"]],
-  [multiSeriesChartFunctionDefinition, ["group", "order", "at", "title", "xAxis", "yAxis", "series"]],
-  [containmentFunctionDefinition, ["group", "order", "at", "title", "root", "relations", "highlights"]],
-  [decompositionFunctionDefinition, ["group", "order", "at", "title", "whole", "parts", "highlights"]],
-  [weightedComparisonFunctionDefinition, ["group", "order", "at", "title", "leftLabel", "rightLabel", "items", "highlights"]],
-  [sideBySideComparisonFunctionDefinition, ["group", "order", "at", "title", "leftLabel", "rightLabel", "items", "highlights"]],
-  [collageNetworkFunctionDefinition, ["group", "order", "at", "title", "subtitle", "nodes", "edges"]],
-  [imageStackFunctionDefinition, ["group", "order", "at", "title", "images"]],
-  [imageGridFunctionDefinition, ["group", "order", "at", "title", "images"]],
-  [effectFunctionDefinition, ["group", "order", "at", "text", "items"]],
-  [objectDropEffectFunctionDefinition, ["group", "order", "at", "impactAt", "image"]],
-  [glassFractureEffectFunctionDefinition, ["group", "order", "at", "crackAt", "image"]],
+    "group", "order", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
+  ], ["group", "order", "reference_image_state", "segments"]],
+  [videoFootageFunctionDefinition, ["group", "order", "source", "sourceStart", "sourceEnd"]],
+  [webNewsFocusFunctionDefinition, ["group", "order", "url", "highlights", "entrance"]],
+  [xyChartFunctionDefinition, ["group", "order", "title", "axes", "keyframes"]],
+  [multiSeriesChartFunctionDefinition, ["group", "order", "title", "xAxis", "yAxis", "series"]],
+  [containmentFunctionDefinition, ["group", "order", "title", "root", "relations", "highlights"]],
+  [decompositionFunctionDefinition, ["group", "order", "title", "whole", "parts", "highlights"]],
+  [weightedComparisonFunctionDefinition, ["group", "order", "title", "leftLabel", "rightLabel", "items", "highlights"]],
+  [sideBySideComparisonFunctionDefinition, ["group", "order", "title", "leftLabel", "rightLabel", "items", "highlights"]],
+  [collageNetworkFunctionDefinition, ["group", "order", "title", "subtitle", "nodes", "edges"]],
+  [imageStackFunctionDefinition, ["group", "order", "title", "images"]],
+  [imageGridFunctionDefinition, ["group", "order", "title", "images"]],
+  [effectFunctionDefinition, ["group", "order", "text", "items"]],
+  [objectDropEffectFunctionDefinition, ["group", "order", "impactAt", "image"]],
+  [glassFractureEffectFunctionDefinition, ["group", "order", "crackAt", "image"]],
 ];
 
 const exposedPropertyNames = (schema: unknown, names = new Set<string>()): Set<string> => {
@@ -76,7 +76,7 @@ const exposedPropertyNames = (schema: unknown, names = new Set<string>()): Set<s
   return names;
 };
 
-test("every Function Call exposes group, absolute at and only its intended root fields", () => {
+test("every Function Call exposes only its intended content and identity fields", () => {
   for (const [definition, expectedProperties, expectedRequired = expectedProperties] of definitions) {
     assert.deepEqual(Object.keys(definition.parameters.properties), expectedProperties, definition.name);
     assert.deepEqual([...definition.parameters.required], expectedRequired, definition.name);
@@ -106,20 +106,18 @@ test("template usage guidance covers every registered template", () => {
 test("resolvers convert absolute episode timestamps to scene-local timestamps", () => {
   const progress = resolveProgressTimelineFunctionArgs({
     group: "history",
-    at: 20,
     title: "发展历程",
     nodes: [{at: 20, title: "1998年创办"}, {at: 24.5, title: "2004年上市"}],
-  });
+  }, {start: 20, end: (20) + 60});
   assert.deepEqual(progress.spec.nodes.map((node) => node.at), [0, 4.5]);
 
   const decomposition = resolveDecompositionFunctionArgs({
     group: "stack",
-    at: 100,
     title: "四层能力",
     whole: "AI基础设施",
     parts: [{at: 101, part: "芯片"}, {at: 103, part: "模型"}],
     highlights: [{at: 104, target: "模型"}],
-  });
+  }, {start: 100, end: (100) + 60});
   assert.deepEqual(decomposition.spec.events.map((event) => event.at), [1, 3, 4]);
   assert.equal("detail" in decomposition.spec.events[0], false);
 });
@@ -128,14 +126,13 @@ test("directed graph keeps the reviewed topology and localizes node and edge tim
   const resolved = resolveDirectedGraphFunctionArgs({
     group: "flow",
     order: null,
-    at: 10,
     title: "能力链路",
     nodes: [
       {id: "n0", label: "起点", at: 10},
       {id: "n1", label: "终点", at: 12},
     ],
     edges: [{at: 13, from: "n0", to: "n1", relation: "连接"}],
-  });
+  }, {start: 10, end: (10) + 60});
   assert.deepEqual(resolved.spec.nodes.map((node) => ({id: node.id, label: node.label, at: node.at})), [
     {id: "n0", label: "起点", at: 0},
     {id: "n1", label: "终点", at: 2},
@@ -146,14 +143,13 @@ test("directed graph keeps the reviewed topology and localizes node and edge tim
 test("XY year axes do not get stretched back to zero", () => {
   const resolved = resolveXYChartFunctionArgs({
     group: "capex",
-    at: 10,
     title: "资本开支",
     axes: {x: {label: "年份", unit: "年"}, y: {label: "金额", unit: "亿美元"}},
     keyframes: [
       {at: 10, x: 2023, y: 323, label: "2023"},
       {at: 12, x: 2024, y: 525, label: "2024"},
     ],
-  });
+  }, {start: 10, end: (10) + 60});
   assert.deepEqual({min: resolved.spec.axes.x.min, max: resolved.spec.axes.x.max, ticks: resolved.spec.axes.x.ticks}, {min: 2023, max: 2024, ticks: 2});
   assert.equal(resolved.spec.axes.y.min, 0);
 });
@@ -161,7 +157,6 @@ test("XY year axes do not get stretched back to zero", () => {
 test("timed table uses explicit coordinates rather than array order", () => {
   const resolved = resolveTimedTableFunctionArgs({
     group: "financials",
-    at: 50,
     rows: 2,
     columns: 2,
     cells: [
@@ -170,7 +165,7 @@ test("timed table uses explicit coordinates rather than array order", () => {
       {row: 2, column: 1, text: "云", at: 54},
       {row: 1, column: 2, text: "收入", at: 50},
     ],
-  });
+  }, {start: 50, end: (50) + 60});
   assert.deepEqual(resolved.spec.cells, [
     {text: "业务", at: 0},
     {text: "收入", at: 0},
@@ -182,7 +177,6 @@ test("timed table uses explicit coordinates rather than array order", () => {
 test("ordinary side-by-side comparison remains unweighted", () => {
   const resolved = resolveSideBySideComparisonFunctionArgs({
     group: "search_change",
-    at: 70,
     title: "搜索方式变化",
     leftLabel: "过去",
     rightLabel: "现在",
@@ -191,14 +185,13 @@ test("ordinary side-by-side comparison remains unweighted", () => {
       {at: 73, side: "right", text: "直接生成答案"},
     ],
     highlights: [],
-  });
+  }, {start: 70, end: (70) + 60});
   assert.ok(resolved.spec.events.every((event) => !("weight" in event)));
 });
 
 test("collage resolver owns assets and visual classification", () => {
   const resolved = resolveCollageNetworkFunctionArgs({
     group: "rivals",
-    at: 200,
     title: "AI竞争网络",
     subtitle: "合作与竞争",
     nodes: [
@@ -206,7 +199,7 @@ test("collage resolver owns assets and visual classification", () => {
       {id: "openai", label: "OpenAI", role: "模型公司", at: 200},
     ],
     edges: [{at: 202, from: "microsoft", to: "openai", relation: "云端模型合作"}],
-  }, {resolveAsset: (node) => node.id === "microsoft" ? "logos/microsoft.png" : undefined});
+  }, {start: 200, end: (200) + 60}, {resolveAsset: (node) => node.id === "microsoft" ? "logos/microsoft.png" : undefined});
   assert.equal(resolved.spec.nodes[0].assetSrc, "logos/microsoft.png");
   assert.equal(resolved.spec.nodes[1].assetSrc, undefined);
   assert.equal(resolved.spec.nodes[0].kind, "cloud");

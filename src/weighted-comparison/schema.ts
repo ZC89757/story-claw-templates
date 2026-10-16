@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -32,7 +33,6 @@ export type SideBySideComparisonFunctionArgs = ComparisonFunctionBase & {
 const commonProperties = {
   group: functionGroupSchema,
   order: functionOrderSchema,
-  at: functionAtSchema,
   title: {type: "string", minLength: 1, maxLength: 80},
   leftLabel: label,
   rightLabel: label,
@@ -52,7 +52,7 @@ const highlights = {
 export const weightedComparisonParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "leftLabel", "rightLabel", "items", "highlights"],
+  required: ["group", "order", "title", "leftLabel", "rightLabel", "items", "highlights"],
   properties: {
     ...commonProperties,
     items: {
@@ -78,7 +78,7 @@ export const weightedComparisonParametersSchema = {
 export const sideBySideComparisonParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "leftLabel", "rightLabel", "items", "highlights"],
+  required: ["group", "order", "title", "leftLabel", "rightLabel", "items", "highlights"],
   properties: {
     ...commonProperties,
     items: {
@@ -120,9 +120,9 @@ const highlightEvents = (input: ComparisonFunctionBase, rootAt: number) =>
   }));
 
 export const resolveWeightedComparisonFunctionArgs = (
-  input: WeightedComparisonFunctionArgs,
+  input: WeightedComparisonFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<WeightedComparisonSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const events = [
     ...input.items.map((item) => ({...item, at: toLocalAt(item.at, envelope.at), action: "add" as const})),
     ...highlightEvents(input, envelope.at),
@@ -132,9 +132,9 @@ export const resolveWeightedComparisonFunctionArgs = (
 };
 
 export const resolveSideBySideComparisonFunctionArgs = (
-  input: SideBySideComparisonFunctionArgs,
+  input: SideBySideComparisonFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<SideBySideComparisonSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const events = [
     ...input.items.map((item) => ({...item, at: toLocalAt(item.at, envelope.at), action: "add" as const})),
     ...highlightEvents(input, envelope.at),

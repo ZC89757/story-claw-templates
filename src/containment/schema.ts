@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -22,11 +23,10 @@ const concept = {type: "string", minLength: 1, maxLength: 50} as const;
 export const containmentParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "root", "relations", "highlights"],
+  required: ["group", "order", "title", "root", "relations", "highlights"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     root: concept,
     relations: {
@@ -56,15 +56,15 @@ export const containmentParametersSchema = {
 export const containmentFunctionDefinition = {
   type: "function",
   name: "create_containment_timeline",
-  description: "Create one containment animation for an HTML group. Use absolute episode timestamps for the root animation, each parent-child relation and each optional highlight. Relation and highlight motion are fixed by their named collections; do not supply action names.",
+  description: "Create one containment animation for an HTML group. The host supplies the annotation window; use absolute episode timestamps for each parent-child relation and each optional highlight. Relation and highlight motion are fixed by their named collections; do not supply action names.",
   strict: true,
   parameters: containmentParametersSchema,
 } as const;
 
 export const resolveContainmentFunctionArgs = (
-  input: ContainmentFunctionArgs,
+  input: ContainmentFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<ContainmentSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const events = [
     ...input.relations.map((relation) => ({
       action: "contain" as const,

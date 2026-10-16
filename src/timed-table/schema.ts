@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -19,11 +20,10 @@ export type TimedTableFunctionArgs = FunctionCallEnvelope & {
 export const timedTableParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "rows", "columns", "cells"],
+  required: ["group", "order", "rows", "columns", "cells"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     rows: {type: "integer", minimum: 1, maximum: 10},
     columns: {type: "integer", minimum: 1, maximum: 8},
     cells: {
@@ -54,9 +54,9 @@ export const timedTableFunctionDefinition = {
 } as const;
 
 export const resolveTimedTableFunctionArgs = (
-  input: TimedTableFunctionArgs,
+  input: TimedTableFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<TimedTableSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const slots = new Array<TimedTableSpec["cells"][number] | undefined>(input.rows * input.columns);
   for (const cell of input.cells) {
     if (!Number.isInteger(cell.row) || cell.row < 1 || cell.row > input.rows) throw new Error(`cell row ${cell.row} is outside the table`);

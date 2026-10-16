@@ -10,9 +10,9 @@ const call = (source: Record<string, unknown> = {
   image: "public/era-shift/foreground/jensen-huang.png",
   subject: null,
   references: [],
-}) => mgTemplateProvider.resolveCall({
+}) => mgTemplateProvider.resolveCall({timing: {start: 3.4, end: (3.4) + 60},
   name: "create_cutout_rise",
-  arguments: {group: MG_CUTOUT_GROUP, order: null, at: 3.4, source},
+  arguments: {group: MG_CUTOUT_GROUP, order: null, source},
 });
 
 const placement = (render: ReturnType<typeof call>["render"]) => ({
@@ -37,7 +37,7 @@ test("provider exposes one transparent cutout overlay group", () => {
   assert.equal(mgTemplateProvider.supportsHtmlTag("mg-cutout"), true);
   assert.equal(mgTemplateProvider.supportsGroup("mg-cutout", MG_CUTOUT_GROUP), true);
   assert.equal(mgCutoutRiseFunctionDefinition.name, "create_cutout_rise");
-  assert.deepEqual(Object.keys(mgCutoutRiseFunctionDefinition.parameters.properties), ["group", "order", "at", "source"]);
+  assert.deepEqual(Object.keys(mgCutoutRiseFunctionDefinition.parameters.properties), ["group", "order", "source"]);
 });
 
 test("cutout rises from below with a monotone natural ease-out", () => {

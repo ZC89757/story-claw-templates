@@ -7,6 +7,5 @@ export type RhythmSpec = {
 export type RhythmFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   text: string;
 };

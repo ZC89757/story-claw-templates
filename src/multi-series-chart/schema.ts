@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   autoAxis,
@@ -24,11 +25,10 @@ export type MultiSeriesChartFunctionArgs = FunctionCallEnvelope & {
 export const multiSeriesChartParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "xAxis", "yAxis", "series"],
+  required: ["group", "order", "title", "xAxis", "yAxis", "series"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     xAxis: {
       type: "object",
@@ -82,15 +82,15 @@ export const multiSeriesChartParametersSchema = {
 export const multiSeriesChartFunctionDefinition = {
   type: "function",
   name: "create_multi_series_chart",
-  description: "Create one multi-series chart animation for an HTML group. Copy the HTML group unchanged and use absolute episode timestamps for the root and every datum. Supply visible data and axis meaning only; bar or line rendering, category placement, bounds, ticks and motion are determined by the template group. If the HTML lacks concrete numbers but names identifiable entities and a meaningful comparison, call search_web first and use only reliable, unit-consistent public data; never invent values or add source fields to this strict schema.",
+  description: "Create one multi-series chart animation for an HTML group. Copy the HTML group unchanged and use absolute episode timestamps for every datum; the host supplies the annotation window. Supply visible data and axis meaning only; bar or line rendering, category placement, bounds, ticks and motion are determined by the template group. If the HTML lacks concrete numbers but names identifiable entities and a meaningful comparison, call search_web first and use only reliable, unit-consistent public data; never invent values or add source fields to this strict schema.",
   strict: true,
   parameters: multiSeriesChartParametersSchema,
 } as const;
 
 export const resolveMultiSeriesChartFunctionArgs = (
-  input: MultiSeriesChartFunctionArgs,
+  input: MultiSeriesChartFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<MultiSeriesChartSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const categories = input.xAxis.categories;
   if (new Set(categories).size !== categories.length) throw new Error("xAxis categories must be unique");
   const allValues = input.series.flatMap((series) => series.data.map((datum) => datum.value));

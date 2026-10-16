@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -18,11 +19,10 @@ export type ProgressTimelineFunctionArgs = FunctionCallEnvelope & {
 export const progressTimelineParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "nodes"],
+  required: ["group", "order", "title", "nodes"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     nodes: {
       type: "array",
@@ -56,9 +56,9 @@ export const progressTimelineFunctionDefinition = {
 } as const;
 
 export const resolveProgressTimelineFunctionArgs = (
-  input: ProgressTimelineFunctionArgs,
+  input: ProgressTimelineFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<ProgressTimelineSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const count = input.nodes.length;
   const spec = assertProgressTimelineSpec({
     title: input.title,

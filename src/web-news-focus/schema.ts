@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -23,11 +24,10 @@ export type WebNewsFocusFunctionArgs = FunctionCallEnvelope & {
 export const webNewsFocusParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "url", "highlights", "entrance"],
+  required: ["group", "order", "url", "highlights", "entrance"],
   properties: {
     group: {...functionGroupSchema, description: `固定填写 ${WEB_NEWS_FOCUS_GROUP}。`},
     order: functionOrderSchema,
-    at: {...functionAtSchema, description: "Absolute episode timestamp at which the real web page enters."},
     url: {
       type: "string",
       format: "uri",
@@ -68,13 +68,13 @@ export const webNewsFocusFunctionDefinition = {
 } as const;
 
 export const resolveWebNewsFocusFunctionArgs = (
-  input: WebNewsFocusFunctionArgs,
+  input: WebNewsFocusFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<WebNewsFocusSpec> => {
   const rawInput = input as unknown as Record<string, unknown>;
-  const allowed = new Set(["group", "order", "at", "url", "highlights", "entrance"]);
+  const allowed = new Set(["group", "order", "url", "highlights", "entrance"]);
   const unknown = Object.keys(rawInput).filter((key) => !allowed.has(key));
   if (unknown.length) throw new Error(`create_web_news_focus does not accept extra fields: ${unknown.join(", ")}`);
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   assertWebNewsFocusGroup(envelope.group);
   if (!WEB_NEWS_FOCUS_ENTRANCES.includes(input.entrance)) {
     throw new Error(`entrance must be one of ${WEB_NEWS_FOCUS_ENTRANCES.join(", ")}`);

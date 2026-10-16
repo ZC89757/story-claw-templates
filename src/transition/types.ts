@@ -7,6 +7,5 @@ export type TransitionSpec = {
 export type TransitionFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   text: string;
 };

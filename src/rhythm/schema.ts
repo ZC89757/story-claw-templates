@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -12,11 +13,10 @@ import {assertRhythmSpec} from "./validate";
 export const rhythmParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "text"],
+  required: ["group", "order", "text"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     text: {type: "string", minLength: 1, maxLength: 100},
   },
 } as const;
@@ -30,8 +30,8 @@ export const rhythmFunctionDefinition = {
 } as const;
 
 export const resolveRhythmFunctionArgs = (
-  input: RhythmFunctionArgs & FunctionCallEnvelope,
+  input: RhythmFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<RhythmSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   return {...envelope, spec: assertRhythmSpec({text: input.text, at: 0})};
 };

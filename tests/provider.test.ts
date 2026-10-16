@@ -9,6 +9,27 @@ import {getMgTemplateProvider} from "../src/provider";
 
 const provider = getMgTemplateProvider();
 
+test("all tools leave whole-instance timing to the host while retaining internal event timestamps", () => {
+  const tools = provider.getPlanningTools(provider.templates.map(({htmlTag}) => htmlTag));
+  for (const tool of tools) {
+    const schema = tool.parameters as {properties: Record<string, unknown>; required?: readonly string[]};
+    for (const key of ["at", "startTime", "endTime"]) {
+      assert.equal(key in schema.properties, false, `${tool.name}.${key}`);
+      assert.equal(schema.required?.includes(key) ?? false, false, `${tool.name} requires ${key}`);
+    }
+  }
+  assert.throws(() => provider.resolveCall({
+    name: "create_emphasis_text_cue", timing: {start: 10, end: 12},
+    arguments: {group: "scale", order: null, text: "正文", at: 0},
+  }), /整体时间由宿主计算/);
+  const progress = provider.resolveCall({
+    name: "create_progress_timeline", timing: {start: 10, end: 14},
+    arguments: {group: "horizontal", order: null, title: "进展", nodes: [{title: "第一步", at: 10}, {title: "第二步", at: 12}]},
+  });
+  assert.equal(progress.at, 10);
+  assert.deepEqual((progress.render.spec as {nodes: {at: number}[]}).nodes.map(({at}) => at), [0, 2]);
+});
+
 test("provider exposes only the host-facing static template protocol", () => {
   const effect = provider.templates.find((item) => item.htmlTag === "mg-effect");
   assert.deepEqual(Object.keys(effect ?? {}).sort(), ["groups", "htmlTag", "layerRole", "selectionHint"]);
@@ -82,9 +103,9 @@ test("provider selects only tools needed by HTML and returns opaque runtime payl
     "create_object_drop_effect",
     "create_glass_fracture_effect",
   ]));
-  const call = provider.resolveCall({
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_effect_cue",
-    arguments: {group: "scanline-annotate-focus", order: null, at: 12, text: "核心数字", items: [{text: "数字", at: 12.5}]},
+    arguments: {group: "scanline-annotate-focus", order: null, text: "核心数字", items: [{text: "数字", at: 12.5}]},
   });
   assert.equal(call.htmlTag, "mg-effect");
   assert.equal(call.layerRole, "overlay");
@@ -103,29 +124,29 @@ test("configurable effect groups expose descriptions and require exactly one ima
   const fractureTool = provider.getPlanningTools(["mg-effect"]).find((tool) => tool.name === "create_glass_fracture_effect");
   assert.match(fractureTool?.description ?? "", /固定裂纹/);
 
-  assert.throws(() => provider.resolveCall({
+  assert.throws(() => provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_object_drop_effect",
-    arguments: {group: "object-drop", order: null, at: 12},
+    arguments: {group: "object-drop", order: null, },
   }), /requires one image/);
-  assert.throws(() => provider.resolveCall({
+  assert.throws(() => provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_glass_fracture_effect",
-    arguments: {group: "glass-fracture", order: null, at: 12, text: "失败", image: "nvidia-eye.svg", items: [{text: "失败", at: 12}]},
-  }), /only accepts group, order, at, crackAt and image/);
-  assert.throws(() => provider.resolveCall({
+    arguments: {group: "glass-fracture", order: null, text: "失败", image: "nvidia-eye.svg", items: [{text: "失败", at: 12}]},
+  }), /only accepts group, order, crackAt and image/);
+  assert.throws(() => provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_glass_fracture_effect",
-    arguments: {group: "glass-fracture", order: null, at: 12, crackAt: 11, image: "nvidia-eye.svg"},
+    arguments: {group: "glass-fracture", order: null, crackAt: 11, image: "nvidia-eye.svg"},
   }), /不能早于 at/);
 
-  const fracture = provider.resolveCall({
+  const fracture = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_glass_fracture_effect",
-    arguments: {group: "glass-fracture", order: null, at: 12, crackAt: 13.2, image: "nvidia-eye.svg"},
+    arguments: {group: "glass-fracture", order: null, crackAt: 13.2, image: "nvidia-eye.svg"},
   });
   assert.equal((fracture.render.spec as {crackAt?: number}).crackAt, 1.2);
   assert.deepEqual(fracture.elementAts, [12, 13.2]);
 
-  const call = provider.resolveCall({
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_object_drop_effect",
-    arguments: {group: "object-drop", order: null, at: 12, impactAt: 13.4, image: "nv1-gpu-reference.jpg"},
+    arguments: {group: "object-drop", order: null, impactAt: 13.4, image: "nv1-gpu-reference.jpg"},
   });
   assert.equal((call.render.spec as {impactAt?: number}).impactAt, 1.4);
   assert.deepEqual(call.elementAts, [12, 13.4]);
@@ -152,9 +173,9 @@ test("configurable effect groups expose descriptions and require exactly one ima
   assert.deepEqual(resolvedSources, ["mg-effect/object-drop/nv1-gpu-reference.jpg"]);
   assert.equal((call.render.spec as {image?: string}).image, "assets/nv1.jpg");
 
-  const invalid = provider.resolveCall({
+  const invalid = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_glass_fracture_effect",
-    arguments: {group: "glass-fracture", order: null, at: 12, image: "nv1-gpu-reference.jpg"},
+    arguments: {group: "glass-fracture", order: null, image: "nv1-gpu-reference.jpg"},
   });
   await assert.rejects(() => provider.prepareRuntimeAssets({
     layers: [{
@@ -187,7 +208,6 @@ test("multi-series chart groups share one Function Call and remain runtime group
   const argumentsFor = (group: "bar" | "line") => ({
     group,
     order: null,
-    at: 20,
     title: "模型能力",
     xAxis: {label: "维度", categories: ["推理", "代码"]},
     yAxis: {label: "评分", unit: "分"},
@@ -198,7 +218,7 @@ test("multi-series chart groups share one Function Call and remain runtime group
   });
 
   for (const group of ["bar", "line"] as const) {
-    const call = provider.resolveCall({name: "create_multi_series_chart", arguments: argumentsFor(group)});
+    const call = provider.resolveCall({timing: {start: 20, end: (20) + 60}, name: "create_multi_series_chart", arguments: argumentsFor(group)});
     assert.equal(call.group, group);
     assert.equal(call.render.group, group);
     assert.equal("chartType" in (call.render.spec as Record<string, unknown>), false);
@@ -216,15 +236,14 @@ test("web-news-focus uses a scene layer and keeps camera geometry provider-owned
   assert.match(provider.getTemplatePlanningInstructions(["web-news-focus"]), /DOM Range/);
   assert.match(tools[0].description, /canonical URL/);
   assert.deepEqual(Object.keys((tools[0].parameters as {properties: Record<string, unknown>}).properties), [
-    "group", "order", "at", "url", "highlights", "entrance",
+    "group", "order", "url", "highlights", "entrance",
   ]);
 
-  const call = provider.resolveCall({
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_web_news_focus",
     arguments: {
       group: "focus",
       order: null,
-      at: 12,
       url: "https://www.reuters.com/technology/article",
       entrance: "fade",
       highlights: [{text: "真实重点", at: 12}, {text: "第二重点", at: 14.5}],
@@ -243,10 +262,10 @@ test("web-page-focus is a separate scene tool with unhighlighted focus anchors",
   assert.equal(descriptor?.layerRole, "scene");
   const tools = provider.getPlanningTools(["web-page-focus"]);
   assert.deepEqual(tools.map((tool) => tool.name), ["create_web_page_focus"]);
-  const call = provider.resolveCall({
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_web_page_focus",
     arguments: {
-      group: "focus", order: null, at: 12, url: "https://openai.com/index/announcement",
+      group: "focus", order: null, url: "https://openai.com/index/announcement",
       entrance: "fade", focus: [{text: "Official announcement", at: 12.75}],
     },
   });
@@ -259,11 +278,10 @@ test("web focus preparation rejects missing snapshots instead of refetching the 
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "web-focus-missing-"));
   try {
     for (const kind of ["news", "page"] as const) {
-      const call = provider.resolveCall({
+      const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
         name: `create_web_${kind}_focus`,
         arguments: {
-          group: "focus", order: null, at: 12,
-          url: "https://www.reuters.com/technology/report", entrance: "fade",
+          group: "focus", order: null, url: "https://www.reuters.com/technology/report", entrance: "fade",
           [kind === "news" ? "highlights" : "focus"]: [{text: "网页重点", at: 12}],
         },
       });

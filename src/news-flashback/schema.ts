@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -17,11 +18,10 @@ export type NewsFlashbackFunctionArgs = FunctionCallEnvelope & {
 export const newsFlashbackParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "text", "pages"],
+  required: ["group", "order", "text", "pages"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     text: {
       type: "string",
       minLength: 1,
@@ -50,15 +50,15 @@ export const newsFlashbackParametersSchema = {
 export const newsFlashbackFunctionDefinition = {
   type: "function",
   name: "create_news_flashback",
-  description: "Create one web-article flashback for an HTML group. at is the absolute episode timestamp. Provide 2-12 searched article screenshots or local image paths in pages; the center text stays the exact HTML cue text. This template owns the full screen, so it replaces the original footage inside its time window.",
+  description: "Create one web-article flashback for an HTML group. The host supplies the annotation window. Provide 2-12 searched article screenshots or local image paths in pages; the center text stays the exact HTML cue text. This template owns the full screen, so it replaces the original footage inside its time window.",
   strict: true,
   parameters: newsFlashbackParametersSchema,
 } as const;
 
 export const resolveNewsFlashbackFunctionArgs = (
-  input: NewsFlashbackFunctionArgs,
+  input: NewsFlashbackFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<NewsFlashbackSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   if (!Array.isArray(input.pages) || input.pages.length < 2) {
     throw new Error("create_news_flashback requires 2-12 pages from search_web");
   }

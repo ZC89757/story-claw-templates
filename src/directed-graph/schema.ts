@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -22,11 +23,10 @@ const nodeLabel = {type: "string", minLength: 1, maxLength: 80} as const;
 export const directedGraphParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "nodes", "edges"],
+  required: ["group", "order", "title", "nodes", "edges"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     nodes: {
       type: "array",
@@ -71,9 +71,9 @@ export const directedGraphFunctionDefinition = {
 } as const;
 
 export const resolveDirectedGraphFunctionArgs = (
-  input: DirectedGraphFunctionArgs,
+  input: DirectedGraphFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<DirectedGraphSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const spec = assertDirectedGraphSpec({
     title: input.title,
     nodes: input.nodes.map((node) => ({...node, at: toLocalAt(node.at, envelope.at)})),

@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -71,15 +72,14 @@ const foreground = {
 export const eraShiftParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "foreground", "switchAt", "startItems", "endItems"],
+  required: ["group", "order", "foreground", "switchAt", "startItems", "endItems"],
   properties: {
     group: {type: "string", enum: [ERA_SHIFT_GROUP]},
     order: functionOrderSchema,
-    at: functionAtSchema,
     foreground,
     switchAt: {
       ...functionAtSchema,
-      description: "背景从 startItems 切换到 endItems 的绝对 episode 时间；必须不早于根 at。",
+      description: "背景从 startItems 切换到 endItems 的绝对 episode 时间；必须不早于标签首字时间。",
     },
     startItems: items,
     endItems: items,
@@ -95,13 +95,13 @@ export const eraShiftFunctionDefinition = {
 } as const;
 
 export const resolveEraShiftFunctionArgs = (
-  input: EraShiftFunctionArgs & FunctionCallEnvelope,
+  input: EraShiftFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<EraShiftSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const record = input as unknown as Record<string, unknown>;
-  const allowedFields = new Set(["group", "order", "at", "foreground", "image", "switchAt", "startItems", "endItems"]);
+  const allowedFields = new Set(["group", "order", "foreground", "image", "switchAt", "startItems", "endItems"]);
   const unknownFields = Object.keys(record).filter((field) => !allowedFields.has(field));
-  if (unknownFields.length) throw new Error(`era-shift only accepts group, order, at, image, foreground, switchAt, startItems and endItems`);
+  if (unknownFields.length) throw new Error(`era-shift only accepts group, order, image, foreground, switchAt, startItems and endItems`);
   if (envelope.group !== ERA_SHIFT_GROUP) {
     throw new Error(`era-shift group must be ${ERA_SHIFT_GROUP}`);
   }

@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -42,11 +43,10 @@ const sourceSchema = {
 export const mgCutoutRiseParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "source"],
+  required: ["group", "order", "source"],
   properties: {
     group: {type: "string", enum: [MG_CUTOUT_GROUP]},
     order: functionOrderSchema,
-    at: functionAtSchema,
     source: sourceSchema,
   },
 } as const;
@@ -76,12 +76,12 @@ const normalizeSource = (input: unknown): MgCutoutSource => {
   } as MgCutoutSource;
 };
 export const resolveMgCutoutRiseFunctionArgs = (
-  input: MgCutoutRiseFunctionArgs & FunctionCallEnvelope,
+  input: MgCutoutRiseFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<MgCutoutRiseSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const record = input as unknown as Record<string, unknown>;
-  const unknownFields = Object.keys(record).filter((field) => !["group", "order", "at", "source"].includes(field));
-  if (unknownFields.length) throw new Error("mg-cutout only accepts group, order, at and source");
+  const unknownFields = Object.keys(record).filter((field) => !["group", "order", "source"].includes(field));
+  if (unknownFields.length) throw new Error("mg-cutout only accepts group, order and source");
   if (envelope.group !== MG_CUTOUT_GROUP) throw new Error(`mg-cutout group must be ${MG_CUTOUT_GROUP}`);
   const source = normalizeSource(record.source);
   const image = source.mode === "transparent" || source.mode === "chroma" ? source.image : "";

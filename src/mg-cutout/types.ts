@@ -16,6 +16,5 @@ export type MgCutoutRiseSpec = {
 export type MgCutoutRiseFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   source: MgCutoutSource;
 };

@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -16,11 +17,10 @@ const labelValue = {type: "string", minLength: 1, maxLength: 100} as const;
 const imageParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "images"],
+  required: ["group", "order", "title", "images"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     images: {
       type: "array",
@@ -55,8 +55,8 @@ export const imageGridFunctionDefinition = {
   parameters: imageGridParametersSchema,
 } as const;
 
-const resolve = <T extends ImageStackSpec | ImageGridSpec>(input: ImageMediaFunctionArgs): ResolvedFunctionCall<T> => {
-  const envelope = assertFunctionEnvelope(input);
+const resolve = <T extends ImageStackSpec | ImageGridSpec>(input: ImageMediaFunctionArgs, timing: FunctionCallTiming): ResolvedFunctionCall<T> => {
+  const envelope = assertFunctionEnvelope(input, timing);
   const spec = assertImageMediaSpec<T>({
     title: input.title,
     images: input.images.map((item) => ({
@@ -68,5 +68,5 @@ const resolve = <T extends ImageStackSpec | ImageGridSpec>(input: ImageMediaFunc
   return {...envelope, spec};
 };
 
-export const resolveImageStackFunctionArgs = (input: ImageMediaFunctionArgs): ResolvedFunctionCall<ImageStackSpec> => resolve<ImageStackSpec>(input);
-export const resolveImageGridFunctionArgs = (input: ImageMediaFunctionArgs): ResolvedFunctionCall<ImageGridSpec> => resolve<ImageGridSpec>(input);
+export const resolveImageStackFunctionArgs = (input: ImageMediaFunctionArgs, timing: FunctionCallTiming): ResolvedFunctionCall<ImageStackSpec> => resolve<ImageStackSpec>(input, timing);
+export const resolveImageGridFunctionArgs = (input: ImageMediaFunctionArgs, timing: FunctionCallTiming): ResolvedFunctionCall<ImageGridSpec> => resolve<ImageGridSpec>(input, timing);

@@ -14,7 +14,6 @@ export type ImageMediaSpec = {
 export type ImageMediaFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   title: string;
   images: Array<{image: string; label?: string; at: number}>;
 };

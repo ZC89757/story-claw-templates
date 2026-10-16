@@ -13,7 +13,6 @@ export type ShowcaseSpec = {
 export type ShowcaseFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   title: string;
   items: Array<{text: string; at: number}>;
 };

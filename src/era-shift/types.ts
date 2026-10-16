@@ -32,7 +32,6 @@ export type EraShiftSpec = {
 export type EraShiftFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   /** Preferred foreground selection. */
   foreground?: EraShiftForeground;
   /** Legacy fixed foreground field; accepted while older plans are replayed. */

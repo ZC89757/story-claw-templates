@@ -69,7 +69,7 @@ const templateCommit = process.env.GITHUB_SHA?.trim() || (() => {
 const manifest = {
   name: "Story Claw MG Template Pack",
   version: templatePackage.version,
-  protocolVersion: 3,
+  protocolVersion: 4,
   provider: "src/provider.js",
   templateCommit,
 };

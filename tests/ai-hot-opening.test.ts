@@ -8,8 +8,6 @@ import {layoutAiHotOpeningItems} from "../src/ai-hot-opening/layout";
 import {getMgTemplateProvider} from "../src/provider";
 
 const validArgs = {
-  at: 12.5,
-  endTime: 22.5,
   title: "AI热点",
   sub_title: "2026/09/21",
   items: [
@@ -25,16 +23,16 @@ const validArgs = {
 test("ai hot opening exposes only the requested content fields", () => {
   assert.deepEqual(
     Object.keys(aiHotOpeningFunctionDefinition.parameters.properties).sort(),
-    ["at", "endTime", "items", "sub_title", "title"],
+    ["items", "sub_title", "title"],
   );
   assert.deepEqual(
     [...aiHotOpeningFunctionDefinition.parameters.required].sort(),
-    ["at", "endTime", "items", "sub_title", "title"],
+    ["items", "sub_title", "title"],
   );
 });
 
 test("ai hot opening resolves absolute times into one fixed visual group", () => {
-  const resolved = resolveAiHotOpeningFunctionArgs(validArgs);
+  const resolved = resolveAiHotOpeningFunctionArgs(validArgs, {start: 12.5, end: 22.5});
   assert.equal(resolved.group, "color-orb");
   assert.equal(resolved.order, undefined);
   assert.equal(resolved.at, 12.5);
@@ -45,21 +43,21 @@ test("ai hot opening resolves absolute times into one fixed visual group", () =>
     durationSeconds: 10,
   });
 
-  const noSubtitle = resolveAiHotOpeningFunctionArgs({...validArgs, sub_title: "   "});
+  const noSubtitle = resolveAiHotOpeningFunctionArgs({...validArgs, sub_title: "   "}, {start: 12.5, end: 22.5});
   assert.equal(noSubtitle.spec.subTitle, null);
 });
 
 test("ai hot opening rejects short, crowded or expanded calls", () => {
   assert.throws(
-    () => resolveAiHotOpeningFunctionArgs({...validArgs, endTime: 19.49}),
-    /endTime - at >= 7/,
+    () => resolveAiHotOpeningFunctionArgs({...validArgs, }, {start: 12.5, end: 19.49}),
+    /host window of at least 7 seconds/,
   );
   assert.throws(
-    () => resolveAiHotOpeningFunctionArgs({...validArgs, items: [...validArgs.items, "第七条"]}),
+    () => resolveAiHotOpeningFunctionArgs({...validArgs, items: [...validArgs.items, "第七条"]}, {start: 12.5, end: 22.5}),
     /items must contain 1-6 headlines/,
   );
   assert.throws(
-    () => resolveAiHotOpeningFunctionArgs({...validArgs, group: "color-orb"}),
+    () => resolveAiHotOpeningFunctionArgs({...validArgs, group: "color-orb"}, {start: 12.5, end: 22.5}),
     /does not accept extra fields: group/,
   );
 });
@@ -86,15 +84,15 @@ test("provider registers the opening as one fixed full-screen overlay", () => {
 
   const tools = provider.getPlanningTools(["ai-hot-opening"]);
   assert.deepEqual(tools.map((tool) => tool.name), ["create_ai_hot_opening"]);
-  const call = provider.resolveCall({name: "create_ai_hot_opening", arguments: validArgs});
+  const call = provider.resolveCall({timing: {start: 12.5, end: 22.5}, name: "create_ai_hot_opening", arguments: validArgs});
   assert.equal(call.htmlTag, "ai-hot-opening");
   assert.equal(call.group, "color-orb");
   assert.equal(call.instanceKey, "ai-hot-opening::color-orb::one");
-  assert.deepEqual(call.elementAts, [12.5, 22.5]);
+  assert.deepEqual(call.elementAts, [12.5]);
   assert.equal(call.render.kind, "ai-hot-opening");
   assert.equal(call.render.canvas, "full");
   assert.equal(call.render.layerRole, "overlay");
-  assert.match(provider.getTemplatePlanningInstructions(["ai-hot-opening"]), /endTime-at.*7/);
+  assert.match(provider.getTemplatePlanningInstructions(["ai-hot-opening"]), /标签窗口必须至少为 7 秒/);
   assert.throws(
     () => provider.validateAnnotatedInstance({htmlTag: "ai-hot-opening", tagCount: 2}),
     /只能出现一次/,

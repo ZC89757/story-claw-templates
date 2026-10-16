@@ -27,12 +27,12 @@ test("source classifier distinguishes URLs, local assets, and prompts", () => {
 });
 
 test("resolvers convert absolute image timestamps to scene-local timestamps", () => {
-  const input = {group: "evidence", at: 10, title: "证据", images: [
+  const input = {group: "evidence", title: "证据", images: [
     {at: 10, image: "a.png"},
     {at: 12.5, image: "b.png", label: "第二张"},
   ]};
-  assert.deepEqual(resolveImageStackFunctionArgs(input).spec.images.map((item) => item.at), [0, 2.5]);
-  assert.deepEqual(resolveImageGridFunctionArgs(input).spec.images.map((item) => item.at), [0, 2.5]);
+  assert.deepEqual(resolveImageStackFunctionArgs(input, {start: 10, end: (10) + 60}).spec.images.map((item) => item.at), [0, 2.5]);
+  assert.deepEqual(resolveImageGridFunctionArgs(input, {start: 10, end: (10) + 60}).spec.images.map((item) => item.at), [0, 2.5]);
 });
 
 test("validator rejects too few images and empty image values", () => {

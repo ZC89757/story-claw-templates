@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -13,11 +14,10 @@ import {assertShowcaseSpec} from "./validate";
 export const showcaseParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "items"],
+  required: ["group", "order", "title", "items"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     items: {
       type: "array",
@@ -45,9 +45,9 @@ export const showcaseFunctionDefinition = {
 } as const;
 
 export const resolveShowcaseFunctionArgs = (
-  input: ShowcaseFunctionArgs & FunctionCallEnvelope,
+  input: ShowcaseFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<ShowcaseSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const spec = assertShowcaseSpec({
     title: input.title,
     items: input.items.map((item, index) => ({

@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -29,11 +30,10 @@ export type CollageNetworkResolveOptions = {
 export const collageNetworkParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "subtitle", "nodes", "edges"],
+  required: ["group", "order", "title", "subtitle", "nodes", "edges"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: shortText,
     subtitle: {type: "string", minLength: 1, maxLength: 120},
     nodes: {
@@ -85,10 +85,10 @@ const inferEdgeType = (relation: string, index: number): CollageNetworkEdgeType 
 };
 
 export const resolveCollageNetworkFunctionArgs = (
-  input: CollageNetworkFunctionArgs,
+  input: CollageNetworkFunctionArgs, timing: FunctionCallTiming,
   options: CollageNetworkResolveOptions = {},
 ): ResolvedFunctionCall<CollageNetworkSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const spec = assertCollageNetworkSpec({
     title: input.title,
     subtitle: input.subtitle,

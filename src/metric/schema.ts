@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -13,11 +14,10 @@ import {assertMetricSpec} from "./validate";
 export const metricParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "points"],
+  required: ["group", "order", "title", "points"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     points: {
       type: "array",
@@ -46,9 +46,9 @@ export const metricFunctionDefinition = {
 } as const;
 
 export const resolveMetricFunctionArgs = (
-  input: MetricFunctionArgs & FunctionCallEnvelope,
+  input: MetricFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<MetricSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const spec = assertMetricSpec({
     title: input.title,
     points: input.points.map((point, index) => ({

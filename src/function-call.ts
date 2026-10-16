@@ -2,11 +2,14 @@ export type FunctionCallEnvelope = {
   group: string;
   /** Instance order for repeated tags of the same structure; null for a singleton. */
   order?: number | null;
-  /** Absolute second on the episode timeline. */
-  at: number;
 };
 
-export type ResolvedFunctionCall<TSpec> = FunctionCallEnvelope & {
+/** Whole-instance timing computed by the host from reviewed HTML, never model arguments. */
+export type FunctionCallTiming = Readonly<{start: number; end: number}>;
+
+export type ResolvedFunctionEnvelope = FunctionCallEnvelope & {at: number};
+
+export type ResolvedFunctionCall<TSpec> = ResolvedFunctionEnvelope & {
   spec: TSpec;
 };
 
@@ -32,7 +35,15 @@ export const functionAtSchema = {
   maximum: 36000,
 } as const;
 
-export const assertFunctionEnvelope = (input: unknown): FunctionCallEnvelope => {
+export const assertFunctionTiming = (timing: FunctionCallTiming): FunctionCallTiming => {
+  if (!timing || !Number.isFinite(timing.start) || timing.start < 0
+    || !Number.isFinite(timing.end) || timing.end <= timing.start) {
+    throw new Error("host timing requires a non-negative start and a later end");
+  }
+  return timing;
+};
+
+export const assertFunctionEnvelope = (input: unknown, timing: FunctionCallTiming): ResolvedFunctionEnvelope => {
   if (typeof input !== "object" || input === null || Array.isArray(input)) {
     throw new Error("function arguments must be an object");
   }
@@ -43,13 +54,13 @@ export const assertFunctionEnvelope = (input: unknown): FunctionCallEnvelope => 
   if (value.order !== undefined && value.order !== null && (!Number.isInteger(value.order) || Number(value.order) < 1)) {
     throw new Error("order must be null or a positive integer");
   }
-  if (typeof value.at !== "number" || !Number.isFinite(value.at) || value.at < 0) {
-    throw new Error("at must be a non-negative absolute timestamp");
+  if (["at", "startTime", "endTime"].some((field) => field in value)) {
+    throw new Error("whole-instance timing belongs to the host, not Function Call arguments");
   }
   return {
     group: value.group,
     ...(typeof value.order === "number" ? {order: value.order} : {}),
-    at: value.at,
+    at: assertFunctionTiming(timing).start,
   };
 };
 

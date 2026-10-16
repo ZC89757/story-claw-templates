@@ -1,3 +1,5 @@
+import type {FunctionCallTiming} from "../function-call";
+import {assertFunctionEnvelope} from "../function-call";
 const orderSchema = {
   anyOf: [{type: "integer", minimum: 1}, {type: "null"}],
 } as const;
@@ -19,15 +21,14 @@ const segmentSchema = {
 
 export const scLongtakeFunctionDefinition = {
   name: "create_sc_longtake",
-  description: "为 <sc-longtake> 实例生成接力式一镜到底视频。把一段过长的连续画面拆成按时间排序的 segments；第一段使用初始参考图，后续每段必须以前一段视频的尾帧作为首帧，并保持主体、镜头轴线、光线和运动方向连续。不要把它当作多个独立镜头或硬切蒙太奇。时间窗口由宿主代码根据 HTML 标签和 segments 的 at 计算。",
+  description: "为 <sc-longtake> 实例生成接力式一镜到底视频。把一段过长的连续画面拆成按时间排序的 segments；第一段使用初始参考图，后续每段必须以前一段视频的尾帧作为首帧，并保持主体、镜头轴线、光线和运动方向连续。不要把它当作多个独立镜头或硬切蒙太奇。整体时间窗口由宿主代码根据 HTML 标签计算，segments 的 at 只确定内部各段的开始。",
   parameters: {
     type: "object",
     additionalProperties: false,
-    required: ["group", "order", "at", "reference_image_state", "segments"],
+    required: ["group", "order", "reference_image_state", "segments"],
     properties: {
       group: {type: "string", enum: ["relay"]},
       order: orderSchema,
-      at: {type: "number", minimum: 0},
       reference_image_state: referenceStateSchema,
       reference_image_path: {type: "string"},
       reference_image_prompt: {type: "string"},
@@ -49,14 +50,13 @@ export type ScLongtakeSegment = {
 export type ScLongtakeFunctionArgs = {
   group: "relay";
   order: number | null;
-  at: number;
   reference_image_state: "existing" | "generate" | "none";
   reference_image_path?: string;
   reference_image_prompt?: string;
   segments: ScLongtakeSegment[];
 };
 
-export const resolveScLongtakeFunctionArgs = (input: unknown): {
+export const resolveScLongtakeFunctionArgs = (input: unknown, timing: FunctionCallTiming): {
   group: "relay";
   order?: number | null;
   at: number;
@@ -70,8 +70,7 @@ export const resolveScLongtakeFunctionArgs = (input: unknown): {
   if (args.order !== null && args.order !== undefined && (!Number.isInteger(args.order) || Number(args.order) < 1)) {
     throw new Error("create_sc_longtake order 必须是正整数或 null");
   }
-  const at = Number(args.at);
-  if (!Number.isFinite(at) || at < 0) throw new Error("create_sc_longtake at 必须是非负绝对时间");
+  const {at} = assertFunctionEnvelope(args, timing);
 
   const state = args.reference_image_state;
   if (state !== "existing" && state !== "generate" && state !== "none") {
@@ -97,7 +96,7 @@ export const resolveScLongtakeFunctionArgs = (input: unknown): {
     return {at: segmentAt, video_prompt: prompt};
   });
 
-  if (Math.abs(segments[0].at - at) > 0.35) throw new Error("create_sc_longtake 的第一个 segment.at 必须接近根 at");
+  if (Math.abs(segments[0].at - at) > 0.35) throw new Error("create_sc_longtake 的第一个 segment.at 必须接近标签起点");
   for (let index = 1; index < segments.length; index++) {
     if (segments[index].at <= segments[index - 1].at) throw new Error("create_sc_longtake segments.at 必须严格递增");
   }
@@ -105,7 +104,6 @@ export const resolveScLongtakeFunctionArgs = (input: unknown): {
   const spec: ScLongtakeFunctionArgs = {
     group: "relay",
     order: typeof args.order === "number" ? args.order : null,
-    at,
     reference_image_state: state,
     ...(referenceImagePath ? {reference_image_path: referenceImagePath} : {}),
     ...(referenceImagePrompt ? {reference_image_prompt: referenceImagePrompt} : {}),

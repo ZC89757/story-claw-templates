@@ -7,12 +7,11 @@ type Props = Readonly<{
   durationInFrames?: number;
 }>;
 
-export const VideoFootageTemplate = ({spec, durationInFrames}: Props) => {
+export const VideoFootageTemplate = ({spec}: Props) => {
   const {fps} = useVideoConfig();
   const trimBefore = Math.max(0, Math.round(spec.sourceStart * fps));
   const selectedFrames = Math.max(1, Math.round(spec.sourceEnd * fps) - trimBefore);
-  // Extend the selected footage tail to the MG window so TTS pauses do not expose a black gap.
-  const trimAfter = trimBefore + Math.max(1, selectedFrames, durationInFrames ?? 0);
+  const trimAfter = trimBefore + selectedFrames;
 
   return <AbsoluteFill style={{background: "#000", overflow: "hidden"}}>
     <OffthreadVideo

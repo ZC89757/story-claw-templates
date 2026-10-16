@@ -1,12 +1,12 @@
-import {functionAtSchema, type ResolvedFunctionCall} from "../function-call";
+import type {FunctionCallTiming} from "../function-call";
+import {assertFunctionTiming, type ResolvedFunctionCall} from "../function-call";
 import {AI_HOT_FOCUS_STAGE_GROUP, type AiHotFocusStageSpec} from "./types";
 import {assertAiHotFocusStageSpec} from "./validate";
 
 export const aiHotFocusStageParametersSchema = {
   type: "object", additionalProperties: false,
-  required: ["at", "title", "sub_title", "items"],
+  required: ["title", "sub_title", "items"],
   properties: {
-    at: {...functionAtSchema, description: "Absolute episode timestamp at which this full-screen chapter stage begins."},
     title: {type: "string", minLength: 1, maxLength: 24, description: "Main title shown in the opening orb."},
     sub_title: {anyOf: [{type: "string", minLength: 1, maxLength: 32}, {type: "null"}], description: "Optional smaller subtitle; pass null when absent."},
     items: {type: "array", minItems: 1, maxItems: 6, description: "Ordered chapter headlines with absolute switch-trigger times.", items: {
@@ -25,14 +25,13 @@ export const aiHotFocusStageFunctionDefinition = {
   strict: true, parameters: aiHotFocusStageParametersSchema,
 } as const;
 
-export const resolveAiHotFocusStageFunctionArgs = (input: unknown): ResolvedFunctionCall<AiHotFocusStageSpec> => {
+export const resolveAiHotFocusStageFunctionArgs = (input: unknown, timing: FunctionCallTiming): ResolvedFunctionCall<AiHotFocusStageSpec> => {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("create_ai_hot_focus_stage arguments must be an object");
   const args = input as Record<string, unknown>;
-  const allowed = new Set(["at", "title", "sub_title", "items"]);
+  const allowed = new Set(["title", "sub_title", "items"]);
   const unknown = Object.keys(args).filter((key) => !allowed.has(key));
   if (unknown.length) throw new Error(`create_ai_hot_focus_stage does not accept extra fields: ${unknown.join(", ")}`);
-  const at = Number(args.at);
-  if (!Number.isFinite(at) || at < 0 || at > 36000) throw new Error("create_ai_hot_focus_stage at must be a non-negative absolute timestamp");
+  const at = assertFunctionTiming(timing).start;
   const title = typeof args.title === "string" ? args.title.trim() : "";
   const rawSubtitle = args.sub_title;
   const subTitle = typeof rawSubtitle === "string" && rawSubtitle.trim() ? rawSubtitle.trim() : null;

@@ -50,11 +50,10 @@ test("translates an English webpage, persists the snapshot, and feeds its text t
     const resolved = resolveWebPageFocusFunctionArgs({
       group: "focus",
       order: null,
-      at: 12,
       url: pageUrl,
       entrance: "fade",
       focus: [{text: translated.slice(0, Math.min(80, translated.length)), at: 12}],
-    });
+    }, {start: 12, end: (12) + 60});
     assert.equal(resolved.spec.url, pageUrl);
     assert.equal(resolved.spec.focus[0].text, translated.slice(0, Math.min(80, translated.length)));
   } finally {

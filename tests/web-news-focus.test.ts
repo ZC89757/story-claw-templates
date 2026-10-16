@@ -13,10 +13,10 @@ const newsUrl = "https://www.reuters.com/technology/article";
 
 test("web-news-focus exposes only URL, exact highlights and fixed entrance", () => {
   assert.deepEqual(Object.keys(webNewsFocusFunctionDefinition.parameters.properties), [
-    "group", "order", "at", "url", "highlights", "entrance",
+    "group", "order", "url", "highlights", "entrance",
   ]);
   assert.deepEqual(webNewsFocusFunctionDefinition.parameters.required, [
-    "group", "order", "at", "url", "highlights", "entrance",
+    "group", "order", "url", "highlights", "entrance",
   ]);
   assert.deepEqual(webNewsFocusFunctionDefinition.parameters.properties.entrance.enum, ["fade", "slide-right", "cut"]);
 });
@@ -41,11 +41,10 @@ test("web-news-focus accepts a literal webpage phrase absent from the narration"
   const resolved = resolveWebNewsFocusFunctionArgs({
     group: "focus",
     order: null,
-    at: 20,
     url: newsUrl,
     entrance: "fade",
     highlights: [{text: webpagePhrase, at: 20.8}],
-  });
+  }, {start: 20, end: (20) + 60});
   assert.deepEqual(resolved.spec.highlights, [{text: webpagePhrase, at: 0.8}]);
 });
 
@@ -53,14 +52,13 @@ test("web-news-focus localizes absolute highlight times and keeps DOM coordinate
   const resolved = resolveWebNewsFocusFunctionArgs({
     group: "focus",
     order: null,
-    at: 20,
     url: newsUrl,
     entrance: "slide-right",
     highlights: [
       {text: "第一处重点", at: 20},
       {text: "第二处重点", at: 22.375},
     ],
-  });
+  }, {start: 20, end: (20) + 60});
   assert.equal(resolved.group, "focus");
   assert.deepEqual(resolved.spec.highlights.map((item) => item.at), [0, 2.375]);
   assert.equal(resolved.spec.url, newsUrl);
@@ -69,31 +67,28 @@ test("web-news-focus localizes absolute highlight times and keeps DOM coordinate
   assert.throws(() => resolveWebNewsFocusFunctionArgs({
     group: "focus",
     order: null,
-    at: 20,
     url: newsUrl,
     entrance: "fade",
     highlights: [{text: "重点", at: 21}],
     camera: {x: 1, y: 2, z: 3},
-  } as never), /does not accept extra fields/);
+  } as never, {start: 20, end: (20) + 60}), /does not accept extra fields/);
 });
 
 test("web-news-focus rejects invalid page inputs and unsorted highlights", () => {
   assert.throws(() => resolveWebNewsFocusFunctionArgs({
     group: "focus",
     order: null,
-    at: 10,
     url: newsUrl,
     entrance: "fade",
     highlights: [{text: "过早", at: 9}],
-  }), /cannot precede scene at/);
+  }, {start: 10, end: (10) + 60}), /cannot precede scene at/);
   assert.throws(() => resolveWebNewsFocusFunctionArgs({
     group: "focus",
     order: null,
-    at: 10,
     url: newsUrl,
     entrance: "fade",
     highlights: [{text: "后面", at: 12}, {text: "前面", at: 11}],
-  }), /must not precede the previous highlight/);
+  }, {start: 10, end: (10) + 60}), /must not precede the previous highlight/);
   assert.deepEqual(validateWebNewsFocusSpec({
     at: 0,
     url: "file:///not-a-web-page",

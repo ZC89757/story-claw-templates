@@ -20,7 +20,6 @@ export type EffectSpec = {
 export type EffectFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   text: string;
   items?: Array<{text: string; at: number}>;
 };
@@ -28,7 +27,6 @@ export type EffectFunctionArgs = {
 export type ConfigurableEffectFunctionArgs = {
   group: "object-drop" | "glass-fracture";
   order?: number | null;
-  at: number;
   /** Exactly one image filename/path from the group's fixed asset directory. */
   image: string;
   /** Absolute episode second at which the falling object hits the ground. */

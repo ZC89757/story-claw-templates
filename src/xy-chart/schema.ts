@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   autoAxis,
@@ -33,11 +34,10 @@ const axisSchema = {
 export const xyChartParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "axes", "keyframes"],
+  required: ["group", "order", "title", "axes", "keyframes"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     axes: {
       type: "object",
@@ -67,15 +67,15 @@ export const xyChartParametersSchema = {
 export const xyChartFunctionDefinition = {
   type: "function",
   name: "create_xy_chart_timeline",
-  description: "Create one XY-chart animation for an HTML group. Copy absolute episode timestamps into the root and every keyframe. Supply data and axis meaning only; bounds, tick count and motion are computed by the template.",
+  description: "Create one XY-chart animation for an HTML group. The host supplies the annotation window; copy absolute episode timestamps into every keyframe. Supply data and axis meaning only; bounds, tick count and motion are computed by the template.",
   strict: true,
   parameters: xyChartParametersSchema,
 } as const;
 
 export const resolveXYChartFunctionArgs = (
-  input: XYChartFunctionArgs,
+  input: XYChartFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<XYChartSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const xValues = input.keyframes.map((point) => point.x);
   const xAxis = autoAxis(xValues, {
     includeZero: false,

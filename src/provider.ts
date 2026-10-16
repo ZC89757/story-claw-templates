@@ -1,3 +1,4 @@
+import {assertFunctionTiming, type FunctionCallTiming} from "./function-call.js";
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
@@ -196,7 +197,7 @@ type Binding = {
   template: MgTemplateName;
   minDurationSeconds?: number;
   definition: {name: string; description: string; parameters: unknown};
-  resolve: (input: unknown) => ResolveResult;
+  resolve: (input: unknown, timing: FunctionCallTiming) => ResolveResult;
   elementAts: (input: Record<string, any>) => number[];
   groups?: readonly string[];
 };
@@ -205,58 +206,50 @@ const assetForCollageNode = (node: {id: string; label: string; role?: string}): 
   findLogoAsset(node, {scope: "any"})?.runtimePath;
 
 const elementAts = {
-  // Every non-generated template has a root HTML element whose start time is
-  // carried by the envelope `at`.  Keep that timestamp in the element list so
-  // host-side validation can bind the outer tag as well as its child events.
-  progress: (args: Record<string, any>) => [args.at, ...(args.nodes ?? []).map((item: any) => item.at)],
-  table: (args: Record<string, any>) => [args.at, ...(args.cells ?? []).map((item: any) => item.at)],
+  // Root timestamps are supplied by the host; these extract only internal events.
+  progress: (args: Record<string, any>) => [...(args.nodes ?? []).map((item: any) => item.at)],
+  table: (args: Record<string, any>) => [...(args.cells ?? []).map((item: any) => item.at)],
   graph: (args: Record<string, any>) => [
-    args.at,
     ...(args.nodes ?? []).map((item: any) => item.at),
     ...(args.edges ?? []).map((item: any) => item.at),
   ],
-  root: (args: Record<string, any>) => [args.at],
-  opening: (args: Record<string, any>) => [args.at, args.endTime],
-  focusStage: (args: Record<string, any>) => [args.at, ...(args.items ?? []).map((item: any) => item.time)],
-  xy: (args: Record<string, any>) => [args.at, ...(args.keyframes ?? []).map((item: any) => item.at)],
-  multi: (args: Record<string, any>) => [args.at, ...(args.series ?? []).flatMap((series: any) => (series.data ?? []).map((item: any) => item.at))],
-  relation: (args: Record<string, any>) => [args.at, ...(args.relations ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
-  decomposition: (args: Record<string, any>) => [args.at, ...(args.parts ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
-  comparison: (args: Record<string, any>) => [args.at, ...(args.items ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
-  network: (args: Record<string, any>) => [args.at, ...(args.nodes ?? []).map((item: any) => item.at), ...(args.edges ?? []).map((item: any) => item.at)],
-  images: (args: Record<string, any>) => [args.at, ...(args.images ?? []).map((item: any) => item.at)],
-  showcase: (args: Record<string, any>) => [args.at, ...(args.items ?? []).map((item: any) => item.at)],
-  metric: (args: Record<string, any>) => [args.at, ...(args.points ?? []).map((item: any) => item.at)],
-  cueItems: (args: Record<string, any>) => [args.at, ...(args.items ?? []).map((item: any) => item.at)],
-  objectDrop: (args: Record<string, any>) => [args.at, args.impactAt],
-  glassFracture: (args: Record<string, any>) => [args.at, args.crackAt],
+  root: (_args: Record<string, any>): number[] => [],
+  opening: (_args: Record<string, any>): number[] => [],
+  focusStage: (args: Record<string, any>) => [...(args.items ?? []).map((item: any) => item.time)],
+  xy: (args: Record<string, any>) => [...(args.keyframes ?? []).map((item: any) => item.at)],
+  multi: (args: Record<string, any>) => [...(args.series ?? []).flatMap((series: any) => (series.data ?? []).map((item: any) => item.at))],
+  relation: (args: Record<string, any>) => [...(args.relations ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
+  decomposition: (args: Record<string, any>) => [...(args.parts ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
+  comparison: (args: Record<string, any>) => [...(args.items ?? []).map((item: any) => item.at), ...(args.highlights ?? []).map((item: any) => item.at)],
+  network: (args: Record<string, any>) => [...(args.nodes ?? []).map((item: any) => item.at), ...(args.edges ?? []).map((item: any) => item.at)],
+  images: (args: Record<string, any>) => [...(args.images ?? []).map((item: any) => item.at)],
+  showcase: (args: Record<string, any>) => [...(args.items ?? []).map((item: any) => item.at)],
+  metric: (args: Record<string, any>) => [...(args.points ?? []).map((item: any) => item.at)],
+  cueItems: (args: Record<string, any>) => [...(args.items ?? []).map((item: any) => item.at)],
+  objectDrop: (args: Record<string, any>) => [args.impactAt],
+  glassFracture: (args: Record<string, any>) => [args.crackAt],
   eraShift: (args: Record<string, any>) => [
-    args.at,
     args.switchAt,
   ],
-  mgCutoutRise: (args: Record<string, any>) => [args.at],
+  mgCutoutRise: (_args: Record<string, any>): number[] => [],
   routeShift: (args: Record<string, any>) => [
-    args.at,
     args.switchTime,
   ],
   webNewsFocus: (args: Record<string, any>) => [
-    args.at,
     ...(args.highlights ?? []).map((item: any) => item.at),
   ],
   webPageFocus: (args: Record<string, any>) => [
-    args.at,
     ...(args.focus ?? []).map((item: any) => item.at),
   ],
   longtake: (args: Record<string, any>) => [
-    args.at,
     ...(args.segments ?? []).map((item: any) => item.at),
   ],
 };
 
 /** Fill omitted era-shift logos from the same fixed scanner used by collage
  * nodes. Explicit item.logo values remain untouched and are validated later. */
-const resolveEraShiftCall = (input: unknown): ResolveResult => {
-  const resolved = resolveEraShiftFunctionArgs(input as never);
+const resolveEraShiftCall = (input: unknown, timing: FunctionCallTiming): ResolveResult => {
+  const resolved = resolveEraShiftFunctionArgs(input as never, timing);
   const spec = resolved.spec as {
     startItems?: Array<{text: string; logo?: string}>;
     endItems?: Array<{text: string; logo?: string}>;
@@ -278,34 +271,34 @@ const bindings: readonly Binding[] = Object.freeze([
   {name: videoFootageFunctionDefinition.name, label: "素材视频截取", template: "video-footage", definition: videoFootageFunctionDefinition, resolve: resolveVideoFootageFunctionArgs, elementAts: elementAts.root},
   {name: aiHotOpeningFunctionDefinition.name, label: "AI 热点开场", template: "ai-hot-opening", definition: aiHotOpeningFunctionDefinition, resolve: resolveAiHotOpeningFunctionArgs, elementAts: elementAts.opening, groups: [AI_HOT_OPENING_GROUP]},
   {name: aiHotFocusStageFunctionDefinition.name, label: "AI 热点章节舞台", template: "ai-hot-focus-stage", definition: aiHotFocusStageFunctionDefinition, resolve: resolveAiHotFocusStageFunctionArgs, elementAts: elementAts.focusStage, groups: [AI_HOT_FOCUS_STAGE_GROUP]},
-  {name: progressTimelineFunctionDefinition.name, label: "时间进度条", template: "progress-timeline", definition: progressTimelineFunctionDefinition, resolve: (input) => resolveProgressTimelineFunctionArgs(input as never), elementAts: elementAts.progress},
-  {name: timedTableFunctionDefinition.name, label: "动态表格", template: "timed-table", definition: timedTableFunctionDefinition, resolve: (input) => resolveTimedTableFunctionArgs(input as never), elementAts: elementAts.table},
-  {name: directedGraphFunctionDefinition.name, label: "有向关系图", template: "directed-graph", definition: directedGraphFunctionDefinition, resolve: (input) => resolveDirectedGraphFunctionArgs(input as never), elementAts: elementAts.graph},
-  {name: titleFunctionDefinition.name, label: "标题动画", template: "title", definition: titleFunctionDefinition, resolve: (input) => resolveTitleFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: emphasisFunctionDefinition.name, label: "重点大字", template: "emphasis", definition: emphasisFunctionDefinition, resolve: (input) => resolveEmphasisFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: newsFlashbackFunctionDefinition.name, label: "网页资料闪回", template: "news-flashback", definition: newsFlashbackFunctionDefinition, resolve: (input) => resolveNewsFlashbackFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: xyChartFunctionDefinition.name, label: "坐标趋势图", template: "xy-chart", definition: xyChartFunctionDefinition, resolve: (input) => resolveXYChartFunctionArgs(input as never), elementAts: elementAts.xy},
-  {name: multiSeriesChartFunctionDefinition.name, label: "多系列图表", template: "multi-series-chart", definition: multiSeriesChartFunctionDefinition, resolve: (input) => resolveMultiSeriesChartFunctionArgs(input as never), elementAts: elementAts.multi},
-  {name: containmentFunctionDefinition.name, label: "包含关系", template: "containment", definition: containmentFunctionDefinition, resolve: (input) => resolveContainmentFunctionArgs(input as never), elementAts: elementAts.relation},
-  {name: decompositionFunctionDefinition.name, label: "整体拆解", template: "decomposition", definition: decompositionFunctionDefinition, resolve: (input) => resolveDecompositionFunctionArgs(input as never), elementAts: elementAts.decomposition},
-  {name: weightedComparisonFunctionDefinition.name, label: "加权对比", template: "weighted-comparison", definition: weightedComparisonFunctionDefinition, resolve: (input) => resolveWeightedComparisonFunctionArgs(input as never), elementAts: elementAts.comparison},
-  {name: sideBySideComparisonFunctionDefinition.name, label: "左右对比", template: "side-by-side-comparison", definition: sideBySideComparisonFunctionDefinition, resolve: (input) => resolveSideBySideComparisonFunctionArgs(input as never), elementAts: elementAts.comparison},
-  {name: collageNetworkFunctionDefinition.name, label: "拼贴关系网络", template: "collage-network", definition: collageNetworkFunctionDefinition, resolve: (input) => resolveCollageNetworkFunctionArgs(input as never, {resolveAsset: assetForCollageNode}), elementAts: elementAts.network},
-  {name: imageStackFunctionDefinition.name, label: "图片叠加", template: "image-stack", definition: imageStackFunctionDefinition, resolve: (input) => resolveImageStackFunctionArgs(input as never), elementAts: elementAts.images},
-  {name: imageGridFunctionDefinition.name, label: "图片并列", template: "image-grid", definition: imageGridFunctionDefinition, resolve: (input) => resolveImageGridFunctionArgs(input as never), elementAts: elementAts.images},
-  {name: newsReportFunctionDefinition.name, label: "新闻报道纸张", template: "news-report", definition: newsReportFunctionDefinition, resolve: (input) => resolveNewsReportFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input) => resolveWebNewsFocusFunctionArgs(input as never), elementAts: elementAts.webNewsFocus, groups: [WEB_NEWS_FOCUS_GROUP]},
-  {name: webPageFocusFunctionDefinition.name, label: "网页重点推近", template: "web-page-focus", definition: webPageFocusFunctionDefinition, resolve: (input) => resolveWebPageFocusFunctionArgs(input as never), elementAts: elementAts.webPageFocus, groups: [WEB_PAGE_FOCUS_GROUP]},
+  {name: progressTimelineFunctionDefinition.name, label: "时间进度条", template: "progress-timeline", definition: progressTimelineFunctionDefinition, resolve: (input, timing) => resolveProgressTimelineFunctionArgs(input as never, timing), elementAts: elementAts.progress},
+  {name: timedTableFunctionDefinition.name, label: "动态表格", template: "timed-table", definition: timedTableFunctionDefinition, resolve: (input, timing) => resolveTimedTableFunctionArgs(input as never, timing), elementAts: elementAts.table},
+  {name: directedGraphFunctionDefinition.name, label: "有向关系图", template: "directed-graph", definition: directedGraphFunctionDefinition, resolve: (input, timing) => resolveDirectedGraphFunctionArgs(input as never, timing), elementAts: elementAts.graph},
+  {name: titleFunctionDefinition.name, label: "标题动画", template: "title", definition: titleFunctionDefinition, resolve: (input, timing) => resolveTitleFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: emphasisFunctionDefinition.name, label: "重点大字", template: "emphasis", definition: emphasisFunctionDefinition, resolve: (input, timing) => resolveEmphasisFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: newsFlashbackFunctionDefinition.name, label: "网页资料闪回", template: "news-flashback", definition: newsFlashbackFunctionDefinition, resolve: (input, timing) => resolveNewsFlashbackFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: xyChartFunctionDefinition.name, label: "坐标趋势图", template: "xy-chart", definition: xyChartFunctionDefinition, resolve: (input, timing) => resolveXYChartFunctionArgs(input as never, timing), elementAts: elementAts.xy},
+  {name: multiSeriesChartFunctionDefinition.name, label: "多系列图表", template: "multi-series-chart", definition: multiSeriesChartFunctionDefinition, resolve: (input, timing) => resolveMultiSeriesChartFunctionArgs(input as never, timing), elementAts: elementAts.multi},
+  {name: containmentFunctionDefinition.name, label: "包含关系", template: "containment", definition: containmentFunctionDefinition, resolve: (input, timing) => resolveContainmentFunctionArgs(input as never, timing), elementAts: elementAts.relation},
+  {name: decompositionFunctionDefinition.name, label: "整体拆解", template: "decomposition", definition: decompositionFunctionDefinition, resolve: (input, timing) => resolveDecompositionFunctionArgs(input as never, timing), elementAts: elementAts.decomposition},
+  {name: weightedComparisonFunctionDefinition.name, label: "加权对比", template: "weighted-comparison", definition: weightedComparisonFunctionDefinition, resolve: (input, timing) => resolveWeightedComparisonFunctionArgs(input as never, timing), elementAts: elementAts.comparison},
+  {name: sideBySideComparisonFunctionDefinition.name, label: "左右对比", template: "side-by-side-comparison", definition: sideBySideComparisonFunctionDefinition, resolve: (input, timing) => resolveSideBySideComparisonFunctionArgs(input as never, timing), elementAts: elementAts.comparison},
+  {name: collageNetworkFunctionDefinition.name, label: "拼贴关系网络", template: "collage-network", definition: collageNetworkFunctionDefinition, resolve: (input, timing) => resolveCollageNetworkFunctionArgs(input as never, timing, {resolveAsset: assetForCollageNode}), elementAts: elementAts.network},
+  {name: imageStackFunctionDefinition.name, label: "图片叠加", template: "image-stack", definition: imageStackFunctionDefinition, resolve: (input, timing) => resolveImageStackFunctionArgs(input as never, timing), elementAts: elementAts.images},
+  {name: imageGridFunctionDefinition.name, label: "图片并列", template: "image-grid", definition: imageGridFunctionDefinition, resolve: (input, timing) => resolveImageGridFunctionArgs(input as never, timing), elementAts: elementAts.images},
+  {name: newsReportFunctionDefinition.name, label: "新闻报道纸张", template: "news-report", definition: newsReportFunctionDefinition, resolve: (input, timing) => resolveNewsReportFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input, timing) => resolveWebNewsFocusFunctionArgs(input as never, timing), elementAts: elementAts.webNewsFocus, groups: [WEB_NEWS_FOCUS_GROUP]},
+  {name: webPageFocusFunctionDefinition.name, label: "网页重点推近", template: "web-page-focus", definition: webPageFocusFunctionDefinition, resolve: (input, timing) => resolveWebPageFocusFunctionArgs(input as never, timing), elementAts: elementAts.webPageFocus, groups: [WEB_PAGE_FOCUS_GROUP]},
   {name: eraShiftFunctionDefinition.name, label: "策略转向", template: "era-shift", definition: eraShiftFunctionDefinition, resolve: resolveEraShiftCall, elementAts: elementAts.eraShift},
-  {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", minDurationSeconds: MG_CUTOUT_MIN_DURATION_SECONDS, definition: mgCutoutRiseFunctionDefinition, resolve: (input) => resolveMgCutoutRiseFunctionArgs(input as never), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
-  {name: routeShiftFunctionDefinition.name, label: "路线切换", template: "route-shift", definition: routeShiftFunctionDefinition, resolve: (input) => resolveRouteShiftFunctionArgs(input as never), elementAts: elementAts.routeShift},
-  {name: showcaseFunctionDefinition.name, label: "界面陈列", template: "showcase", definition: showcaseFunctionDefinition, resolve: (input) => resolveShowcaseFunctionArgs(input as never), elementAts: elementAts.showcase},
-  {name: metricFunctionDefinition.name, label: "指标动画", template: "metric", definition: metricFunctionDefinition, resolve: (input) => resolveMetricFunctionArgs(input as never), elementAts: elementAts.metric},
-  {name: transitionFunctionDefinition.name, label: "转场", template: "transition", definition: transitionFunctionDefinition, resolve: (input) => resolveTransitionFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: rhythmFunctionDefinition.name, label: "节拍强调", template: "rhythm", definition: rhythmFunctionDefinition, resolve: (input) => resolveRhythmFunctionArgs(input as never), elementAts: elementAts.root},
-  {name: effectFunctionDefinition.name, label: "视觉效果", template: "effect", definition: effectFunctionDefinition, resolve: (input) => resolveEffectFunctionArgs(input as never), elementAts: elementAts.cueItems, groups: MG_STYLE_CATALOG.filter((entry) => entry.template === "effect" && entry.style !== "object-drop" && entry.style !== "glass-fracture").map((entry) => entry.style)},
-  {name: objectDropEffectFunctionDefinition.name, label: "物体坠落", template: "effect", definition: objectDropEffectFunctionDefinition, resolve: (input) => resolveObjectDropEffectFunctionArgs(input as never), elementAts: elementAts.objectDrop, groups: ["object-drop"]},
-  {name: glassFractureEffectFunctionDefinition.name, label: "破碎效果", template: "effect", definition: glassFractureEffectFunctionDefinition, resolve: (input) => resolveGlassFractureEffectFunctionArgs(input as never), elementAts: elementAts.glassFracture, groups: ["glass-fracture"]},
+  {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", minDurationSeconds: MG_CUTOUT_MIN_DURATION_SECONDS, definition: mgCutoutRiseFunctionDefinition, resolve: (input, timing) => resolveMgCutoutRiseFunctionArgs(input as never, timing), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
+  {name: routeShiftFunctionDefinition.name, label: "路线切换", template: "route-shift", definition: routeShiftFunctionDefinition, resolve: (input, timing) => resolveRouteShiftFunctionArgs(input as never, timing), elementAts: elementAts.routeShift},
+  {name: showcaseFunctionDefinition.name, label: "界面陈列", template: "showcase", definition: showcaseFunctionDefinition, resolve: (input, timing) => resolveShowcaseFunctionArgs(input as never, timing), elementAts: elementAts.showcase},
+  {name: metricFunctionDefinition.name, label: "指标动画", template: "metric", definition: metricFunctionDefinition, resolve: (input, timing) => resolveMetricFunctionArgs(input as never, timing), elementAts: elementAts.metric},
+  {name: transitionFunctionDefinition.name, label: "转场", template: "transition", definition: transitionFunctionDefinition, resolve: (input, timing) => resolveTransitionFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: rhythmFunctionDefinition.name, label: "节拍强调", template: "rhythm", definition: rhythmFunctionDefinition, resolve: (input, timing) => resolveRhythmFunctionArgs(input as never, timing), elementAts: elementAts.root},
+  {name: effectFunctionDefinition.name, label: "视觉效果", template: "effect", definition: effectFunctionDefinition, resolve: (input, timing) => resolveEffectFunctionArgs(input as never, timing), elementAts: elementAts.cueItems, groups: MG_STYLE_CATALOG.filter((entry) => entry.template === "effect" && entry.style !== "object-drop" && entry.style !== "glass-fracture").map((entry) => entry.style)},
+  {name: objectDropEffectFunctionDefinition.name, label: "物体坠落", template: "effect", definition: objectDropEffectFunctionDefinition, resolve: (input, timing) => resolveObjectDropEffectFunctionArgs(input as never, timing), elementAts: elementAts.objectDrop, groups: ["object-drop"]},
+  {name: glassFractureEffectFunctionDefinition.name, label: "破碎效果", template: "effect", definition: glassFractureEffectFunctionDefinition, resolve: (input, timing) => resolveGlassFractureEffectFunctionArgs(input as never, timing), elementAts: elementAts.glassFracture, groups: ["glass-fracture"]},
 ]);
 
 const catalogByTemplate = new Map<MgTemplateName, MgStyleCatalogEntry[]>();
@@ -421,14 +414,12 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - 只能根据真实字级时间轴补每个节点的 at、每条边的 at 和 relation；不得新增、删除、改名或改连线
 
 时间规则：
-- at 直接使用字级时间轴 JSON 的 start 数值，不进行换算
-- 根 at 使用该实例首个标签文字的 start；每个结构元素使用其对应标签文字首字的 start
-- 没有单独对应文字的结构性元素使用实例根 at
-- <sc-video> 的时间窗口由宿主代码根据标签文字绑定，其工具参数不填写 at
-- <sc-longtake> 的时间窗口由宿主代码根据标签文字绑定；工具参数中的根 at 和 segments.at 必须来自同一实例的真实字级时间轴
-- <video-footage> 的 at 使用标签首字在整集的绝对时间；sourceStart/sourceEnd 是所选源视频内部的秒数，不得与 at 混用
-- <ai-hot-opening> 的 at 使用标签首字 start，endTime 使用标签末字 end，二者至少间隔 7 秒
-- <ai-hot-focus-stage> 的 at 使用标签首字 start；items[].time 使用各章节标题首字的绝对 start，作为新闻切换动作的触发时间，不要加动画时长；第一项至少晚于 at 5 秒，后续至少间隔 2.5 秒
+- 实例整体的开始和结束由宿主代码从已审核 HTML 和字级时间轴计算；Function Call 不填写根 at、startTime 或 endTime
+- 节点、连线、片段等内部事件的 at 或 time 仍使用字级时间轴 JSON 的绝对 start 数值，不进行换算
+- 没有单独对应文字的结构性元素使用该实例首个标签首字的 start
+- sourceStart/sourceEnd 是所选源视频内部的秒数，不是整集时间
+- <ai-hot-opening> 的标签窗口至少为 7 秒，标题和列表由模型提供
+- <ai-hot-focus-stage> 的 items[].time 使用各章节标题首字的绝对 start，作为切换动作触发时间；第一项至少晚于标签开始 5 秒，后续至少间隔 2.5 秒
 
 连续视频规则：
 - <sc-video> 是普通短视频片段；<sc-longtake group="relay"> 是接力式一镜到底，二者不能混用
@@ -445,7 +436,7 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 策略转向规则：
 - <era-shift group="foreground-with-background"> 调用 create_era_shift；foreground 选择 existing 或 generate，startItems/endItems 只填语义文字和可选 logo 文件名
 - switchAt 是背景从 startItems 切换到 endItems 的绝对时间；不要给 item 填 at，也不要输出 assetDir、title、label 或视觉参数
-- <mg-cutout group="rise"> 调用 create_cutout_rise；at 是主体入场时间，source 依工具说明选择透明图、已有绿幕图或参考图生成
+- <mg-cutout group="rise"> 调用 create_cutout_rise；主体入场时间由标签首字确定，source 依工具说明选择透明图、已有绿幕图或参考图生成
 - 主体从画面下方上升并自然减速停住；图层只有透明主体，不绘制或替换任何背景，不添加回弹、烟雾、标题或装饰
 
 内容规则：
@@ -485,7 +476,7 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
 export type MgTemplateProvider = Readonly<{
-  protocolVersion: 3;
+  protocolVersion: 4;
   templates: readonly MgTemplateDescriptor[];
   runtimeEntryUrl: URL;
   getAnnotationInstructions(): string;
@@ -502,7 +493,8 @@ export type MgTemplateProvider = Readonly<{
     fps: number;
     durationFrames: number;
   }): readonly MgCompositionSlot[];
-  resolveCall(input: {name: string; arguments: Record<string, unknown>}): MgResolvedProviderCall;
+  identifyCall(input: {name: string; arguments: Record<string, unknown>}): Pick<MgProviderInstance, "htmlTag" | "group" | "order"> & {instanceKey: string};
+  resolveCall(input: {name: string; arguments: Record<string, unknown>; timing: FunctionCallTiming}): MgResolvedProviderCall;
   isToolAllowed(input: {htmlTag: string; group: string; name: string}): boolean;
   validateAnnotatedInstance(input: {htmlTag: string; tagCount: number}): void;
   prepareRuntimeAssets(input: {
@@ -979,8 +971,27 @@ const copyDirectoryIfPresent = async (source: string, target: string): Promise<v
   }
 };
 
+/** Locate the reviewed HTML instance before resolving its internal event offsets. */
+const identifyCall: MgTemplateProvider["identifyCall"] = ({name, arguments: args}) => {
+  const binding = bindingByName.get(name);
+  if (!binding) throw new Error(`未知 MG Function Call: ${name}`);
+  if (["at", "startTime", "endTime"].some((field) => field in args)) {
+    throw new Error("实例整体时间由宿主计算，Function Call 不接受 at/startTime/endTime");
+  }
+  const schema = binding.definition.parameters as {properties?: Record<string, unknown>};
+  const group = schema.properties?.group ? args.group : binding.groups?.length === 1 ? binding.groups[0] : undefined;
+  if (typeof group !== "string" || !isMgStyleForTemplate(binding.template, group)
+    || (binding.groups && !binding.groups.includes(group))) throw new Error(`${name} 不支持 group=${String(group)}`);
+  if (args.order !== undefined && args.order !== null && (!Number.isInteger(args.order) || Number(args.order) < 1)) {
+    throw new Error("order 必须为正整数或 null");
+  }
+  const order = typeof args.order === "number" ? args.order : undefined;
+  const htmlTag = htmlTagByTemplate.get(binding.template)!;
+  return {htmlTag, group, ...(order === undefined ? {} : {order}), instanceKey: instanceKey({htmlTag, group, order})};
+};
+
 export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
-  protocolVersion: 3,
+  protocolVersion: 4,
   templates: descriptors,
   runtimeEntryUrl: new URL("../runtime/render-entry.tsx", import.meta.url),
   getAnnotationInstructions: annotationInstructions,
@@ -1044,10 +1055,14 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   },
   resolveCompositionSlots: ({htmlTag, spec, fps, durationFrames}) =>
     getCompositionSlotResolverForHtmlTag(htmlTag)?.(spec, fps, durationFrames) ?? [],
-  resolveCall: ({name, arguments: args}) => {
+  identifyCall,
+  resolveCall: ({name, arguments: args, timing}) => {
+    const identity = identifyCall({name, arguments: args});
+    assertFunctionTiming(timing);
     const binding = bindingByName.get(name);
     if (!binding) throw new Error(`未知 MG Function Call: ${name}`);
-    const resolved = binding.resolve(args);
+    const resolved = binding.resolve(args, timing);
+    if (resolved.group !== identity.group || (resolved.order ?? undefined) !== identity.order) throw new Error("Resolver changed the HTML instance identity");
     const htmlTag = htmlTagByTemplate.get(binding.template);
     if (!htmlTag) throw new Error(`Function Call ${name} 的模板没有 HTML 标签`);
     if (!isMgStyleForTemplate(binding.template, resolved.group)) {
@@ -1064,7 +1079,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
       group: resolved.group,
       ...(order === undefined ? {} : {order}),
       at: resolved.at,
-      elementAts: binding.elementAts(args).filter(Number.isFinite),
+      elementAts: [timing.start, ...binding.elementAts(args)].filter(Number.isFinite),
       instanceKey: instanceKey({htmlTag, group: resolved.group, order}),
       layerRole: descriptorByHtmlTag.get(htmlTag)!.layerRole,
       render: makeRuntimeLayer(binding.template, resolved.group, resolved.spec),

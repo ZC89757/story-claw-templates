@@ -1,3 +1,5 @@
+import type {FunctionCallTiming} from "../function-call";
+import {assertFunctionEnvelope} from "../function-call";
 export const scVideoFunctionDefinition = {
   name: "create_sc_video",
   description: "为 <sc-video> 实例生成普通 AI 视频片段。时间窗口由宿主代码计算。",
@@ -25,7 +27,7 @@ export type ScVideoFunctionArgs = {
   video_prompt: string;
 };
 
-export const resolveScVideoFunctionArgs = (input: unknown): {
+export const resolveScVideoFunctionArgs = (input: unknown, timing: FunctionCallTiming): {
   group: "normal";
   order?: number | null;
   at: number;
@@ -33,6 +35,7 @@ export const resolveScVideoFunctionArgs = (input: unknown): {
 } => {
   if (!input || typeof input !== "object") throw new Error("create_sc_video 参数必须是对象");
   const args = input as Record<string, unknown>;
+  const envelope = assertFunctionEnvelope(args, timing);
   if (args.group !== "normal") throw new Error("create_sc_video group 必须是 normal");
   if (args.order !== null && args.order !== undefined && (!Number.isInteger(args.order) || Number(args.order) < 1)) {
     throw new Error("create_sc_video order 必须是正整数或 null");
@@ -55,6 +58,5 @@ export const resolveScVideoFunctionArgs = (input: unknown): {
     ...(referenceImagePrompt ? {reference_image_prompt: referenceImagePrompt} : {}),
     video_prompt: videoPrompt,
   };
-  // The host binds the real absolute timeline after matching this call to its HTML instance.
-  return {group: "normal", order: spec.order, at: 0, spec};
+  return {...envelope, group: "normal", order: spec.order, spec};
 };

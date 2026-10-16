@@ -39,19 +39,21 @@ HTML 不填写 `at`。标签允许嵌套，例如时间线节点中可以再标�
 
 ### 2. AI 直接进行 Function Calling
 
-第二次 AI 调用同时读取完整 HTML 和原始字级时间戳文件。它按 `group` 为每组标签选择一个模板函数，并根据标签内的文本组织函数参数。
+第二次 AI 调用读取已审核 HTML 和原始字级时间戳文件。它按标签、`group` 和可选 `order` 为每个逻辑实例调用一次模板函数，并根据标签内的文本组织函数参数。
 
-每个函数都必须传：
+一般模板函数使用以下公共字段；固定开场和 AI 舞台函数由 Provider 识别实例，不传 `group` 或 `order`：
 
 - 根级 `group`：与 HTML 的 `group` 完全一致。
-- 根级 `at`：这段 MG 在整集视频中的绝对开始秒数。
+- 可选实例 `order`：重复实例按 HTML 顺序编号；单实例传 `null`。
 - 动态元素自己的 `at`：节点、表格单元格、图表数据点、关系边等出现时的绝对秒数。
 
-resolver 将动态元素的绝对时间换算为模板内部时间：`localAt = elementAt - rootAt`。`mode` 只属于 HTML，不进入 Function Call；渲染拼接代码根据 HTML 中的 `together` 或 `split` 决定连续显示还是分段显示。
+实例整体时间由宿主统一计算：开始取标签首字，结束取末字；正文紧邻的同层兄弟标签之间，结束延续到下个标签开始。未标注文字阻止延伸。所有标签使用同一规则，动画最小时长不会扩大标注范围。Function Call 不接受根级 `at`、`startTime` 或 `endTime`。
+
+resolver 将动态元素的绝对时间换算为模板内部时间：`localAt = elementAt - timing.start`。`mode` 只属于 HTML，不进入 Function Call；Together 保留连续窗口，Split 保留各段窗口和共享实例时间轴。副标签只与父级活动窗口取交集。
 
 ## Function Calling 参数
 
-所有函数都采用严格 JSON Schema，禁止额外字段。下表仅列 AI 需要填写的业务参数；每个函数还都包含公共的 `group` 和根级绝对 `at`。
+所有函数都采用严格 JSON Schema，禁止额外字段。下表仅列 AI 需要填写的业务参数；公共字段按上面的实例规则填写。宿主在 resolver 调用中单独传入 `{start, end}`，不交给模型填写。
 
 | 函数 | AI 填写的参数 | 模板或 resolver 自动处理 |
 | --- | --- | --- |
@@ -138,7 +140,7 @@ public/era-shift/
 
 Shotcraft 的 193 个 style 已按“语义标签 + group 样式”方式接入模板目录（当前 catalog 共 219 项，包含基础模板和其他新增结构）：
 
-- `mg-title` / `文字`：字卡、逐字入场、乱码、翻牌、描边、打字机等。模型只传一段文字和根 `at`。
+- `mg-title` / `文字`：字卡、逐字入场、乱码、翻牌、描边、打字机等。模型提供文字，实例开始时间由宿主确定。
 - `mg-showcase` / `界面`：卡片、列表、网格、命令面板、胶囊和界面陈列。模型只传 `items` 的文字及 `at`。
 - `mg-metric` / `数据`：里程表、计数、仪表、波形、粒子和进度。模型只传 `points` 的标签、数值及 `at`。
 - `mg-transition` / `转场`：几何擦除、闪切、甩镜和遮罩，作为原画上的透明叠加层，只传接缝锚点。
@@ -182,9 +184,10 @@ import {
 // 注册给第二阶段 AI。
 const tools = [progressTimelineFunctionDefinition];
 
-// tool_call.arguments 中的 at 均为整集绝对时间。
+// 内部元素的 at 是整集绝对时间；整体窗口由宿主从标签计算。
 const resolved = resolveProgressTimelineFunctionArgs(
   JSON.parse(toolCall.function.arguments),
+  hostComputedWindow, // {start, end}
 );
 
 // resolved.at 用于拼接定位；resolved.spec 内部已换算为局部时间。

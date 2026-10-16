@@ -29,10 +29,10 @@ const fakeAsset: VideoFootageAsset = {
 test("video-footage exposes the minimal Function Calling contract", () => {
   assert.equal(videoFootageFunctionDefinition.name, "use_video_footage");
   assert.deepEqual(Object.keys(videoFootageFunctionDefinition.parameters.properties), [
-    "group", "order", "at", "source", "sourceStart", "sourceEnd",
+    "group", "order", "source", "sourceStart", "sourceEnd",
   ]);
   assert.deepEqual(videoFootageFunctionDefinition.parameters.required, [
-    "group", "order", "at", "source", "sourceStart", "sourceEnd",
+    "group", "order", "source", "sourceStart", "sourceEnd",
   ]);
 
   const descriptor = provider.templates.find((item) => item.htmlTag === "video-footage");
@@ -45,11 +45,10 @@ test("video-footage resolves a listed source and keeps source time separate from
   const resolved = resolveVideoFootageFunctionArgs({
     group: "full-bleed",
     order: null,
-    at: 42.5,
     source: "nvidia-history.mp4",
     sourceStart: 4.25,
     sourceEnd: 11.75,
-  }, {resolveSource: () => fakeAsset});
+  }, {start: 42.5, end: (42.5) + (11.75 - 4.25)}, {resolveSource: () => fakeAsset});
 
   assert.equal(resolved.at, 42.5);
   assert.deepEqual(resolved.spec, {
@@ -64,11 +63,14 @@ test("video-footage rejects traversal, invalid ranges and source duration overfl
   assert.throws(() => normalizeVideoFootageSource("../secret.mp4"), /目录穿越/);
   assert.throws(() => normalizeVideoFootageSource("https://example.com/a.mp4"), /相对路径/);
   assert.throws(() => resolveVideoFootageFunctionArgs({
-    group: "full-bleed", order: null, at: 0, source: "nvidia-history.mp4", sourceStart: 8, sourceEnd: 8,
-  }, {resolveSource: () => fakeAsset}), /sourceEnd 必须大于/);
+    group: "full-bleed", order: null, source: "nvidia-history.mp4", sourceStart: 8, sourceEnd: 8,
+  }, {start: 0, end: 1}, {resolveSource: () => fakeAsset}), /sourceEnd 必须大于/);
   assert.throws(() => resolveVideoFootageFunctionArgs({
-    group: "full-bleed", order: null, at: 0, source: "nvidia-history.mp4", sourceStart: 28, sourceEnd: 31,
-  }, {resolveSource: () => fakeAsset}), /超过素材时长/);
+    group: "full-bleed", order: null, source: "nvidia-history.mp4", sourceStart: 28, sourceEnd: 31,
+  }, {start: 0, end: (0) + (31 - 28)}, {resolveSource: () => fakeAsset}), /超过素材时长/);
+  assert.throws(() => resolveVideoFootageFunctionArgs({
+    group: "full-bleed", order: null, source: "nvidia-history.mp4", sourceStart: 4, sourceEnd: 5,
+  }, {start: 10, end: 12}, {resolveSource: () => fakeAsset}), /必须覆盖宿主窗口/);
 });
 
 test("Provider scans paired metadata, injects subtitles and resolves an opaque scene layer", (context) => {
@@ -94,12 +96,11 @@ test("Provider scans paired metadata, injects subtitles and resolves an opaque s
   assert.match(tool.description, /__provider-test\.mp4/);
   assert.match(tool.description, /数据中心开始部署 AI 芯片/);
 
-  const call = provider.resolveCall({
+  const call = provider.resolveCall({timing: {start: 15, end: (15) + (13 - 7.5)},
     name: "use_video_footage",
     arguments: {
       group: "full-bleed",
       order: null,
-      at: 15,
       source: "__provider-test.mp4",
       sourceStart: 7.5,
       sourceEnd: 13,

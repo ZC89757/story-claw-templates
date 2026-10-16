@@ -6,15 +6,11 @@ export type AiHotOpeningSpec = {
   title: string;
   subTitle: string | null;
   items: string[];
-  /** Local display duration derived from absolute endTime - at. */
+  /** Local display duration derived from the host annotation window. */
   durationSeconds: number;
 };
 
 export type AiHotOpeningFunctionArgs = {
-  /** Absolute episode second at which the opening begins. */
-  at: number;
-  /** Absolute episode second at which the opening is fully transparent. */
-  endTime: number;
   title: string;
   /** Optional small line above title. Pass null or an empty string when absent. */
   sub_title?: string | null;

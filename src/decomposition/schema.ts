@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -22,11 +23,10 @@ export type DecompositionFunctionArgs = FunctionCallEnvelope & {
 export const decompositionParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "title", "whole", "parts", "highlights"],
+  required: ["group", "order", "title", "whole", "parts", "highlights"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     title: {type: "string", minLength: 1, maxLength: 80},
     whole: concept,
     parts: {
@@ -62,9 +62,9 @@ export const decompositionFunctionDefinition = {
 } as const;
 
 export const resolveDecompositionFunctionArgs = (
-  input: DecompositionFunctionArgs,
+  input: DecompositionFunctionArgs, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<DecompositionSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   const events = [
     ...input.parts.map((item) => ({
       at: toLocalAt(item.at, envelope.at),

@@ -14,7 +14,6 @@ export type MetricSpec = {
 export type MetricFunctionArgs = {
   group: string;
   order?: number | null;
-  at: number;
   title: string;
   points: Array<{label: string; value: string; at: number}>;
 };

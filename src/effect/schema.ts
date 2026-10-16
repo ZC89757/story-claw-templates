@@ -1,3 +1,4 @@
+import type {FunctionCallTiming} from "../function-call";
 import {
   assertFunctionEnvelope,
   functionAtSchema,
@@ -24,11 +25,10 @@ export const EFFECT_GROUP_ASSET_DIRS = Object.freeze({
 export const effectParametersSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["group", "order", "at", "text", "items"],
+  required: ["group", "order", "text", "items"],
   properties: {
     group: functionGroupSchema,
     order: functionOrderSchema,
-    at: functionAtSchema,
     text: {type: "string", minLength: 1, maxLength: 120},
     items: {
       type: "array",
@@ -61,21 +61,20 @@ const configurableEffectParametersSchema = (group: "object-drop" | "glass-fractu
     type: "object",
     additionalProperties: false,
     required: objectDrop
-      ? ["group", "order", "at", "impactAt", "image"]
-      : ["group", "order", "at", "crackAt", "image"],
+      ? ["group", "order", "impactAt", "image"]
+      : ["group", "order", "crackAt", "image"],
     properties: {
       group: {type: "string", enum: [group]},
       order: functionOrderSchema,
-      at: functionAtSchema,
       ...(objectDrop ? {
         impactAt: {
           ...functionAtSchema,
-          description: "物体落到地面并产生撞击烟雾的绝对时间戳，单位秒。必须晚于 at，且落在该 mg-effect 标签覆盖的时间区间内；物体从 at 开始下落，坠落时长等于 impactAt - at。",
+          description: "物体落到地面并产生撞击烟雾的绝对时间戳，单位秒。必须晚于标签首字时间，且落在该 mg-effect 标签覆盖的时间区间内；物体从标签首字时间开始下落，坠落时长等于 impactAt 减标签首字时间。",
         },
       } : {
         crackAt: {
           ...functionAtSchema,
-          description: "完整的下层内容炸开并开始扩散裂纹的绝对时间戳，单位秒。必须晚于 at，且落在该 mg-effect 标签覆盖的时间区间内；at 到 crackAt 之间只显示完好的内容，crackAt 之后裂纹扩散并停留。",
+          description: "完整的下层内容炸开并开始扩散裂纹的绝对时间戳，单位秒。必须晚于标签首字时间，且落在该 mg-effect 标签覆盖的时间区间内；标签首字时间到 crackAt 之间只显示完好的内容，crackAt 之后裂纹扩散并停留。",
         },
       }),
       image: {
@@ -105,14 +104,14 @@ export const glassFractureEffectFunctionDefinition = {
 } as const;
 
 const resolveConfigurableEffectFunctionArgs = (
-  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope,
+  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
   expectedGroup: ConfigurableEffectFunctionArgs["group"],
 ): ResolvedFunctionCall<EffectSpec> => {
   const detailField = expectedGroup === "object-drop" ? "impactAt" : "crackAt";
-  const allowedFields = new Set(["group", "order", "at", "image", detailField]);
+  const allowedFields = new Set(["group", "order", "image", detailField]);
   const unknownFields = Object.keys(input).filter((field) => !allowedFields.has(field));
-  if (unknownFields.length) throw new Error(`${expectedGroup} only accepts group, order, at, ${detailField} and image`);
-  const envelope = assertFunctionEnvelope(input);
+  if (unknownFields.length) throw new Error(`${expectedGroup} only accepts group, order, ${detailField} and image`);
+  const envelope = assertFunctionEnvelope(input, timing);
   if (envelope.group !== expectedGroup) throw new Error(`group must be ${expectedGroup}`);
   if (typeof input.image !== "string" || !input.image.trim()) {
     throw new Error(`${expectedGroup} requires one image asset`);
@@ -139,17 +138,17 @@ const resolveConfigurableEffectFunctionArgs = (
 };
 
 export const resolveObjectDropEffectFunctionArgs = (
-  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope,
-): ResolvedFunctionCall<EffectSpec> => resolveConfigurableEffectFunctionArgs(input, "object-drop");
+  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
+): ResolvedFunctionCall<EffectSpec> => resolveConfigurableEffectFunctionArgs(input, timing, "object-drop");
 
 export const resolveGlassFractureEffectFunctionArgs = (
-  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope,
-): ResolvedFunctionCall<EffectSpec> => resolveConfigurableEffectFunctionArgs(input, "glass-fracture");
+  input: ConfigurableEffectFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
+): ResolvedFunctionCall<EffectSpec> => resolveConfigurableEffectFunctionArgs(input, timing, "glass-fracture");
 
 export const resolveEffectFunctionArgs = (
-  input: EffectFunctionArgs & FunctionCallEnvelope,
+  input: EffectFunctionArgs & FunctionCallEnvelope, timing: FunctionCallTiming,
 ): ResolvedFunctionCall<EffectSpec> => {
-  const envelope = assertFunctionEnvelope(input);
+  const envelope = assertFunctionEnvelope(input, timing);
   if (input.group === "object-drop" || input.group === "glass-fracture") {
     throw new Error(`${input.group} must use its dedicated image effect function`);
   }

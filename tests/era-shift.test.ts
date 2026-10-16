@@ -15,7 +15,6 @@ const provider = getMgTemplateProvider();
 const eraShiftArguments = {
   group: ERA_SHIFT_GROUP,
   order: null,
-  at: 12,
   image: "jensen-huang.png",
   switchAt: 14.1,
   startItems: [
@@ -41,10 +40,10 @@ test("provider exposes era-shift as a scene template", () => {
 test("era-shift Function Calling exposes the foreground/background contract", () => {
   assert.equal(eraShiftFunctionDefinition.name, "create_era_shift");
   assert.deepEqual(Object.keys(eraShiftFunctionDefinition.parameters.properties), [
-    "group", "order", "at", "foreground", "switchAt", "startItems", "endItems",
+    "group", "order", "foreground", "switchAt", "startItems", "endItems",
   ]);
   assert.deepEqual(eraShiftFunctionDefinition.parameters.required, [
-    "group", "order", "at", "foreground", "switchAt", "startItems", "endItems",
+    "group", "order", "foreground", "switchAt", "startItems", "endItems",
   ]);
   assert.deepEqual(provider.getPlanningTools(["era-shift"]).map((tool) => tool.name), ["create_era_shift"]);
   const description = provider.getPlanningTools(["era-shift"])[0]?.description ?? "";
@@ -61,7 +60,7 @@ test("era-shift Function Calling exposes the foreground/background contract", ()
 });
 
 test("era-shift converts the absolute switch time to local time", () => {
-  const resolved = resolveEraShiftFunctionArgs(eraShiftArguments);
+  const resolved = resolveEraShiftFunctionArgs(eraShiftArguments, {start: 12, end: (12) + 60});
   assert.equal(resolved.spec.image, "jensen-huang.png");
   assert.deepEqual(resolved.spec.foreground, {
     mode: "existing",
@@ -73,7 +72,7 @@ test("era-shift converts the absolute switch time to local time", () => {
   assert.deepEqual(resolved.spec.startItems, eraShiftArguments.startItems);
   assert.deepEqual(resolved.spec.endItems, eraShiftArguments.endItems);
 
-  const call = provider.resolveCall({name: "create_era_shift", arguments: eraShiftArguments});
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60}, name: "create_era_shift", arguments: eraShiftArguments});
   assert.equal(call.htmlTag, "era-shift");
   assert.equal(call.group, ERA_SHIFT_GROUP);
   assert.equal(call.at, 12);
@@ -87,18 +86,18 @@ test("era-shift rejects a switch before the scene root", () => {
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     switchAt: 11.9,
-  }), /cannot precede scene at/);
+  }, {start: 12, end: (12) + 60}), /cannot precede scene at/);
 });
 
 test("era-shift rejects an unsupported group or extra field", () => {
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     group: "gaming-to-ai",
-  }), /group must be foreground-with-background/);
+  }, {start: 12, end: (12) + 60}), /group must be foreground-with-background/);
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     title: "legacy field",
-  } as never), /only accepts group, order, at, image, foreground, switchAt, startItems and endItems/);
+  } as never, {start: 12, end: (12) + 60}), /only accepts group, order, image, foreground, switchAt, startItems and endItems/);
 });
 
 test("era-shift instances use one together tag", () => {
@@ -110,19 +109,19 @@ test("era-shift reports malformed arrays without a TypeError", () => {
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     startItems: null,
-  } as never), /startItems must contain 1-8 items/);
+  } as never, {start: 12, end: (12) + 60}), /startItems must contain 1-8 items/);
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     endItems: [{text: "OpenAI", logo: 42}],
-  } as never), /logo must be a non-empty string/);
+  } as never, {start: 12, end: (12) + 60}), /logo must be a non-empty string/);
   assert.throws(() => resolveEraShiftFunctionArgs({
     ...eraShiftArguments,
     startItems: [{text: "GPU", at: 1}],
-  } as never), /item only accepts text and logo/);
+  } as never, {start: 12, end: (12) + 60}), /item only accepts text and logo/);
 });
 
 test("era-shift prepares only fixed package assets", async () => {
-  const layer = provider.resolveCall({name: "create_era_shift", arguments: eraShiftArguments}).render;
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60}, name: "create_era_shift", arguments: eraShiftArguments}).render;
   let resolverCalls = 0;
   await provider.prepareRuntimeAssets({
     layers: [{
@@ -151,12 +150,11 @@ test("era-shift prepares only fixed package assets", async () => {
 });
 
 test("era-shift generates and cuts a custom foreground through host callbacks", async () => {
-  const layer = provider.resolveCall({
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_era_shift",
     arguments: {
       group: ERA_SHIFT_GROUP,
       order: null,
-      at: 12,
       foreground: {
         mode: "generate",
         image: null,
@@ -211,12 +209,11 @@ test("era-shift generates and cuts a custom foreground through host callbacks", 
 });
 
 test("era-shift rejects generated foregrounds without host generation callbacks", async () => {
-  const layer = provider.resolveCall({
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_era_shift",
     arguments: {
       group: ERA_SHIFT_GROUP,
       order: null,
-      at: 12,
       foreground: {mode: "generate", image: null, person: "Ada Lovelace", references: ["https://example.com/ada.jpg"]},
       switchAt: 14.1,
       startItems: [{text: "早期计算"}],
@@ -253,7 +250,7 @@ test("era-shift runtime asset copy includes foreground and logo directories", as
 });
 
 test("era-shift rejects assets outside its fixed directories", async () => {
-  const layer = provider.resolveCall({
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_era_shift",
     arguments: {...eraShiftArguments, image: "../ai-company-logos/nvidia.svg"},
   }).render;
@@ -276,7 +273,7 @@ test("era-shift rejects assets outside its fixed directories", async () => {
 });
 
 test("era-shift runtime preparation rejects an invalid group", async () => {
-  const layer = provider.resolveCall({name: "create_era_shift", arguments: eraShiftArguments}).render;
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60}, name: "create_era_shift", arguments: eraShiftArguments}).render;
   await assert.rejects(() => provider.prepareRuntimeAssets({
     layers: [{
       id: "era",
@@ -296,7 +293,7 @@ test("era-shift runtime preparation rejects an invalid group", async () => {
 });
 
 test("era-shift runtime preparation rejects malformed item data", async () => {
-  const layer = provider.resolveCall({name: "create_era_shift", arguments: eraShiftArguments}).render;
+  const layer = provider.resolveCall({timing: {start: 12, end: (12) + 60}, name: "create_era_shift", arguments: eraShiftArguments}).render;
   const malformed = {
     ...layer,
     spec: {

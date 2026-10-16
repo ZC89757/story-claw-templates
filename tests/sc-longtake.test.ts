@@ -12,7 +12,6 @@ const provider = getMgTemplateProvider();
 const longtakeArguments = {
   group: "relay",
   order: null,
-  at: 12,
   reference_image_state: "generate",
   reference_image_prompt: "A researcher beside a glowing GPU workstation",
   segments: [
@@ -25,10 +24,10 @@ const longtakeArguments = {
 test("sc-longtake exposes the relay Function Calling contract", () => {
   assert.equal(scLongtakeFunctionDefinition.name, "create_sc_longtake");
   assert.deepEqual(Object.keys(scLongtakeFunctionDefinition.parameters.properties), [
-    "group", "order", "at", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
+    "group", "order", "reference_image_state", "reference_image_path", "reference_image_prompt", "segments",
   ]);
   assert.deepEqual(scLongtakeFunctionDefinition.parameters.required, [
-    "group", "order", "at", "reference_image_state", "segments",
+    "group", "order", "reference_image_state", "segments",
   ]);
   assert.deepEqual(provider.getPlanningTools(["sc-longtake"]).map((tool) => tool.name), ["create_sc_longtake"]);
   assert.equal(provider.isToolAllowed({
@@ -44,10 +43,10 @@ test("sc-longtake exposes the relay Function Calling contract", () => {
 });
 
 test("sc-longtake keeps absolute segment times and resolves an opaque scene layer", () => {
-  const resolved = resolveScLongtakeFunctionArgs(longtakeArguments);
+  const resolved = resolveScLongtakeFunctionArgs(longtakeArguments, {start: 12, end: (12) + 60});
   assert.deepEqual(resolved.spec.segments.map((segment) => segment.at), [12, 14.4, 16.8]);
 
-  const call = provider.resolveCall({name: "create_sc_longtake", arguments: longtakeArguments});
+  const call = provider.resolveCall({timing: {start: 12, end: (12) + 60}, name: "create_sc_longtake", arguments: longtakeArguments});
   assert.equal(call.htmlTag, "sc-longtake");
   assert.equal(call.group, "relay");
   assert.equal(call.order, undefined);
@@ -64,18 +63,18 @@ test("sc-longtake requires a valid initial reference and ordered segment chain",
   assert.throws(() => resolveScLongtakeFunctionArgs({
     ...longtakeArguments,
     reference_image_state: "existing",
-  }), /existing 状态必须提供 reference_image_path/);
+  }, {start: 12, end: (12) + 60}), /existing 状态必须提供 reference_image_path/);
   assert.throws(() => resolveScLongtakeFunctionArgs({
     ...longtakeArguments,
     segments: [
       {at: 12, video_prompt: "first"},
       {at: 11.9, video_prompt: "second"},
     ],
-  }), /segments\.at 必须严格递增/);
+  }, {start: 12, end: (12) + 60}), /segments\.at 必须严格递增/);
   assert.throws(() => resolveScLongtakeFunctionArgs({
     ...longtakeArguments,
     segments: [{at: 12, video_prompt: "only"}],
-  }), /segments 必须包含 2-8 个连续片段/);
+  }, {start: 12, end: (12) + 60}), /segments 必须包含 2-8 个连续片段/);
 });
 
 test("catalog registers one distinct sc-longtake relay style", () => {
