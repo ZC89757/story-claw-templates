@@ -1,4 +1,14 @@
 export type MgTemplateName =
+  | "image-plate"
+  | "cutout-cue"
+  | "speaker-quote"
+  | "mg-canvas"
+  | "part-whole-chart"
+  | "dual-axis-chart"
+  | "mg-argument"
+  | "image-side-by-side"
+  | "image-directed-graph"
+  | "subject-expansion"
   | "sc-video"
   | "sc-longtake"
   | "video-footage"
@@ -24,6 +34,7 @@ export type MgTemplateName =
   | "news-flashback"
   | "era-shift"
   | "mg-cutout"
+  | "route-map"
   | "route-shift"
   | "showcase"
   | "metric"
@@ -31,7 +42,7 @@ export type MgTemplateName =
   | "rhythm"
   | "effect";
 
-export type MgOverlayTemplateName = "title" | "emphasis" | "transition" | "rhythm" | "effect" | "ai-hot-opening" | "mg-cutout";
+export type MgOverlayTemplateName = "title" | "emphasis" | "transition" | "rhythm" | "effect" | "ai-hot-opening" | "mg-cutout" | "cutout-cue" | "dual-axis-chart";
 
 export const mgInstanceKey = (template: MgTemplateName, order?: number): string =>
   `${template}-${String(order ?? 1).padStart(2, "0")}`;

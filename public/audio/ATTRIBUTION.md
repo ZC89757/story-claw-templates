@@ -12,3 +12,6 @@ the repository's recorded Mixkit free-license notes.
 
 The source repository's complete attribution record is at
 `D:/video-shotcraft-analysis/assets/audio/ATTRIBUTION.md`.
+# Subject Expansion original synthesized tracks
+
+`subject-expansion-bed.wav` and `subject-expansion-roll.wav` are original deterministic synthesized instrumentals created for this template pack by `scripts/generate-subject-expansion-audio.ts`. They contain no external recordings, sampled music, voice or third-party audio assets. The roll's final impact begins at 0.72 seconds, aligned to the template's item impact timestamp.

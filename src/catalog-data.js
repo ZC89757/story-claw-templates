@@ -149,6 +149,10 @@ const SHOTCRAFT_EFFECT_STYLES = makeShotcraftEntries(
 );
 
 export const MG_STYLE_CATALOG = Object.freeze([
+  {template:"progress-timeline",htmlTag:"progress-timeline",style:"archive-rail",name:"汽车工程 · 年份定位",structureName:"时间进度条",category:"引导",renderMode:"replace",description:"刻度横移、急刹定位与年份推近；多节点承接红色进度，间隔恢复原视频。相关口播开始才展开实拍窗口，结束收起；当前年份各显示一次，四角无碎字。",previewKind:"documentary-timeline",isDefault:false},
+  {template:"side-by-side-comparison",htmlTag:"side-by-side-comparison",style:"editorial-scale",name:"汽车工程 · 实体对照",structureName:"左右对比",category:"对比",renderMode:"replace",description:"汽车价格用车辆示意与斜纹实体化比例槽，配置规模用有厚度的点阵；数值和统计口径各出现一次，不根据倍数编造精确价格。",previewKind:"documentary-price",isDefault:false},
+  {template:"directed-graph",htmlTag:"directed-graph",style:"production-chain",name:"汽车工程 · 立体工位",structureName:"有向关系图",category:"关系",renderMode:"replace",description:"立体厂房、电芯与车体构件按口播进入，物料转移、部件悬停后归位；机构颜色图例各一次，职责清楚、四角无碎字。",previewKind:"documentary-factory",isDefault:false},
+  {template:"route-map",htmlTag:"route-map",style:"supply-chain",name:"汽车工程 · 航线追踪",structureName:"地理路线地图",category:"关系",renderMode:"replace",description:"立体大陆轮廓与带笔头的路线描绘，跟随运输再回到总览；地点各标一次，环节说明与地点同处显示，无角落计数。",previewKind:"documentary-map",isDefault:true},
   {
     template: "sc-video",
     htmlTag: "sc-video",
@@ -220,6 +224,18 @@ export const MG_STYLE_CATALOG = Object.freeze([
     description: "按时间、阶段或流程从左到右推进节点。",
     previewKind: "timeline-horizontal",
     isDefault: true,
+  },
+  {
+    template: "progress-timeline",
+    htmlTag: "progress-timeline",
+    style: "content-window",
+    name: "时间线 · 内容窗口",
+    structureName: "时间进度条",
+    category: "数据",
+    renderMode: "replace",
+    description: "复用时间线原有 title/nodes 参数，底部保留年份轨道，当前节点在右上固定窗口嵌入独立时段的子素材；旧分组不受窗口裁剪影响。",
+    previewKind: "timeline-content-window",
+    isDefault: false,
   },
   {
     template: "progress-timeline",
@@ -389,6 +405,7 @@ export const MG_STYLE_CATALOG = Object.freeze([
     previewKind: "image-grid",
     isDefault: true,
   },
+  {template:"image-stack",htmlTag:"image-stack",style:"editorial-focus",name:"编辑图片 · 全幅聚焦",structureName:"图片堆叠",category:"素材",renderMode:"replace",description:"沿用图片列表参数，按图片时间切换全幅资料画面；纸边、柔和纵深、短来源标签和轻推近。",previewKind:"image-stack",isDefault:false},
   {
     template: "news-report",
     htmlTag: "news-report",
@@ -438,6 +455,61 @@ export const MG_STYLE_CATALOG = Object.freeze([
     isDefault: true,
   },
   {
+    template: "subject-expansion",
+    htmlTag: "subject-expansion",
+    style: "progressive",
+    name: "主体关系渐进展开",
+    structureName: "主体展开",
+    category: "关系",
+    renderMode: "replace",
+    description: "稳定透明主体与周边对象逐步建立关系，已有对象保留，短说明随聚焦变化；右侧固定区域可嵌入独立时段的素材。当前支持已有透明图，无参考图文生图待宿主接口授权接入。",
+    previewKind: "subject-expansion-progressive",
+    isDefault: true,
+  },
+  {
+    template: "subject-expansion",
+    htmlTag: "subject-expansion",
+    style: "impact",
+    name: "翻牌拍桌 · 重节奏",
+    structureName: "主体展开",
+    category: "关系",
+    renderMode: "replace",
+    description: "纸牌带厚度翻转落到桌面，落点压缩回弹、短震感和低频滚奏重拍，落稳后连接主体。沿用 progressive 的同一套参数，items.at 定位拍桌，连线延迟 0.18 秒。",
+    previewKind: "subject-expansion-impact",
+    isDefault: false,
+  },
+  {
+    template: "mg-canvas", htmlTag: "mg-canvas", style: "path-follow", name: "连续画布 · 节点跟随", structureName: "连续画布", category: "结构", renderMode: "replace",
+    description: "定义一次节点，再按 steps 回访；镜头跟随当前对象，卡片窗口在移动完成后开放。与不具备回访语义的卡片列表分开。", previewKind: "canvas-path-follow", isDefault: true,
+  },
+  {
+    template: "mg-canvas", htmlTag: "mg-canvas", style: "subject-detail", name: "连续画布 · 主体与属性", structureName: "连续画布", category: "结构", renderMode: "replace",
+    description: "与节点跟随共用 nodes/steps 参数，首节点固定为主体，按步骤切换属性和内嵌内容窗口；可回到已经讲过的节点。", previewKind: "canvas-subject-detail", isDefault: false,
+  },
+  {
+    template: "part-whole-chart", htmlTag: "part-whole-chart", style: "pie", name: "动态饼图", structureName: "部分与整体", category: "数据", renderMode: "replace",
+    description: "明确总体与互斥部分数值，按真实比例绘制扇区，并校验部分之和不超过总体；其余部分自动计算。", previewKind: "part-whole-pie", isDefault: true,
+  },
+  {
+    template: "dual-axis-chart", htmlTag: "dual-axis-chart", style: "line-overlay", name: "透明双轴折线", structureName: "双轴图表", category: "数据", renderMode: "overlay",
+    description: "同一时间分类下两条线绑定不同单位的左右轴，绘图区域之外透明，可叠在现有视频上；与单尺度多系列图保持独立契约。", previewKind: "dual-axis-overlay", isDefault: true,
+  },
+  {template:"dual-axis-chart",htmlTag:"dual-axis-chart",style:"editorial-overlay",name:"透明双轴折线 · 上层紧凑",structureName:"双轴图表",category:"数据",renderMode:"overlay",description:"沿用双轴图表参数，将绘图区收在上半屏，保留下层视频人物与动作。",previewKind:"dual-axis-overlay",isDefault:false},
+  {
+    template: "mg-argument", htmlTag: "mg-argument", style: "evidence-gap", name: "推论与证据缺口", structureName: "逻辑论证", category: "关系", renderMode: "replace",
+    description: "前提与结论之间的线停在证据缺口，并逐项呈现需要核验的证据；不把论证不足画成结论为假。", previewKind: "argument-evidence-gap", isDefault: true,
+  },
+  {
+    template: "image-side-by-side", htmlTag: "image-side-by-side", style: "split-panel", name: "左右图文对照", structureName: "图文对照", category: "对比", renderMode: "replace",
+    description: "两侧透明图与短文字逐项展开，图片来源是独立契约；不向旧纯文字对照参数里塞图片。", previewKind: "image-comparison", isDefault: true,
+  },
+  {template:"image-side-by-side",htmlTag:"image-side-by-side",style:"editorial-paper",name:"编辑图文对照 · 纸面",structureName:"图文对照",category:"对比",renderMode:"replace",description:"沿用原图文对照参数；大幅主体图、纸面双色关系说明与按时间揭示的短句，适合同维度经营路径或对象对照。",previewKind:"image-comparison",isDefault:false},
+  {
+    template: "image-directed-graph", htmlTag: "image-directed-graph", style: "flow", name: "图文关系图", structureName: "图文关系", category: "关系", renderMode: "replace",
+    description: "具体人物、物体的透明图片节点与真实有向关系逐步连接，支持分支与回路；节点图片不冒充数值大小。", previewKind: "image-graph", isDefault: true,
+  },
+  ...["editorial", "editorial-paper"].map(style => ({template:"image-directed-graph", htmlTag:"image-directed-graph", style, name:style === "editorial" ? "编辑关系图 · 深色追踪" : "编辑关系图 · 纸面拼贴", structureName:"图文关系", category:"关系", renderMode:"replace", description:"沿用图文关系图节点和连线参数，镜头随已出现节点扩展，保留上下文；短标签、图片纸卡和逐段绘制连线承担解释。", previewKind:"image-graph", isDefault:false})),
+  {
     template: "mg-cutout",
     htmlTag: "mg-cutout",
     style: "rise",
@@ -448,6 +520,38 @@ export const MG_STYLE_CATALOG = Object.freeze([
     description: "使用透明图片，或把绿幕主体自动抠除后作为透明叠加层；主体从画面下方自然减速上升并停住，下层画面保持透出。",
     previewKind: "mg-cutout-rise",
     isDefault: true,
+  },
+  {
+    template: "image-plate", htmlTag: "image-plate", style: "company", name: "公司静态图片底层", structureName: "图片背景", category: "素材", renderMode: "replace",
+    description: "一张静态企业或场景照片作为全屏底层，不做慢推；可嵌套透明人物入场与Logo点名模板。", previewKind: "image-plate-company", isDefault: true,
+  },
+  {
+    template: "cutout-cue", htmlTag: "cutout-cue", style: "duo", name: "人物点名 · 左右入场", structureName: "主体按点名出现", category: "素材", renderMode: "overlay",
+    description: "两个人物按各自姓名的时间先左后右出现，并保留到段尾；下层静态背景或真实视频透出。", previewKind: "cutout-cue-duo", isDefault: true,
+  },
+  {
+    template: "cutout-cue", htmlTag: "cutout-cue", style: "pop", name: "Logo点名 · 中央弹入", structureName: "主体按点名出现", category: "素材", renderMode: "overlay",
+    description: "念到公司或产品时，透明Logo或物体在视频中央短促弹入、停留后退出；无自带背景。", previewKind: "cutout-cue-pop", isDefault: false,
+  },
+  {
+    template: "speaker-quote", htmlTag: "speaker-quote", style: "portrait", name: "名人说 · 逐字引语", structureName: "人物与引语", category: "文字", renderMode: "replace",
+    description: "不透明人物画像配合上方逐字出现的话语，每字对齐真实配音时间；支持核验引语与观点转述两种标记。", previewKind: "speaker-quote-portrait", isDefault: true,
+  },
+  {
+    template: "image-plate", htmlTag: "image-plate", style: "company-landscape", name: "公司静态背景 · 横屏", structureName: "图片背景", category: "素材", renderMode: "replace",
+    description: "16:9横屏静态企业背景，保留厂房全貌与中央空间；参数与company相同，仅group不同。", previewKind: "image-plate-company-landscape", isDefault: false,
+  },
+  {
+    template: "cutout-cue", htmlTag: "cutout-cue", style: "duo-landscape", name: "人物左右点名 · 横屏", structureName: "主体按点名出现", category: "素材", renderMode: "overlay",
+    description: "16:9横屏两位人物在左右两侧按姓名入场，中间留出公司背景；图片、旁白时间与duo完全相同。", previewKind: "cutout-cue-duo-landscape", isDefault: false,
+  },
+  {
+    template: "cutout-cue", htmlTag: "cutout-cue", style: "pop-landscape", name: "实拍Logo点名 · 横屏", structureName: "主体按点名出现", category: "素材", renderMode: "overlay",
+    description: "16:9横屏实拍上的居中Logo短促弹入；透明素材、时间点与pop相同，只调整横屏比例。", previewKind: "cutout-cue-pop-landscape", isDefault: false,
+  },
+  {
+    template: "speaker-quote", htmlTag: "speaker-quote", style: "landscape", name: "名人说逐字观点 · 横屏", structureName: "人物与引语", category: "文字", renderMode: "replace",
+    description: "16:9横屏人物在右，观点在左上随旁白逐字出现；沿用portrait全部参数，仅group不同。", previewKind: "speaker-quote-landscape", isDefault: false,
   },
   {
     template: "route-shift",
@@ -558,6 +662,18 @@ export const MG_STYLE_CATALOG = Object.freeze([
     isDefault: true,
   },
   {
+    template: "emphasis", htmlTag: "emphasis", style: "brush-shadow",
+    name: "书法白字黄影", structureName: "重点文字", category: "强调", renderMode: "overlay",
+    description: "书法白字配黄色错位叠影；海、陆、空单字巨幅从上方落下并轻微回弹，其余短标题从左向右显现。",
+    previewKind: "emphasis-brush-shadow", isDefault: false,
+  },
+  {
+    template: "title", htmlTag: "mg-title", style: "brush-shadow",
+    name: "书法白字黄影说明", structureName: "标题文字", category: "文字", renderMode: "overlay",
+    description: "较大的书法白字配黄色错位叠影，整段说明文字从左向右显现。",
+    previewKind: "title-brush-shadow", isDefault: false,
+  },
+  {
     template: "news-flashback",
     htmlTag: "news-flashback",
     style: "project",
@@ -572,6 +688,7 @@ export const MG_STYLE_CATALOG = Object.freeze([
   ...SHOTCRAFT_TITLE_STYLES,
   ...SHOTCRAFT_SHOWCASE_STYLES,
   ...SHOTCRAFT_METRIC_STYLES,
+  {template:"metric",htmlTag:"mg-metric",style:"editorial-ledger",name:"编辑数据 · 逐项记录",structureName:"指标动画",category:"数据",renderMode:"replace",description:"沿用指标 points 参数，每项按自己的 at 展示原始完整数值，不使用共同数轴，不重复制造里程碑。",previewKind:"metric",isDefault:false},
   ...SHOTCRAFT_TRANSITION_STYLES,
   ...SHOTCRAFT_RHYTHM_STYLES,
   ...SHOTCRAFT_EFFECT_STYLES,

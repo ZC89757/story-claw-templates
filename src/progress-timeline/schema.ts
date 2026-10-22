@@ -26,7 +26,8 @@ export const progressTimelineParametersSchema = {
     title: {type: "string", minLength: 1, maxLength: 80},
     nodes: {
       type: "array",
-      minItems: 2,
+      minItems: 1,
+      description: "archive-rail allows one year; all other groups require at least two nodes.",
       maxItems: 60,
       items: {
         type: "object",
@@ -50,7 +51,7 @@ export const progressTimelineParametersSchema = {
 export const progressTimelineFunctionDefinition = {
   type: "function",
   name: "create_progress_timeline",
-  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. For each node, pass year as the short year/date shown below the node (for example, '1993年'), and pass title as the single concise event overview shown in the left description panel (for example, '三位创始人共同创办英伟达'). Do not put the year into title. The template displays these values exactly as provided; node position, size, description panel, viewport behavior and motion are fixed by the template.",
+  description: "Create one progress-timeline animation for an HTML group. at values are absolute episode timestamps copied from the supplied timestamp file. For each node, pass year as the short year/date shown below the node (for example, '1993年'), and pass title as the single concise event overview shown in the left description panel (for example, '三位创始人共同创办英伟达'). Do not put the year into title. The template displays these values exactly as provided; node position, size, description panel, viewport behavior and motion are fixed by the template. The content-window group uses this same schema unchanged: nested content is independently annotated/called and its fixed window opens immediately for the first node and 0.45 seconds after later node triggers.",
   strict: true,
   parameters: progressTimelineParametersSchema,
 } as const;
@@ -74,6 +75,6 @@ export const resolveProgressTimelineFunctionArgs = (
       detail: {type: "text" as const, value: node.title},
       motion: index === 0 ? "instant" as const : "ease" as const,
     })),
-  });
+  }, envelope.group === "archive-rail" ? 1 : 2);
   return {...envelope, spec};
 };

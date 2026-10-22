@@ -1,3 +1,4 @@
+export {ProductionChainTemplate} from "./ProductionChainTemplate";
 export * from "./DirectedGraphTemplate";
 export * from "./RadialRelationTemplate";
 export * from "./evaluate";

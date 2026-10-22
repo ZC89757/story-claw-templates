@@ -2,8 +2,9 @@ import {CSSProperties} from "react";
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from "remotion";
 import {emphasisHasStarted, evaluateEmphasis} from "./evaluate";
 import {EmphasisSpec} from "./types";
+import {BrushShadowText} from "./BrushShadowText";
 
-type Props = {spec: EmphasisSpec; style?: CSSProperties};
+type Props = {spec: EmphasisSpec; group?: string; style?: CSSProperties};
 
 const fontSizeFor = (text: string) => {
   const length = Array.from(text).length;
@@ -15,9 +16,10 @@ const fontSizeFor = (text: string) => {
 };
 
 /** 重点大字：在透明图层上短暂放大一句关键信息，不覆盖原画。 */
-export const EmphasisTextTemplate = ({spec, style}: Props) => {
+export const EmphasisTextTemplate = ({spec, group = "scale", style}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  if (group === "brush-shadow") return <BrushShadowText spec={spec} style={style} />;
   const seconds = frame / fps;
   if (!emphasisHasStarted(spec, seconds)) return null;
   const state = evaluateEmphasis(spec, seconds);

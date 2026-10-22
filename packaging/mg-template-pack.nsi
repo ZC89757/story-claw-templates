@@ -16,8 +16,8 @@ OutFile "${OUTPUT_FILE}"
 InstallDir "$LOCALAPPDATA\StoryClaw\mg-templates"
 InstallDirRegKey HKCU "Software\StoryClaw\MGTemplatePack" "InstallDir"
 RequestExecutionLevel user
-SetCompressor /SOLID lzma
-SetCompressorDictSize 64
+; Video-heavy packs gain little from solid LZMA, but it substantially delays previews.
+SetCompressor zlib
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"

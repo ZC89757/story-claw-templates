@@ -21,6 +21,7 @@ export type {
   MgActiveWindow,
   MgRuntimeCompositionNode,
 } from "./runtime.js";
+import {routeMapFunctionDefinition,resolveRouteMapFunctionArgs} from "./route-map/schema.js";
 import {progressTimelineFunctionDefinition, resolveProgressTimelineFunctionArgs} from "./progress-timeline/schema.js";
 import {timedTableFunctionDefinition, resolveTimedTableFunctionArgs} from "./timed-table/schema.js";
 import {directedGraphFunctionDefinition, resolveDirectedGraphFunctionArgs} from "./directed-graph/schema.js";
@@ -76,6 +77,18 @@ import {MG_CUTOUT_MIN_DURATION_SECONDS} from "./mg-cutout/evaluate.js";
 import {MG_CUTOUT_CHROMA_COLOR, MG_CUTOUT_GENERATED_ASPECT_RATIO, mgCutoutGenerationPrompt, mgCutoutPlanningInstructions} from "./mg-cutout/prompt.js";
 import {assertMgCutoutRiseSpec} from "./mg-cutout/validate.js";
 import type {MgCutoutSource} from "./mg-cutout/types.js";
+import {cutoutCueFunctionDefinition, resolveCutoutCueFunctionArgs, assertCutoutCueSpec, cutoutCuePlanningInstructions} from "./cutout-cue/schema.js";
+import {imagePlateFunctionDefinition, resolveImagePlateFunctionArgs, assertImagePlateSpec} from "./image-plate/schema.js";
+import {speakerQuoteFunctionDefinition, resolveSpeakerQuoteFunctionArgs, assertSpeakerQuoteSpec, speakerQuotePlanningInstructions} from "./speaker-quote/schema.js";
+import {subjectExpansionFunctionDefinition, resolveSubjectExpansionFunctionArgs} from "./subject-expansion/schema.js";
+import {subjectExpansionPlanningInstructions} from "./subject-expansion/prompt.js";
+import {prepareSubjectExpansionAssets, prepareCutoutImages} from "./subject-expansion/assets.js";
+import {canvasFunctionDefinition, resolveCanvasFunctionArgs, type CanvasSpec} from "./mg-canvas/schema.js";
+import {partWholeFunctionDefinition, resolvePartWholeFunctionArgs} from "./part-whole-chart/schema.js";
+import {dualAxisFunctionDefinition, resolveDualAxisFunctionArgs} from "./dual-axis-chart/schema.js";
+import {argumentFunctionDefinition, resolveArgumentFunctionArgs} from "./mg-argument/schema.js";
+import {imageComparisonFunctionDefinition, resolveImageComparisonFunctionArgs, type ImageComparisonSpec} from "./image-side-by-side/schema.js";
+import {imageGraphFunctionDefinition, resolveImageGraphFunctionArgs, type ImageGraphSpec} from "./image-directed-graph/schema.js";
 import {
   ERA_SHIFT_ASSET_DIRS,
   ERA_SHIFT_GROUP,
@@ -114,6 +127,12 @@ import {
 } from "./logo-assets.js";
 
 const publicRoot = fileURLToPath(new URL("../public/", import.meta.url));
+const peopleCueAssetInventory = (): string => {
+  try {
+    const assets = JSON.parse(fsSync.readFileSync(path.join(publicRoot, "people-cues", "catalog.json"), "utf8"));
+    return `模板自带可复用图片（这些资料描述不是正文或时间轴；仅在内容匹配时使用）：\n${JSON.stringify(assets)}`;
+  } catch { return ""; }
+};
 
 /** The only static template description consumed by Story Claw. */
 export type MgTemplateDescriptor = Readonly<{
@@ -206,6 +225,10 @@ const assetForCollageNode = (node: {id: string; label: string; role?: string}): 
   findLogoAsset(node, {scope: "any"})?.runtimePath;
 
 const elementAts = {
+  canvas: (args: Record<string, any>) => (args.steps ?? []).map((s: any) => s.at),
+  parts: (args: Record<string, any>) => (args.parts ?? []).map((s: any) => s.at),
+  dualAxis: (args: Record<string, any>) => (args.series ?? []).flatMap((s: any) => (s.data ?? []).map((p: any) => p.at)),
+  claims: (args: Record<string, any>) => (args.claims ?? []).map((s: any) => s.at),
   // Root timestamps are supplied by the host; these extract only internal events.
   progress: (args: Record<string, any>) => [...(args.nodes ?? []).map((item: any) => item.at)],
   table: (args: Record<string, any>) => [...(args.cells ?? []).map((item: any) => item.at)],
@@ -266,6 +289,17 @@ const resolveEraShiftCall = (input: unknown, timing: FunctionCallTiming): Resolv
 };
 
 const bindings: readonly Binding[] = Object.freeze([
+  {name:routeMapFunctionDefinition.name,label:"全球供应链路线地图",template:"route-map",definition:routeMapFunctionDefinition,resolve:(input,timing)=>resolveRouteMapFunctionArgs(input as never,timing),elementAts:args=>[...(args.stops??[]).map((s:any)=>s.at),...(args.routes??[]).map((r:any)=>r.at)],groups:["supply-chain"]},
+  {name: imagePlateFunctionDefinition.name, label: "公司静态图片底层", template: "image-plate", definition: imagePlateFunctionDefinition, resolve: resolveImagePlateFunctionArgs, elementAts: elementAts.root, groups: ["company","company-landscape"]},
+  {name: cutoutCueFunctionDefinition.name, label: "抠图主体按点名入场", template: "cutout-cue", definition: cutoutCueFunctionDefinition, resolve: resolveCutoutCueFunctionArgs, elementAts: elementAts.cueItems, minDurationSeconds: 1.75, groups: ["duo","pop","duo-landscape","pop-landscape"]},
+  {name: speakerQuoteFunctionDefinition.name, label: "名人说 · 逐字引语", template: "speaker-quote", definition: speakerQuoteFunctionDefinition, resolve: resolveSpeakerQuoteFunctionArgs, elementAts: args=>(args.characters??[]).map((c:any)=>c.at), groups: ["portrait","landscape"]},
+  {name: canvasFunctionDefinition.name, label: "连续画布", template: "mg-canvas", definition: canvasFunctionDefinition, resolve: resolveCanvasFunctionArgs, elementAts: elementAts.canvas},
+  {name: partWholeFunctionDefinition.name, label: "部分与整体", template: "part-whole-chart", definition: partWholeFunctionDefinition, resolve: resolvePartWholeFunctionArgs, elementAts: elementAts.parts},
+  {name: dualAxisFunctionDefinition.name, label: "透明双轴折线", template: "dual-axis-chart", definition: dualAxisFunctionDefinition, resolve: resolveDualAxisFunctionArgs, elementAts: elementAts.dualAxis},
+  {name: argumentFunctionDefinition.name, label: "推论与证据缺口", template: "mg-argument", definition: argumentFunctionDefinition, resolve: resolveArgumentFunctionArgs, elementAts: elementAts.claims},
+  {name: imageComparisonFunctionDefinition.name, label: "左右图文对照", template: "image-side-by-side", definition: imageComparisonFunctionDefinition, resolve: resolveImageComparisonFunctionArgs, elementAts: elementAts.comparison},
+  {name: imageGraphFunctionDefinition.name, label: "图文关系图", template: "image-directed-graph", definition: imageGraphFunctionDefinition, resolve: resolveImageGraphFunctionArgs, elementAts: elementAts.graph},
+  {name: subjectExpansionFunctionDefinition.name, label: "主体关系展开", template: "subject-expansion", definition: subjectExpansionFunctionDefinition, resolve: resolveSubjectExpansionFunctionArgs, elementAts: elementAts.comparison, groups: ["progressive", "impact"]},
   {name: scVideoFunctionDefinition.name, label: "普通 AI 视频", template: "sc-video", definition: scVideoFunctionDefinition, resolve: resolveScVideoFunctionArgs, elementAts: elementAts.root},
   {name: scLongtakeFunctionDefinition.name, label: "接力一镜到底", template: "sc-longtake", definition: scLongtakeFunctionDefinition, resolve: resolveScLongtakeFunctionArgs, elementAts: elementAts.longtake},
   {name: videoFootageFunctionDefinition.name, label: "素材视频截取", template: "video-footage", definition: videoFootageFunctionDefinition, resolve: resolveVideoFootageFunctionArgs, elementAts: elementAts.root},
@@ -338,9 +372,21 @@ const descriptorByHtmlTag = new Map(descriptors.map((descriptor) => [descriptor.
 const bindingByName = new Map(bindings.map((binding) => [binding.name, binding]));
 
 const backgroundFor = (template: MgTemplateName, group: string): string => {
+  if ((template === "progress-timeline" && group === "archive-rail") || (template === "side-by-side-comparison" && group === "editorial-scale") || (template === "directed-graph" && group === "production-chain")) return "#e5ebee";
+  if (template === "image-stack" && group === "editorial-focus") return "#101b20";
   if (template === "progress-timeline" && group === "vertical") return "#191d21";
   if (template === "directed-graph" && group === "radial") return "#f4f0e8";
   const backgrounds: Record<MgTemplateName, string> = {
+    "image-plate": "#162126",
+    "cutout-cue": "transparent",
+    "speaker-quote": "#111c24",
+    "mg-canvas": "#eaece4",
+    "part-whole-chart": "#f3f0e8",
+    "dual-axis-chart": "transparent",
+    "mg-argument": "#f0eee7",
+    "image-side-by-side": "#f1eee4",
+    "image-directed-graph": "#edf0e6",
+    "subject-expansion": "#f1eee6",
     "sc-video": "#000000",
     "sc-longtake": "#071014",
     "video-footage": "#000000",
@@ -366,6 +412,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
     "news-flashback": "#0a0f13",
     "era-shift": "#0a1117",
     "mg-cutout": "transparent",
+    "route-map": "#0b141c",
     "route-shift": "#071118",
     showcase: "#10171b",
     metric: "#0e1519",
@@ -377,7 +424,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
 };
 
 /** 这些模板自带整屏画面，必须是 full canvas 而不是 safe 内缩画布。 */
-const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus", "web-page-focus"]);
+const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["route-map", "image-plate", "speaker-quote", "video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus", "web-page-focus", "subject-expansion"]);
 
 const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown): MgRuntimeLayer => {
   const descriptor = descriptorByHtmlTag.get(htmlTagByTemplate.get(template) ?? "");
@@ -387,7 +434,7 @@ const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown
     group,
     spec,
     layerRole: descriptor.layerRole,
-    canvas: FULL_CANVAS_TEMPLATES.has(template) || descriptor.layerRole === "overlay" ? "full" : "safe",
+    canvas: ["archive-rail","editorial-scale","production-chain"].includes(group) || FULL_CANVAS_TEMPLATES.has(template) || descriptor.layerRole === "overlay" || ["mg-canvas", "part-whole-chart", "mg-argument", "image-side-by-side", "image-directed-graph"].includes(template) || (template === "progress-timeline" && group === "content-window") || (template === "image-stack" && group === "editorial-focus") ? "full" : "safe",
     background: backgroundFor(template, group),
   };
 };
@@ -409,9 +456,9 @@ const planningInstructions = `你负责把 HTML 中的 MG 标签转换成动画�
 - 只调用输入 HTML 中实际存在标签所对应的工具，不得合并、遗漏或创建不存在的实例
 
 有向关系图规则：
-- <directed-graph> 的 nodes 和 edges 是 HTML 标注阶段已经确定、并经过人工审核的固定拓扑
+- 任何标签携带的 nodes 和 edges 都是 HTML 标注阶段已经确定、并经过人工审核的固定拓扑，不按标签名区分
 - Function Call 必须逐项复制这套 nodes/edges，保持节点 id、label、边的 from/to 和顺序不变
-- 只能根据真实字级时间轴补每个节点的 at、每条边的 at 和 relation；不得新增、删除、改名或改连线
+- 只能按所选函数 Schema 补充图片或属性、根据真实字级时间轴补每个节点的 at、每条边的 at 和 relation；不得新增、删除、改名或改连线
 
 时间规则：
 - 实例整体的开始和结束由宿主代码从已审核 HTML 和字级时间轴计算；Function Call 不填写根 at、startTime 或 endTime
@@ -463,12 +510,16 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <video-footage> 只允许 group="full-bleed"、可选 order 和 mode="together"，不使用 value；一个标签覆盖一个完整的连续素材片段
 - <ai-hot-opening> 只允许 group="color-orb" 和 mode="together"，不使用 order 或 value；一集最多标注一次，标签范围必须覆盖至少 7 秒
 - <ai-hot-focus-stage> 只允许 group="focus-stage" 和 mode="together"，不使用 order 或外层 value；一集最多标注一次，标签必须覆盖整集正文，values 属性按新闻顺序逐项填写数据库标题，并用连续编号的 <mg-value value="N"> 在正文中标出相同标题
-- <directed-graph> 必须在 HTML 标注阶段同时写入 nodes 和 edges：nodes 是按显示顺序排列的非空节点文字 JSON 数组，edges 是引用 nodes 下标的 [from,to] JSON 数组；这套拓扑供人工审核，规划阶段不得改动
+- 凡函数 Schema 同时要求 nodes(id,label) 和 edges(from,to) 的节点关系图，都必须在 HTML 同时写入 nodes 和 edges；此规则覆盖普通图、图文图和拼贴网络，不限具体标签名。nodes 是按显示顺序排列的非空节点文字 JSON 数组，edges 是引用 nodes 下标的 [from,to] JSON 数组；这套拓扑供人工审核，规划阶段不得改动。普通非关系模板不必填写拓扑
 - value 是当前实例内部元素的正文顺序，从 1 连续编号；同一实例的 group、order、mode 必须一致
 - mode 只能是 together 或 split；标签可嵌套，但不能嵌套同一个动画实例
 - mode="split" 时每个节点独立标注；mode="together" 时一个标签覆盖完整范围，并用 values JSON 字符串数组列出需要显示的节点词
 - <era-shift group="foreground-with-background"> 用于一个固定或可生成的前景人物/物体与两套背景生态的策略转向；每个实例只用一个 mode="together" 标签，标注时只保留正文原文，不写 foreground、switchAt、startItems 或 endItems，这些在规划阶段根据时间轴、搜索结果和 Provider 素材规则填写
 - <mg-cutout group="rise"> 用于把一个人物或完整物体作为透明前景从下方升入原视频；每个实例一个 mode="together" 标签，标注时只保留正文原文，图片来源在规划阶段选择
+- <image-plate group="company|company-landscape" mode="together"> 用一个标签覆盖静态背景完整范围，允许内嵌独立 cutout-cue；16:9 横屏用 company-landscape；仅标原文，不把图像地址或资料说明写进正文
+- <cutout-cue group="duo|pop|duo-landscape|pop-landscape" mode="together"> duo 用同一标签覆盖两个人名及其连接文字，values 按左、右顺序列出两个人名；pop 用同一标签包住这一组点名，values 列出Logo/物体名；16:9 横屏分别用 duo-landscape、pop-landscape，内容和时间规则相同；可用 mg-value 明确锚点；透明层嵌套在 image-plate 或 video-footage 内，禁止另加全屏背景
+- <speaker-quote group="portrait|landscape" mode="together"> 覆盖人物及其话语，用 values 保留话语原文；16:9 横屏用 landscape，画像在右、文字在左上；规划阶段为每字填真实 at，标注阶段不写时间，也不生成不存在的引语
+- <subject-expansion group="progressive|impact" mode="together"> 实际 group 选 progressive 平滑版或 impact 翻牌拍桌重节奏版，两组共用参数；用一个完整父标签覆盖同一主体的渐进展开，values 列出逐字原文节点，可用 <mg-value value="1"> 等与 values 逐项一致的节点标记，不能用 span。impact 的节点锚点对应拍桌重音，内置滚奏和重拍；禁止新增音量、坐标或音乐字段。子视频/MG 必须用真实嵌套标签，仅包住所需原文，独立决定子时段；右侧固定窗口可用，子结束后露出主体关系图。禁止为了不同对象拆成许多父标签，禁止用于虚构的两方对比
 - <mg-effect group="object-drop"> 只用于正文明确出现产品或实体物体落下/砸落的节点；<mg-effect group="glass-fracture"> 只用于计划、方案或屏幕明确失败/破碎的节点。图片在后续规划阶段从模板固定目录选择，标注 HTML 不写 image。
 - <news-flashback group="project"> 用于“这句话有公开报道为证”的节点：规划阶段会先联网检索真实网页截图再生成动画；标注 HTML 只写标签和原文，不写 pages。它是整屏画面，会盖住该时间窗口内的原画，一段原文只标注一次。
 - <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、highlights、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择重点短语，并把高亮时间对齐清稿中对应语义。
@@ -673,6 +724,48 @@ const prepareLayerAssets = async (
   context: RuntimeAssetPreparationContext,
 ): Promise<void> => {
   const {resolveImage, webSnapshotDirectory, generateImageFromReferences, removeSolidBackground} = context;
+  if (layer.kind === "image-plate") {
+    const spec=assertImagePlateSpec(layer.spec);
+    if (!spec.prepared) layer.spec={...spec,image:await resolveImage(spec.image),prepared:true};
+    return;
+  }
+  if (layer.kind === "speaker-quote") {
+    const spec=assertSpeakerQuoteSpec(layer.spec);
+    if (!spec.prepared) layer.spec={...spec,portrait:await resolveImage(spec.portrait),prepared:true};
+    return;
+  }
+  if (layer.kind === "cutout-cue") {
+    const spec=assertCutoutCueSpec(layer.spec);
+    if (spec.prepared) return;
+    const items=[];
+    for (const item of spec.items) {
+      // The existing source pipeline retains generation, chroma removal and caching.
+      const cutout=makeRuntimeLayer("mg-cutout",MG_CUTOUT_GROUP,{image:item.image,source:item.source,at:0});
+      await prepareLayerAssets(cutout,context);
+      items.push({...item,image:assertMgCutoutRiseSpec(cutout.spec).image});
+    }
+    layer.spec=assertCutoutCueSpec({items,prepared:true});
+    return;
+  }
+  if (layer.kind === "mg-canvas" || layer.kind === "image-directed-graph" || layer.kind === "image-side-by-side") {
+    const spec = layer.spec as CanvasSpec | ImageGraphSpec | ImageComparisonSpec;
+    if (spec.prepared) return;
+    if (layer.kind === "image-side-by-side") {
+      const comparison = spec as ImageComparisonSpec;
+      const images = await prepareCutoutImages([comparison.left.source, comparison.right.source], resolveImage, publicRoot, context);
+      layer.spec = {...comparison, left: {...comparison.left, image: images[0]!}, right: {...comparison.right, image: images[1]!}, prepared: true};
+    } else {
+      const graph = spec as CanvasSpec | ImageGraphSpec;
+      const images = await prepareCutoutImages(graph.nodes.map((n) => n.source), resolveImage, publicRoot, context);
+      layer.spec = {...graph, nodes: graph.nodes.map((n, i) => ({...n, image: images[i]})), prepared: true};
+    }
+    return;
+  }
+  if (layer.kind === "subject-expansion") {
+    if (layer.group !== "progressive" && layer.group !== "impact") throw new Error("subject-expansion group must be progressive or impact");
+    layer.spec = await prepareSubjectExpansionAssets(layer.spec, resolveImage, publicRoot, context);
+    return;
+  }
   if (layer.kind === "video-footage") {
     if (!layer.spec || typeof layer.spec !== "object" || Array.isArray(layer.spec)) {
       throw new Error("video-footage 缺少有效 spec");
@@ -1006,6 +1099,19 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
       requested.has("multi-series-chart") ? multiSeriesChartPlanningInstructions : "",
       requested.has("era-shift") ? eraShiftPlanningInstructions : "",
       requested.has("mg-cutout") ? mgCutoutPlanningInstructions : "",
+      requested.has("cutout-cue") ? cutoutCuePlanningInstructions : "",
+      requested.has("image-plate") ? "image-plate group=company / company-landscape 调用 create_image_plate，后者是16:9横屏布局；两组只改group，其余参数完全一样。背景图与可选资料说明只填一次；静态底层不做慢推。允许在正文内嵌套独立 cutout-cue，子层保持透明。" : "",
+      requested.has("speaker-quote") ? speakerQuotePlanningInstructions : "",
+      ["image-plate","cutout-cue","speaker-quote"].some(tag=>requested.has(tag)) ? peopleCueAssetInventory() : "",
+      requested.has("subject-expansion") ? subjectExpansionPlanningInstructions : "",
+      requested.has("mg-canvas") ? "mg-canvas 两组共用 nodes/steps Schema；定义节点后可按 nodeId 回访，不生成重复卡片。首次 step.at=实例开始，后续窗口从 step.at+0.5 秒开放。子标签必须在开放后开始，结束前退出，不能用 order 指定窗口。" : "",
+      requested.has("route-map") ? "route-map 用于真实地理供应链或运输路线，stops 填近似地理坐标、短地点名、必要的简短环节说明与绝对 at；routes 保留真实支线关系，waypoints 只填必要的路线弯点。每个地点只标一次，不加角落计数和重复信息卡。不得把法国供货支线误写为日本到泰国到英国到法国的串行运输。不用于抽象方案切换。" : "",
+      requested.has("progress-timeline") ? "progress-timeline 的 content-window 与 archive-rail 和 horizontal/vertical 共用原参数，禁止新增 children、图片或视频字段。archive-rail 支持单个年份，也支持同一 split 实例的多个里程碑；多节点红条承接前一节点推进，非节点时段回到原视频。年份与必要事件各显示一次；子视频独立标注，必须按需要素材的原文子句确定开始和结束，禁止默认铺满整个时间轴。运行时从已有子节点起止推导视频窗口展开、收起，不增加根参数。四角不放碎字。content-window 首节点时间等于标签开始，后续窗口在 node.at+0.45 秒开放；子素材按自身原文时段播放。旧 horizontal/vertical 没有窗口裁剪。" : "",
+      requested.has("part-whole-chart") ? "饼图只使用同一统计总体和互斥部分的明确数值；不解析含糊字符串，不用电脑用户替代非手机用户。剩余量自动计算，不补造其他分类。" : "",
+      requested.has("dual-axis-chart") ? "双轴是透明 overlay，只有绘图区域带半透明阅读底板，其他像素透明。左右轴分别保留单位和尺度；在 sc-video/video-footage 父标签内部叠加，不再拆成多个指标。" : "",
+      requested.has("mg-argument") ? "mg-argument 的缺口表示证据不足，不判断结论为假。前提、结论、缺失证据类别按原文提供，不画财富或报酬的虚构定量。" : "",
+      requested.has("image-side-by-side") ? "image-side-by-side 是独立图片参数契约，旧 side-by-side-comparison 不接受 source。只在同一维度的两方对照使用，不强凑对立面；同一平台的机会、约束用 subject-expansion。" : "",
+      requested.has("image-directed-graph") ? "image-directed-graph 需要节点图片和方向明确的边。HTML 的 nodes/edges 是审核拓扑；使用 n0/n1 等稳定 ID，保持节点标签和边的顺序、端点，只按本函数 Schema 补充图片 source、绝对 at 和 relation。" : "",
       requested.has("ai-hot-opening") ? aiHotOpeningPlanningInstructions : "",
       requested.has("ai-hot-focus-stage") ? aiHotFocusStagePlanningInstructions : "",
     ].filter(Boolean).join("\n\n");
@@ -1042,6 +1148,9 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
           }
           if (binding.template === "mg-cutout") {
             return `${binding.definition.description}\n\n${mgCutoutSourceToolInstructions()}`;
+          }
+          if (binding.template === "cutout-cue") {
+            return `${binding.definition.description}\n\n${cutoutCuePlanningInstructions}\n\n${mgCutoutSourceToolInstructions()}`;
           }
           if (binding.template === "collage-network") {
             return `${binding.definition.description}\n\n${formatLogoAssetInventory("any")}\n关系图节点只填写实体语义字段；不要新增 logo、assetDir 或视觉参数。`;
@@ -1099,7 +1208,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   validateAnnotatedInstance: ({htmlTag, tagCount}) => {
     const template = templateByHtmlTag.get(htmlTag);
     if (!template) throw new Error(`不支持的 MG 标签 <${htmlTag}>`);
-    if ((template === "sc-video" || template === "sc-longtake" || template === "video-footage" || template === "era-shift" || template === "ai-hot-opening" || template === "ai-hot-focus-stage") && tagCount !== 1) {
+    if ((["image-plate", "cutout-cue", "speaker-quote", "sc-video", "sc-longtake", "video-footage", "era-shift", "ai-hot-opening", "ai-hot-focus-stage", "subject-expansion"].includes(template)) && tagCount !== 1) {
       throw new Error(`<${htmlTag}> 的单个动画实例只能出现一次`);
     }
     if ((template === "title" || template === "emphasis" || template === "news-flashback") && tagCount !== 1) {
@@ -1119,6 +1228,8 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
     await Promise.all([
       copyDirectoryIfPresent(path.join(publicRoot, "ai-company-logos"), path.join(targetPublicDir, "ai-company-logos")),
       copyDirectoryIfPresent(path.join(publicRoot, "audio"), path.join(targetPublicDir, "audio")),
+      copyDirectoryIfPresent(path.join(publicRoot, "people-cues"), path.join(targetPublicDir, "people-cues")),
+      copyDirectoryIfPresent(path.join(publicRoot, "documentary-design-v3"), path.join(targetPublicDir, "documentary-design-v3")),
       copyDirectoryIfPresent(path.join(publicRoot, "era-shift"), path.join(targetPublicDir, "era-shift")),
       copyDirectoryIfPresent(path.join(publicRoot, "mg-effect"), path.join(targetPublicDir, "mg-effect")),
       copyDirectoryIfPresent(path.join(publicRoot, "video-footage", "sources"), path.join(targetPublicDir, "video-footage", "sources")),

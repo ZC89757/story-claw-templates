@@ -164,6 +164,20 @@ export const formatVideoFootageLibraryForAgent = (): string => {
   if (!library.assets.length) lines.push("- 无。请先放入视频及其同名 metadata JSON，不得编造 source。");
   for (const asset of library.assets) {
     lines.push(`- source=${JSON.stringify(asset.source)} | duration=${formatTime(asset.duration)}s | metadata=${asset.metadataFile}`);
+    // Visual notes are evidence about the footage, never replacement subtitles.
+    try {
+      const raw: unknown = JSON.parse(fs.readFileSync(path.join(metadataRoot, asset.metadataFile), "utf8"));
+      if (isRecord(raw)) {
+        if (typeof raw.visual_notes === "string") lines.push(`  画面资料说明（不是字幕）：${JSON.stringify(raw.visual_notes.slice(0, 2400))}`);
+        if (typeof raw.provenance_page === "string") lines.push(`  来源：${JSON.stringify(raw.provenance_page.slice(0, 2000))}`);
+        if (Array.isArray(raw.shotlist)) for (const shot of raw.shotlist.slice(0, 30)) {
+          if (!isRecord(shot) || typeof shot.start !== "number" || typeof shot.end !== "number"
+            || !Number.isFinite(shot.start) || !Number.isFinite(shot.end) || shot.start < 0
+            || shot.end <= shot.start || shot.end > asset.duration + .001 || typeof shot.description !== "string") continue;
+          lines.push(`  画面候选 [${formatTime(shot.start)}-${formatTime(shot.end)}] ${JSON.stringify(shot.description.slice(0, 500))}`);
+        }
+      }
+    } catch { /* Optional descriptive metadata must not hide a valid indexed source. */ }
     if (!asset.subtitles.length) {
       lines.push("  [无字幕时间轴]");
       continue;

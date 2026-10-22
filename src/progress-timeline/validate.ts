@@ -4,13 +4,13 @@ import {PROGRESS_MOVE_DURATION} from "./evaluate";
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
-export const validateProgressTimelineSpec = (input: unknown): string[] => {
+export const validateProgressTimelineSpec = (input: unknown, minimumNodes = 2): string[] => {
   if (!isRecord(input)) return ["spec must be an object"];
   const errors: string[] = [];
   if (typeof input.title !== "string" || !input.title.trim()) errors.push("title is required");
   if (typeof input.subtitle !== "string") errors.push("subtitle must be a string");
   if (typeof input.followViewport !== "boolean") errors.push("followViewport must be a boolean");
-  if (!Array.isArray(input.nodes) || input.nodes.length < 2) return [...errors, "nodes must contain at least two items"];
+  if (!Array.isArray(input.nodes) || input.nodes.length < minimumNodes) return [...errors, minimumNodes === 1 ? "nodes must contain at least one item" : "nodes must contain at least two items"];
   if (input.nodes.length > 60) errors.push("nodes may contain at most 60 items");
 
   let previousAt = -1;
@@ -46,8 +46,8 @@ export const validateProgressTimelineSpec = (input: unknown): string[] => {
   return errors;
 };
 
-export const assertProgressTimelineSpec = (input: unknown): ProgressTimelineSpec => {
-  const errors = validateProgressTimelineSpec(input);
+export const assertProgressTimelineSpec = (input: unknown, minimumNodes = 2): ProgressTimelineSpec => {
+  const errors = validateProgressTimelineSpec(input, minimumNodes);
   if (errors.length) throw new Error(`Invalid ProgressTimelineSpec:\n- ${errors.join("\n- ")}`);
   return input as ProgressTimelineSpec;
 };

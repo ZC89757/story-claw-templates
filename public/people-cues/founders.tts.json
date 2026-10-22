@@ -1,0 +1,129 @@
+{
+  "text": "不过，2003 年创立这家公司的，是马丁·艾伯哈德和马克·塔彭宁。",
+  "words": [
+    {
+      "word": "不过",
+      "startTime": 0.1,
+      "characterPosition": 0,
+      "characterCount": 2
+    },
+    {
+      "word": "2003",
+      "startTime": 0.97,
+      "characterPosition": 3,
+      "characterCount": 4
+    },
+    {
+      "word": "年",
+      "startTime": 1.78,
+      "characterPosition": 8,
+      "characterCount": 1
+    },
+    {
+      "word": "创立",
+      "startTime": 2.07,
+      "characterPosition": 9,
+      "characterCount": 2
+    },
+    {
+      "word": "这",
+      "startTime": 2.485,
+      "characterPosition": 11,
+      "characterCount": 1
+    },
+    {
+      "word": "家",
+      "startTime": 2.665,
+      "characterPosition": 12,
+      "characterCount": 1
+    },
+    {
+      "word": "公司",
+      "startTime": 2.88,
+      "characterPosition": 13,
+      "characterCount": 2
+    },
+    {
+      "word": "的",
+      "startTime": 3.27,
+      "characterPosition": 15,
+      "characterCount": 1
+    },
+    {
+      "word": "是",
+      "startTime": 3.87,
+      "characterPosition": 17,
+      "characterCount": 1
+    },
+    {
+      "word": "马",
+      "startTime": 4.095,
+      "characterPosition": 18,
+      "characterCount": 1
+    },
+    {
+      "word": "丁",
+      "startTime": 4.32,
+      "characterPosition": 19,
+      "characterCount": 1
+    },
+    {
+      "word": "艾",
+      "startTime": 4.56,
+      "characterPosition": 21,
+      "characterCount": 1
+    },
+    {
+      "word": "伯",
+      "startTime": 4.785,
+      "characterPosition": 22,
+      "characterCount": 1
+    },
+    {
+      "word": "哈",
+      "startTime": 5.045,
+      "characterPosition": 23,
+      "characterCount": 1
+    },
+    {
+      "word": "德",
+      "startTime": 5.28,
+      "characterPosition": 24,
+      "characterCount": 1
+    },
+    {
+      "word": "和",
+      "startTime": 5.53,
+      "characterPosition": 25,
+      "characterCount": 1
+    },
+    {
+      "word": "马克",
+      "startTime": 5.765,
+      "characterPosition": 26,
+      "characterCount": 2
+    },
+    {
+      "word": "塔",
+      "startTime": 6.25,
+      "characterPosition": 29,
+      "characterCount": 1
+    },
+    {
+      "word": "彭",
+      "startTime": 6.52,
+      "characterPosition": 30,
+      "characterCount": 1
+    },
+    {
+      "word": "宁",
+      "startTime": 6.745,
+      "characterPosition": 31,
+      "characterCount": 1
+    }
+  ],
+  "voice": "Microsoft Huihui Desktop",
+  "engine": "Windows SAPI",
+  "purpose": "template demo narration only",
+  "duration": 7.865
+}

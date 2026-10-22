@@ -72,6 +72,11 @@ const manifest = {
   protocolVersion: 4,
   provider: "src/provider.js",
   templateCommit,
+  builtAt: new Date().toISOString(),
+  workingTreeDirty: (() => {
+    try {return Boolean(execFileSync("git", ["status", "--porcelain", "--untracked-files=normal"], {cwd: projectRoot, encoding: "utf8"}).trim());}
+    catch {return true;}
+  })(),
 };
 await fs.writeFile(path.join(payloadRoot, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 

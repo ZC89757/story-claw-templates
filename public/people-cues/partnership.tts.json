@@ -1,0 +1,177 @@
+{
+  "text": "在整车开发上，团队找到了英国跑车厂商莲花，希望寻求合作，莲花提供整车工程经验，特斯拉重点开发电池组及控制系统。",
+  "words": [
+    {
+      "word": "在",
+      "startTime": 0.1,
+      "characterPosition": 0,
+      "characterCount": 1
+    },
+    {
+      "word": "整",
+      "startTime": 0.395,
+      "characterPosition": 1,
+      "characterCount": 1
+    },
+    {
+      "word": "车",
+      "startTime": 0.61,
+      "characterPosition": 2,
+      "characterCount": 1
+    },
+    {
+      "word": "开发",
+      "startTime": 0.805,
+      "characterPosition": 3,
+      "characterCount": 2
+    },
+    {
+      "word": "上",
+      "startTime": 1.215,
+      "characterPosition": 5,
+      "characterCount": 1
+    },
+    {
+      "word": "团队",
+      "startTime": 1.93,
+      "characterPosition": 7,
+      "characterCount": 2
+    },
+    {
+      "word": "找到",
+      "startTime": 2.425,
+      "characterPosition": 9,
+      "characterCount": 2
+    },
+    {
+      "word": "了",
+      "startTime": 2.83,
+      "characterPosition": 11,
+      "characterCount": 1
+    },
+    {
+      "word": "英国",
+      "startTime": 3.04,
+      "characterPosition": 12,
+      "characterCount": 2
+    },
+    {
+      "word": "跑车",
+      "startTime": 3.44,
+      "characterPosition": 14,
+      "characterCount": 2
+    },
+    {
+      "word": "厂商",
+      "startTime": 3.97,
+      "characterPosition": 16,
+      "characterCount": 2
+    },
+    {
+      "word": "莲花",
+      "startTime": 4.475,
+      "characterPosition": 18,
+      "characterCount": 2
+    },
+    {
+      "word": "希望",
+      "startTime": 5.39,
+      "characterPosition": 21,
+      "characterCount": 2
+    },
+    {
+      "word": "寻求",
+      "startTime": 5.88,
+      "characterPosition": 23,
+      "characterCount": 2
+    },
+    {
+      "word": "合作",
+      "startTime": 6.355,
+      "characterPosition": 25,
+      "characterCount": 2
+    },
+    {
+      "word": "莲花",
+      "startTime": 7.27,
+      "characterPosition": 28,
+      "characterCount": 2
+    },
+    {
+      "word": "提供",
+      "startTime": 7.8,
+      "characterPosition": 30,
+      "characterCount": 2
+    },
+    {
+      "word": "整",
+      "startTime": 8.27,
+      "characterPosition": 32,
+      "characterCount": 1
+    },
+    {
+      "word": "车",
+      "startTime": 8.485,
+      "characterPosition": 33,
+      "characterCount": 1
+    },
+    {
+      "word": "工程",
+      "startTime": 8.755,
+      "characterPosition": 34,
+      "characterCount": 2
+    },
+    {
+      "word": "经验",
+      "startTime": 9.21,
+      "characterPosition": 36,
+      "characterCount": 2
+    },
+    {
+      "word": "特斯拉",
+      "startTime": 10.12,
+      "characterPosition": 39,
+      "characterCount": 3
+    },
+    {
+      "word": "重点",
+      "startTime": 10.745,
+      "characterPosition": 42,
+      "characterCount": 2
+    },
+    {
+      "word": "开发",
+      "startTime": 11.18,
+      "characterPosition": 44,
+      "characterCount": 2
+    },
+    {
+      "word": "电池组",
+      "startTime": 11.635,
+      "characterPosition": 46,
+      "characterCount": 3
+    },
+    {
+      "word": "及",
+      "startTime": 12.32,
+      "characterPosition": 49,
+      "characterCount": 1
+    },
+    {
+      "word": "控制",
+      "startTime": 12.56,
+      "characterPosition": 50,
+      "characterCount": 2
+    },
+    {
+      "word": "系统",
+      "startTime": 12.97,
+      "characterPosition": 52,
+      "characterCount": 2
+    }
+  ],
+  "voice": "Microsoft Huihui Desktop",
+  "engine": "Windows SAPI",
+  "purpose": "template demo narration only",
+  "duration": 14.245
+}

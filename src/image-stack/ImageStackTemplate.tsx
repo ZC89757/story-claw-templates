@@ -3,6 +3,7 @@ import {AbsoluteFill, Audio, useCurrentFrame, useVideoConfig} from "remotion";
 import {evaluateImageMediaItem} from "../image-media/evaluate";
 import {ImageMediaCard} from "../image-media/ImageMediaCard";
 import {ImageStackSpec} from "../image-media/types";
+import {EditorialImageFocusTemplate} from "./EditorialImageFocusTemplate";
 
 type Props = {spec: ImageStackSpec; audioSrc?: string; style?: CSSProperties};
 
@@ -11,7 +12,7 @@ const HEIGHT = 1080;
 const COLORS = ["#c34d3d", "#2d8b82", "#d0952e", "#567eab", "#8a659e", "#6b7e3b", "#b76d43", "#3f7070"];
 const ROTATIONS = [-2.8, 1.6, -1.1, 2.25, -1.7, 1.15, -2, 1.35];
 
-export const ImageStackTemplate = ({spec, audioSrc, style}: Props) => {
+const PaperImageStackTemplate = ({spec, audioSrc, style}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
@@ -61,3 +62,4 @@ export const ImageStackTemplate = ({spec, audioSrc, style}: Props) => {
     </div>
   </AbsoluteFill>;
 };
+export const ImageStackTemplate=({group,...props}:Props&{group?:string})=>group==="editorial-focus"?<EditorialImageFocusTemplate spec={props.spec}/>:<PaperImageStackTemplate {...props}/>;

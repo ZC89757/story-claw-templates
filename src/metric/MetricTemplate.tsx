@@ -1,6 +1,7 @@
 import type {CSSProperties} from "react";
 import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {easeOut, formatNumeric, metricProgress, numericValue} from "./evaluate";
+import {EditorialMetricTemplate} from "./EditorialMetricTemplate";
 import type {MetricPoint, MetricSpec} from "./types";
 
 type Props = {spec: MetricSpec; style?: string; css?: CSSProperties};
@@ -237,9 +238,10 @@ const MetricBody = ({renderer, points, seconds, recipe}: SceneProps & {renderer:
   }
 };
 
-export const MetricTemplate = ({spec, style = "counter-confetti", css}: Props) => {
+const StandardMetricTemplate = ({spec, style = "counter-confetti", css}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const recipe = recipeFor(style);
   return <AbsoluteFill style={{background: recipe.background, color: INK, fontFamily: '"Microsoft YaHei", Arial, sans-serif', overflow: "hidden", ...css}}><MetricBody renderer={recipe.renderer} points={spec.points} seconds={frame / fps} recipe={recipe} /><Header title={spec.title} light={recipe.light} /><Footer recipe={recipe} /><FixedSfx points={spec.points} recipe={recipe} /></AbsoluteFill>;
 };
+export const MetricTemplate=(props:Props)=>props.style==="editorial-ledger"?<EditorialMetricTemplate spec={props.spec}/>:<StandardMetricTemplate {...props}/>;

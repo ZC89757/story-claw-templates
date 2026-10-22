@@ -1,0 +1,30 @@
+[
+  {
+    "image": "people-cues/tesla-company.jpg",
+    "subject": "Tesla现代厂房背景资料图；不能称2003年办公室"
+  },
+  {
+    "image": "people-cues/martin-eberhard.png",
+    "subject": "马丁·艾伯哈德 Martin Eberhard，基于本人参考照的透明肖像，duo左侧"
+  },
+  {
+    "image": "people-cues/marc-tarpenning.png",
+    "subject": "马克·塔彭宁 Marc Tarpenning，基于本人参考照的透明肖像，duo右侧"
+  },
+  {
+    "image": "people-cues/elon-musk-portrait.png",
+    "subject": "埃隆·马斯克AI生成不透明画像，仅人物观点视觉；不是活动实拍"
+  },
+  {
+    "image": "people-cues/lotus-wordmark.svg",
+    "subject": "莲花Lotus官网准确白色字标，透明，Logo点名弹入"
+  },
+  {
+    "image": "people-cues/tesla-symbol.svg",
+    "subject": "Tesla官网准确T形标志，透明，Logo点名弹入"
+  },
+  {
+    "image": "people-cues/tesla-wordmark.svg",
+    "subject": "Tesla官网准确白色字标，透明"
+  }
+]

@@ -1,0 +1,165 @@
+import {assertCutoutCueSpec} from "./cutout-cue/schema";
+import {assertSpeakerQuoteSpec} from "./speaker-quote/schema";
+import {assertImagePlateSpec} from "./image-plate/schema";
+const demo = {
+  "founders": {
+    "duration": 8.365,
+    "plate": {
+      "image": "people-cues/tesla-company.jpg",
+      "caption": "TESLA · 创始人"
+    },
+    "spec": {
+      "items": [
+        {
+          "label": "马丁·艾伯哈德",
+          "source": {
+            "mode": "transparent",
+            "image": "people-cues/martin-eberhard.png",
+            "subject": null,
+            "references": []
+          },
+          "image": "people-cues/martin-eberhard.png",
+          "at": 4.095
+        },
+        {
+          "label": "马克·塔彭宁",
+          "source": {
+            "mode": "transparent",
+            "image": "people-cues/marc-tarpenning.png",
+            "subject": null,
+            "references": []
+          },
+          "image": "people-cues/marc-tarpenning.png",
+          "at": 5.765
+        }
+      ],
+      "prepared": true
+    }
+  },
+  "partnership": {
+    "duration": 14.645,
+    "spec": {
+      "items": [
+        {
+          "label": "莲花汽车",
+          "source": {
+            "mode": "transparent",
+            "image": "people-cues/lotus-wordmark.svg",
+            "subject": null,
+            "references": []
+          },
+          "image": "people-cues/lotus-wordmark.svg",
+          "at": 4.475
+        },
+        {
+          "label": "特斯拉",
+          "source": {
+            "mode": "transparent",
+            "image": "people-cues/tesla-symbol.svg",
+            "subject": null,
+            "references": []
+          },
+          "image": "people-cues/tesla-symbol.svg",
+          "at": 10.12
+        }
+      ],
+      "prepared": true
+    }
+  },
+  "quote": {
+    "duration": 7.185,
+    "spec": {
+      "speaker": "埃隆·马斯克",
+      "portrait": "people-cues/elon-musk-portrait.png",
+      "quotation": "paraphrase",
+      "characters": [
+        {
+          "text": "设",
+          "at": 1.77
+        },
+        {
+          "text": "计",
+          "at": 1.9775
+        },
+        {
+          "text": "出",
+          "at": 2.185
+        },
+        {
+          "text": "一",
+          "at": 2.38
+        },
+        {
+          "text": "辆",
+          "at": 2.54
+        },
+        {
+          "text": "车",
+          "at": 2.755
+        },
+        {
+          "text": "很",
+          "at": 2.97
+        },
+        {
+          "text": "容",
+          "at": 3.185
+        },
+        {
+          "text": "易",
+          "at": 3.6125
+        },
+        {
+          "text": "，",
+          "at": 3.6125
+        },
+        {
+          "text": "难",
+          "at": 4.04
+        },
+        {
+          "text": "的",
+          "at": 4.27
+        },
+        {
+          "text": "是",
+          "at": 4.375
+        },
+        {
+          "text": "制",
+          "at": 4.645
+        },
+        {
+          "text": "造",
+          "at": 4.8525
+        },
+        {
+          "text": "出",
+          "at": 5.06
+        },
+        {
+          "text": "一",
+          "at": 5.27
+        },
+        {
+          "text": "辆",
+          "at": 5.43
+        },
+        {
+          "text": "车",
+          "at": 5.645
+        },
+        {
+          "text": "。",
+          "at": 5.645
+        }
+      ],
+      "prepared": true
+    }
+  }
+};
+export const foundersCuePreviewSpec=assertCutoutCueSpec(demo.founders.spec);
+export const companyPlatePreviewSpec=assertImagePlateSpec(demo.founders.plate);
+export const logoCuePreviewSpec=assertCutoutCueSpec(demo.partnership.spec);
+export const speakerQuotePreviewSpec=assertSpeakerQuoteSpec(demo.quote.spec);
+export const peopleCueDemoDurations={founders:demo.founders.duration,partnership:demo.partnership.duration,quote:demo.quote.duration};

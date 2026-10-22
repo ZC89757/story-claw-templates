@@ -1,3 +1,4 @@
+export {EditorialScaleTemplate,comparisonHeadline} from "./EditorialScaleTemplate";
 export * from "./BalanceComparisonTemplate";
 export * from "./SideBySideComparisonTemplate";
 export * from "./evaluate";

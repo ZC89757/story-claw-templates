@@ -1,0 +1,22 @@
+{
+  "revision": "2026-10-21",
+  "images": [
+    {
+      "file": "martin-eberhard.png",
+      "prompt": "Reframe this existing Martin Eberhard cutout for a consistent paired historical explainer. Preserve the actual person's identity, face, age, hair, clothing and photorealism. Output one portrait-oriented 2:3 transparent PNG, with ONE WAIST-UP person centered, the TOP of head at 6% of image height, eyes around 23%, waist at bottom edge, shoulders occupying 85% of width. No legs. Remove all existing surrounding background, glow, black/grey haze and large side margins. Clean true transparent alpha outside the person, hair edges natural, no frame, no text, no new objects. This is a crop/reframe and background cleanup of the same person, not a new identity.",
+      "reference": "Previous ImageGen cutout based on Nicki Dugan / Wikimedia Commons source",
+      "output": "exec-3cbd5e77-cccb-49bd-8c95-754cbf2765e9.png"
+    },
+    {
+      "file": "marc-tarpenning.png",
+      "prompt": "Reframe this existing Marc Tarpenning cutout for a consistent paired historical explainer. Preserve the actual person's identity, face, age, hair, clothing and photorealism. Output one portrait-oriented 2:3 transparent PNG, with ONE WAIST-UP person centered, the TOP of head at 6% of image height, eyes around 23%, waist at bottom edge, shoulders occupying 85% of width. No legs. Remove all existing surrounding background, glow, black/grey haze and large side margins. Clean true transparent alpha outside the person, hair edges natural, no frame, no text, no new objects. This is a crop/reframe and background cleanup of the same person, not a new identity.",
+      "reference": "Previous ImageGen cutout based on Marc Tarpenning official portrait",
+      "output": "exec-234a92ac-8eef-421a-8102-f1bf8fca9ccf.png"
+    },
+    {
+      "file": "elon-musk-portrait.png",
+      "description": "Generated editorial portrait of Elon Musk in a dark jacket with blue charcoal background; no event, text or logo. Exact earlier prompt is not present in the recovered turn summary.",
+      "output": "exec-7d8df666-ade5-4649-9675-9ddc8f3b1e0e.png"
+    }
+  ]
+}

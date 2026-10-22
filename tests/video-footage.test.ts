@@ -80,6 +80,8 @@ test("Provider scans paired metadata, injects subtitles and resolves an opaque s
   fs.writeFileSync(fixtureMetadata, JSON.stringify({
     source: "__provider-test.mp4",
     duration: 20,
+    visual_notes: "2021回顾采访，不能冒充2003现场",
+    shotlist: [{start: 1, end: 4, description: "人物交流"}, {start: 19, end: 30, description: "超出范围不可用"}],
     subtitles: [
       {start: 2.5, end: 5.2, text: "英伟达早期产品"},
       {start: 8, end: 12.4, text: "数据中心开始部署 AI 芯片"},
@@ -95,6 +97,9 @@ test("Provider scans paired metadata, injects subtitles and resolves an opaque s
   const tool = provider.getPlanningTools(["video-footage"])[0];
   assert.match(tool.description, /__provider-test\.mp4/);
   assert.match(tool.description, /数据中心开始部署 AI 芯片/);
+  assert.match(tool.description, /2021回顾采访，不能冒充2003现场/);
+  assert.match(tool.description, /画面候选 \[1-4\].*人物交流/);
+  assert.doesNotMatch(tool.description, /超出范围不可用/);
 
   const call = provider.resolveCall({timing: {start: 15, end: (15) + (13 - 7.5)},
     name: "use_video_footage",

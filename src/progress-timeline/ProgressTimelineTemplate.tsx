@@ -2,38 +2,20 @@ import {CSSProperties} from "react";
 import {AbsoluteFill, Audio, useCurrentFrame, useVideoConfig} from "remotion";
 import {evaluateProgressTimeline} from "./evaluate";
 import {ProgressTimelineSpec} from "./types";
+import {horizontalTimelineLayout} from "./horizontal-layout";
 
 type Props = {spec: ProgressTimelineSpec; audioSrc?: string; style?: CSSProperties};
-const WIDTH = 1920;
-const TRACK_WIDTH = 4300;
-const TRACK_LEFT = 250;
 const TRACK_Y = 690;
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-const nodeX = (progress: number) => TRACK_LEFT + (progress / 100) * (TRACK_WIDTH - TRACK_LEFT * 2);
 const smooth = (value: number) => value * value * (3 - 2 * value);
-
-const viewportOffsetForProgress = (spec: ProgressTimelineSpec, progress: number) => {
-  if (!spec.followViewport) return 0;
-  const majors = spec.nodes.filter((node) => node.kind === "major");
-  if (majors.length < 2) return 0;
-  const nextIndex = majors.findIndex((node) => node.progress >= progress);
-  const rightIndex = nextIndex < 0 ? majors.length - 1 : Math.max(1, nextIndex);
-  const leftIndex = rightIndex - 1;
-  const left = majors[leftIndex];
-  const right = majors[rightIndex];
-  const pairOffset = (a: number, b: number) => clamp((nodeX(a) + nodeX(b)) / 2 - WIDTH / 2, 0, TRACK_WIDTH - WIDTH);
-  const previousOffset = leftIndex > 0 ? pairOffset(majors[leftIndex - 1].progress, left.progress) : pairOffset(left.progress, right.progress);
-  const nextOffset = pairOffset(left.progress, right.progress);
-  const ratio = right.progress === left.progress ? 1 : clamp((progress - left.progress) / (right.progress - left.progress), 0, 1);
-  return previousOffset + (nextOffset - previousOffset) * smooth(ratio);
-};
 
 export const ProgressTimelineTemplate = ({spec, audioSrc, style}: Props) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const seconds = frame / fps;
   const state = evaluateProgressTimeline(spec, seconds);
-  const viewportOffset = viewportOffsetForProgress(spec, state.progress);
+  const {trackWidth, trackLeft, nodeX, viewportOffset: offsetForProgress} = horizontalTimelineLayout(spec);
+  const viewportOffset = offsetForProgress(state.progress);
   const active = spec.nodes[state.activeIndex];
   const summaryAge = Math.max(0, seconds - active.at);
   const summaryReveal = smooth(clamp(summaryAge / 0.45, 0, 1));
@@ -49,9 +31,9 @@ export const ProgressTimelineTemplate = ({spec, audioSrc, style}: Props) => {
       <div style={{fontSize: 40, lineHeight: 1.45, fontWeight: 800}}>{active.title}</div>
     </div>
 
-    <div style={{position: "absolute", left: 0, top: 0, width: TRACK_WIDTH, height: 1080, transform: `translateX(${-viewportOffset}px)`}}>
-      <div style={{position: "absolute", left: TRACK_LEFT, top: TRACK_Y, width: TRACK_WIDTH - TRACK_LEFT * 2, height: 10, background: "#d4d2ca"}} />
-      <div style={{position: "absolute", left: TRACK_LEFT, top: TRACK_Y, width: Math.max(0, nodeX(state.progress) - TRACK_LEFT), height: 10, background: "#b33b2f"}} />
+    <div style={{position: "absolute", left: 0, top: 0, width: trackWidth, height: 1080, transform: `translateX(${-viewportOffset}px)`}}>
+      <div style={{position: "absolute", left: trackLeft, top: TRACK_Y, width: trackWidth - trackLeft * 2, height: 10, background: "#d4d2ca"}} />
+      <div style={{position: "absolute", left: trackLeft, top: TRACK_Y, width: Math.max(0, nodeX(state.progress) - trackLeft), height: 10, background: "#b33b2f"}} />
       {spec.nodes.map((node, index) => {
         const x = nodeX(node.progress);
         const complete = state.progress >= node.progress;

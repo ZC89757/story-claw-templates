@@ -1,13 +1,27 @@
 import {
   AbsoluteFill,
+  Audio,
+  Sequence,
   Composition,
+  OffthreadVideo,
   registerRoot,
+  staticFile,
   useCurrentFrame,
+  useVideoConfig,
 } from "remotion";
 import type {ReactNode} from "react";
-import {ProgressTimelineTemplate, VerticalProgressTimelineTemplate} from "../src/progress-timeline";
+import {ExplainerWindowPreview} from "../src/explainer-window-preview";
+import {RouteMapTemplate} from "../src/route-map";
+import {ArchiveRailTemplate,ProgressTimelineTemplate, VerticalProgressTimelineTemplate, TimelineWindowTemplate} from "../src/progress-timeline";
+import {CanvasTemplate} from "../src/mg-canvas";
+import {PartWholeTemplate} from "../src/part-whole-chart";
+import {DualAxisTemplate} from "../src/dual-axis-chart";
+import {ArgumentTemplate} from "../src/mg-argument";
+import {ImageComparisonTemplate} from "../src/image-side-by-side";
+import {ImageGraphTemplate} from "../src/image-directed-graph";
+import {canvasPreviewSpec, piePreviewSpec, dualAxisPreviewSpec, argumentPreviewSpec, imageComparisonPreviewSpec, imageGraphPreviewSpec, timelineWindowPreviewSpec} from "../src/explainer-previews";
 import {TimedTableTemplate} from "../src/timed-table";
-import {DirectedGraphTemplate, RadialRelationTemplate} from "../src/directed-graph";
+import {ProductionChainTemplate,DirectedGraphTemplate, RadialRelationTemplate} from "../src/directed-graph";
 import {
   BlurSlideTitleTemplate,
   FadeTitleTemplate,
@@ -18,13 +32,13 @@ import {
   ShotcraftTitleTemplate,
   TypewriterTitleTemplate,
 } from "../src/title";
-import {EmphasisTextTemplate} from "../src/emphasis";
+import {BrushShadowText, EmphasisTextTemplate} from "../src/emphasis";
 import {NewsFlashbackTemplate} from "../src/news-flashback";
 import {XYChartTemplate} from "../src/xy-chart";
 import {MultiSeriesChartTemplate} from "../src/multi-series-chart";
 import {ContainmentTemplate} from "../src/containment";
 import {DecompositionTemplate} from "../src/decomposition";
-import {BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/weighted-comparison";
+import {EditorialScaleTemplate,BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/weighted-comparison";
 import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
@@ -44,11 +58,19 @@ import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
 import {AiHotOpeningTemplate} from "../src/ai-hot-opening";
 import {AiHotFocusStageTemplate} from "../src/ai-hot-focus-stage";
 import {MgCutoutTemplate} from "../src/mg-cutout";
+import {CutoutCueTemplate,CutoutCueLandscapeTemplate} from "../src/cutout-cue";
+import {ImagePlateTemplate,ImagePlateLandscapeTemplate} from "../src/image-plate";
+import {SpeakerQuoteTemplate,SpeakerQuoteLandscapeTemplate} from "../src/speaker-quote";
+import {foundersCuePreviewSpec,companyPlatePreviewSpec,logoCuePreviewSpec,speakerQuotePreviewSpec,peopleCueDemoDurations} from "../src/people-cues-previews";
+import {SubjectExpansionTemplate} from "../src/subject-expansion";
+import {subjectExpansionPreviewSpec, subjectExpansionImpactPreviewSpec} from "../src/subject-expansion/preview";
 
+import {documentaryTimelineSpec,documentaryPriceSpec,documentaryConfigSpec,documentaryFactorySpec,documentaryMapSpec,documentaryDemoMeta} from "../src/documentary-previews";
 type PreviewProps = {previewKind: string; style: string};
 
 const ScaledCanvas = ({children}: {children: ReactNode}) => {
-  const fit = 0.5;
+  const {width,height}=useVideoConfig();
+  const fit = Math.min(width/1920,height/1080);
   return <div style={{position: "absolute", left: 0, top: 0, width: 1920, height: 1080, transform: `scale(${fit})`, transformOrigin: "top left"}}>{children}</div>;
 };
 
@@ -361,6 +383,27 @@ const MgCutoutDemoPlate = () => {
 const Preview = ({previewKind, style}: PreviewProps) => {
   let content: ReactNode;
   switch (previewKind) {
+    case "documentary-timeline": content=<><ArchiveRailTemplate spec={documentaryTimelineSpec} mediaWindow={documentaryDemoMeta.carWindow} media={<Sequence from={documentaryDemoMeta.carFromFrame} durationInFrames={documentaryDemoMeta.carDurationFrames} layout="none"><OffthreadVideo muted src={staticFile("documentary-demos/roadster.mp4")} style={{width:"100%",height:"100%",objectFit:"cover"}}/></Sequence>}/><Audio src={staticFile("documentary-demos/timeline.wav")}/></>;break;
+    case "documentary-price": content=<><EditorialScaleTemplate spec={documentaryPriceSpec}/><Audio src={staticFile("documentary-demos/price.wav")}/></>;break;
+    case "documentary-config": content=<><EditorialScaleTemplate spec={documentaryConfigSpec}/><Audio src={staticFile("documentary-demos/config.wav")}/></>;break;
+    case "documentary-factory": content=<><ProductionChainTemplate spec={documentaryFactorySpec}/><Audio src={staticFile("documentary-demos/factory.wav")}/></>;break;
+    case "documentary-map": content=<><RouteMapTemplate spec={documentaryMapSpec}/><Audio src={staticFile("documentary-demos/map.wav")}/></>;break;
+    case "image-plate-company": content=<ImagePlateTemplate spec={companyPlatePreviewSpec} viewport={{width:1920,height:1080}}/>;break;
+    case "image-plate-company-landscape": content=<ImagePlateLandscapeTemplate spec={companyPlatePreviewSpec} viewport={{width:1920,height:1080}}/>;break;
+    case "cutout-cue-duo-landscape": content=<><ImagePlateLandscapeTemplate spec={companyPlatePreviewSpec} viewport={{width:1920,height:1080}}/><CutoutCueLandscapeTemplate spec={foundersCuePreviewSpec} group="duo-landscape" viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/founders.wav")}/></>;break;
+    case "cutout-cue-pop-landscape": content=<AbsoluteFill style={{width:1920,height:1080}}><OffthreadVideo muted src={staticFile("people-cues/partnership-footage.mp4")} style={{width:"100%",height:"100%",objectFit:"cover"}}/><CutoutCueLandscapeTemplate spec={logoCuePreviewSpec} group="pop-landscape" viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/partnership.wav")}/></AbsoluteFill>;break;
+    case "speaker-quote-landscape": content=<><SpeakerQuoteLandscapeTemplate spec={speakerQuotePreviewSpec} viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/quote.wav")}/></>;break;
+    case "cutout-cue-duo": content=<><ImagePlateTemplate spec={companyPlatePreviewSpec} viewport={{width:1920,height:1080}}/><CutoutCueTemplate spec={foundersCuePreviewSpec} group="duo" viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/founders.wav")}/></>;break;
+    case "cutout-cue-pop": content=<AbsoluteFill style={{width:1920,height:1080}}><OffthreadVideo muted src={staticFile("people-cues/partnership-footage.mp4")} style={{width:"100%",height:"100%",objectFit:"cover"}}/><CutoutCueTemplate spec={logoCuePreviewSpec} group="pop" viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/partnership.wav")}/></AbsoluteFill>;break;
+    case "speaker-quote-portrait": content=<><SpeakerQuoteTemplate spec={speakerQuotePreviewSpec} viewport={{width:1920,height:1080}}/><Audio src={staticFile("people-cues/quote.wav")}/></>;break;
+    case "canvas-path-follow": content = <ExplainerWindowPreview group="path-follow" />; break;
+    case "canvas-subject-detail": content = <ExplainerWindowPreview group="subject-detail" />; break;
+    case "part-whole-pie": content = <PartWholeTemplate spec={piePreviewSpec} />; break;
+    case "dual-axis-overlay": content = <><MgCutoutDemoPlate /><DualAxisTemplate spec={dualAxisPreviewSpec} group={style} /></>; break;
+    case "argument-evidence-gap": content = <ArgumentTemplate spec={argumentPreviewSpec} />; break;
+    case "image-comparison": content = <ImageComparisonTemplate spec={imageComparisonPreviewSpec} group={style} />; break;
+    case "image-graph": content = <ImageGraphTemplate spec={imageGraphPreviewSpec} group={style} />; break;
+    case "timeline-content-window": content = <ExplainerWindowPreview group="content-window" />; break;
     case "sc-video-normal": content = <ScVideoPreviewPlate
       accent="#8ad3df"
       secondary="#ad8cff"
@@ -371,6 +414,8 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "ai-hot-opening-color-orb": content = <AiHotOpeningTemplate spec={aiHotOpeningPreviewSpec} />; break;
     case "ai-hot-focus-stage": content = <AiHotFocusStageTemplate spec={aiHotFocusStagePreviewSpec} />; break;
     case "mg-cutout-rise": content = <><MgCutoutDemoPlate /><MgCutoutTemplate spec={mgCutoutRisePreviewSpec} /></>; break;
+    case "subject-expansion-progressive": content = <SubjectExpansionTemplate spec={subjectExpansionPreviewSpec} />; break;
+    case "subject-expansion-impact": content = <SubjectExpansionTemplate spec={subjectExpansionImpactPreviewSpec} group="impact" />; break;
     case "timeline-horizontal": content = <ProgressTimelineTemplate spec={progressSpec} />; break;
     case "timeline-vertical": content = <VerticalProgressTimelineTemplate spec={progressSpec} />; break;
     case "table": content = <TimedTableTemplate spec={tableSpec} />; break;
@@ -384,7 +429,7 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "comparison-weighted": content = <BalanceComparisonTemplate spec={{title: "方案对比", leftLabel: "方案 A", rightLabel: "方案 B", events: comparisonEvents}} />; break;
     case "comparison-side": content = <SideBySideComparisonTemplate spec={{title: "方案对比", leftLabel: "方案 A", rightLabel: "方案 B", events: sideEvents}} />; break;
     case "collage": content = <CollageNetworkTemplate spec={collageSpec} />; break;
-    case "image-stack": content = <ImageStackTemplate spec={imageStackSpec} />; break;
+    case "image-stack": content = <ImageStackTemplate spec={imageStackSpec} group={style} />; break;
     case "image-grid": content = <ImageGridTemplate spec={imageGridSpec} />; break;
     case "news-report-paper-stack": content = <NewsReportTemplate spec={newsReportSpec} />; break;
     case "web-news-focus": content = <WebNewsFocusTemplate spec={webNewsFocusSpec} />; break;
@@ -399,6 +444,8 @@ const Preview = ({previewKind, style}: PreviewProps) => {
     case "title-scramble": content = <ScrambleTitleTemplate spec={{text: "MODEL READY 2026", at: 0.15}} />; break;
     case "title-split-flap": content = <SplitFlapTitleTemplate spec={{text: "SHIP FASTER", at: 0.15}} />; break;
     case "emphasis": content = <EmphasisTextTemplate spec={{text: "关键变化", at: 0.2}} />; break;
+    case "emphasis-brush-shadow": content = <EmphasisTextTemplate spec={{text: "海", at: 0.2}} group="brush-shadow" />; break;
+    case "title-brush-shadow": content = <BrushShadowText spec={{text: "航母提供海上起降和补给平台", at: 0.2}} description />; break;
     case "news-flashback-project": content = <NewsFlashbackTemplate spec={{
       text: "NVIDIA Rubin GPU",
       at: 0.2,
@@ -428,9 +475,13 @@ const Root = () => <Composition
   fps={30}
   durationInFrames={150}
   calculateMetadata={({props}) => ({
-    durationInFrames: props.previewKind === "ai-hot-opening-color-orb"
+    width: props.previewKind.startsWith("documentary-") ? 1280 : 960,
+    height: props.previewKind.startsWith("documentary-") ? 720 : 540,
+    durationInFrames: props.previewKind.startsWith("documentary-") ? documentaryDemoMeta.durations[props.previewKind as keyof typeof documentaryDemoMeta.durations] : ["cutout-cue-duo","cutout-cue-duo-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.founders*30):["cutout-cue-pop","cutout-cue-pop-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.partnership*30):["speaker-quote-portrait","speaker-quote-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.quote*30):["canvas-path-follow", "canvas-subject-detail", "part-whole-pie", "dual-axis-overlay", "argument-evidence-gap", "image-comparison", "image-graph", "timeline-content-window"].includes(props.previewKind) ? 360 : props.previewKind === "ai-hot-opening-color-orb"
       ? 210
       : props.previewKind === "ai-hot-focus-stage" ? 630
+        : props.previewKind === "subject-expansion-progressive" ? 480
+        : props.previewKind === "subject-expansion-impact" ? 360
         : props.previewKind === "mg-cutout-rise" ? 180
           : props.previewKind === "web-news-focus" || props.previewKind === "web-page-focus" ? 180 : 150,
   })}

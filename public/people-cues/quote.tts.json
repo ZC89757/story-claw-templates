@@ -1,0 +1,129 @@
+{
+  "text": "马斯克常说，设计出一辆车很容易，难的是制造出一辆车。",
+  "words": [
+    {
+      "word": "马",
+      "startTime": 0.1,
+      "characterPosition": 0,
+      "characterCount": 1
+    },
+    {
+      "word": "斯",
+      "startTime": 0.325,
+      "characterPosition": 1,
+      "characterCount": 1
+    },
+    {
+      "word": "克",
+      "startTime": 0.525,
+      "characterPosition": 2,
+      "characterCount": 1
+    },
+    {
+      "word": "常",
+      "startTime": 0.79,
+      "characterPosition": 3,
+      "characterCount": 1
+    },
+    {
+      "word": "说",
+      "startTime": 1.075,
+      "characterPosition": 4,
+      "characterCount": 1
+    },
+    {
+      "word": "设计",
+      "startTime": 1.77,
+      "characterPosition": 6,
+      "characterCount": 2
+    },
+    {
+      "word": "出",
+      "startTime": 2.185,
+      "characterPosition": 8,
+      "characterCount": 1
+    },
+    {
+      "word": "一",
+      "startTime": 2.38,
+      "characterPosition": 9,
+      "characterCount": 1
+    },
+    {
+      "word": "辆",
+      "startTime": 2.54,
+      "characterPosition": 10,
+      "characterCount": 1
+    },
+    {
+      "word": "车",
+      "startTime": 2.755,
+      "characterPosition": 11,
+      "characterCount": 1
+    },
+    {
+      "word": "很",
+      "startTime": 2.97,
+      "characterPosition": 12,
+      "characterCount": 1
+    },
+    {
+      "word": "容易",
+      "startTime": 3.185,
+      "characterPosition": 13,
+      "characterCount": 2
+    },
+    {
+      "word": "难",
+      "startTime": 4.04,
+      "characterPosition": 16,
+      "characterCount": 1
+    },
+    {
+      "word": "的",
+      "startTime": 4.27,
+      "characterPosition": 17,
+      "characterCount": 1
+    },
+    {
+      "word": "是",
+      "startTime": 4.375,
+      "characterPosition": 18,
+      "characterCount": 1
+    },
+    {
+      "word": "制造",
+      "startTime": 4.645,
+      "characterPosition": 19,
+      "characterCount": 2
+    },
+    {
+      "word": "出",
+      "startTime": 5.06,
+      "characterPosition": 21,
+      "characterCount": 1
+    },
+    {
+      "word": "一",
+      "startTime": 5.27,
+      "characterPosition": 22,
+      "characterCount": 1
+    },
+    {
+      "word": "辆",
+      "startTime": 5.43,
+      "characterPosition": 23,
+      "characterCount": 1
+    },
+    {
+      "word": "车",
+      "startTime": 5.645,
+      "characterPosition": 24,
+      "characterCount": 1
+    }
+  ],
+  "voice": "Microsoft Huihui Desktop",
+  "engine": "Windows SAPI",
+  "purpose": "template demo narration only",
+  "duration": 6.685
+}

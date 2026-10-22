@@ -10,9 +10,16 @@ import {
   useVideoConfig,
   useCurrentFrame,
 } from "remotion";
-import {ProgressTimelineTemplate, VerticalProgressTimelineTemplate} from "../src/progress-timeline";
+import {RouteMapTemplate} from "../src/route-map";
+import {ArchiveRailTemplate,ProgressTimelineTemplate, VerticalProgressTimelineTemplate, TimelineWindowTemplate} from "../src/progress-timeline";
+import {CanvasTemplate} from "../src/mg-canvas";
+import {PartWholeTemplate} from "../src/part-whole-chart";
+import {DualAxisTemplate} from "../src/dual-axis-chart";
+import {ArgumentTemplate} from "../src/mg-argument";
+import {ImageComparisonTemplate} from "../src/image-side-by-side";
+import {ImageGraphTemplate} from "../src/image-directed-graph";
 import {TimedTableTemplate} from "../src/timed-table";
-import {DirectedGraphTemplate, RadialRelationTemplate} from "../src/directed-graph";
+import {ProductionChainTemplate,DirectedGraphTemplate, RadialRelationTemplate} from "../src/directed-graph";
 import {
   FadeTitleTemplate,
   BlurSlideTitleTemplate,
@@ -23,13 +30,13 @@ import {
   ShotcraftTitleTemplate,
   TypewriterTitleTemplate,
 } from "../src/title";
-import {EmphasisTextTemplate} from "../src/emphasis";
+import {BrushShadowText, EmphasisTextTemplate} from "../src/emphasis";
 import {NewsFlashbackTemplate} from "../src/news-flashback";
 import {XYChartTemplate} from "../src/xy-chart";
 import {MultiSeriesChartTemplate} from "../src/multi-series-chart";
 import {ContainmentTemplate} from "../src/containment";
 import {DecompositionTemplate} from "../src/decomposition";
-import {BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/weighted-comparison";
+import {EditorialScaleTemplate,BalanceComparisonTemplate, SideBySideComparisonTemplate} from "../src/weighted-comparison";
 import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
@@ -48,6 +55,10 @@ import {VideoFootageTemplate} from "../src/video-footage/VideoFootageTemplate";
 import {AiHotOpeningTemplate} from "../src/ai-hot-opening";
 import {AiHotFocusStageTemplate} from "../src/ai-hot-focus-stage";
 import {MgCutoutTemplate} from "../src/mg-cutout";
+import {CutoutCueTemplate,CutoutCueLandscapeTemplate} from "../src/cutout-cue";
+import {ImagePlateTemplate,ImagePlateLandscapeTemplate} from "../src/image-plate";
+import {SpeakerQuoteTemplate,SpeakerQuoteLandscapeTemplate} from "../src/speaker-quote";
+import {SubjectExpansionTemplate} from "../src/subject-expansion";
 import type {
   MgCompositionBounds,
   MgRenderInput,
@@ -58,9 +69,12 @@ import type {
   MgRuntimeScene,
 } from "../src/runtime";
 import {findInheritedCompositionBounds} from "../src/composition-layout";
+import {ChildMediaContext,childMediaWindows,type ChildMediaWindow} from "../src/composition-media-context";
+import {archiveVideoAmount} from "../src/progress-timeline/ArchiveRailTemplate";
 
-const ScaledCanvas = ({children, full = false}: {children: ReactNode; full?: boolean}) => {
-  const {width, height} = useVideoConfig();
+const ScaledCanvas = ({children, full = false, viewport}: {children: ReactNode; full?: boolean; viewport?: {width: number; height: number}}) => {
+  const config = useVideoConfig();
+  const {width, height} = viewport ?? config;
   const fit = Math.min(width / 1920, height / 1080);
   const scale = fit * (full ? 1 : width >= height ? 0.86 : 0.96);
   return <div style={{
@@ -76,17 +90,27 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
 }) => {
   const spec = layer.spec as never;
   switch (layer.kind) {
-    case "progress-timeline": return layer.group === "vertical" ? <VerticalProgressTimelineTemplate spec={spec} /> : <ProgressTimelineTemplate spec={spec} />;
+    case "image-plate": return layer.group==="company-landscape"?<ImagePlateLandscapeTemplate spec={spec}/>:<ImagePlateTemplate spec={spec} />;
+    case "cutout-cue": return layer.group.endsWith("-landscape")?<CutoutCueLandscapeTemplate spec={spec} group={layer.group}/>:<CutoutCueTemplate spec={spec} group={layer.group} />;
+    case "speaker-quote": return layer.group==="landscape"?<SpeakerQuoteLandscapeTemplate spec={spec}/>:<SpeakerQuoteTemplate spec={spec} />;
+    case "mg-canvas": return <CanvasTemplate spec={spec} group={layer.group} />;
+    case "part-whole-chart": return <PartWholeTemplate spec={spec} />;
+    case "dual-axis-chart": return <DualAxisTemplate spec={spec} group={layer.group} />;
+    case "mg-argument": return <ArgumentTemplate spec={spec} />;
+    case "image-side-by-side": return <ImageComparisonTemplate spec={spec} group={layer.group} />;
+    case "image-directed-graph": return <ImageGraphTemplate spec={spec} group={layer.group} />;
+    case "route-map": return <RouteMapTemplate spec={spec} />;
+    case "progress-timeline": return layer.group === "archive-rail" ? <ArchiveRailTemplate spec={spec} /> : layer.group === "content-window" ? <TimelineWindowTemplate spec={spec} /> : layer.group === "vertical" ? <VerticalProgressTimelineTemplate spec={spec} /> : <ProgressTimelineTemplate spec={spec} />;
     case "timed-table": return <TimedTableTemplate spec={spec} />;
-    case "directed-graph": return layer.group === "radial" ? <RadialRelationTemplate spec={spec} /> : <DirectedGraphTemplate spec={spec} />;
+    case "directed-graph": return layer.group === "production-chain" ? <ProductionChainTemplate spec={spec} /> : layer.group === "radial" ? <RadialRelationTemplate spec={spec} /> : <DirectedGraphTemplate spec={spec} />;
     case "xy-chart": return <XYChartTemplate spec={spec} />;
     case "multi-series-chart": return <MultiSeriesChartTemplate spec={spec} group={layer.group as "bar" | "line"} />;
     case "containment": return <ContainmentTemplate spec={spec} />;
     case "decomposition": return <DecompositionTemplate spec={spec} />;
     case "weighted-comparison": return <BalanceComparisonTemplate spec={spec} />;
-    case "side-by-side-comparison": return <SideBySideComparisonTemplate spec={spec} />;
+    case "side-by-side-comparison": return layer.group === "editorial-scale" ? <EditorialScaleTemplate spec={spec} /> : <SideBySideComparisonTemplate spec={spec} />;
     case "collage-network": return <CollageNetworkTemplate spec={spec} />;
-    case "image-stack": return <ImageStackTemplate spec={spec} />;
+    case "image-stack": return <ImageStackTemplate spec={spec} group={layer.group} />;
     case "image-grid": return <ImageGridTemplate spec={spec} />;
     case "news-report": return <NewsReportTemplate spec={spec} />;
     case "web-news-focus": return <WebNewsFocusTemplate spec={spec} />;
@@ -103,7 +127,9 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
     case "ai-hot-opening": return <AiHotOpeningTemplate spec={spec} />;
     case "ai-hot-focus-stage": return <AiHotFocusStageTemplate spec={spec} />;
     case "mg-cutout": return <MgCutoutTemplate spec={spec} />;
+    case "subject-expansion": return <SubjectExpansionTemplate spec={spec} group={layer.group as "progressive" | "impact"} />;
     case "title": {
+      if (layer.group === "brush-shadow") return <BrushShadowText spec={spec} description />;
       if (layer.group === "blur-slide") return <BlurSlideTitleTemplate spec={spec} />;
       if (layer.group === "scramble") return <ScrambleTitleTemplate spec={spec} />;
       if (layer.group === "split-flap") return <SplitFlapTitleTemplate spec={spec} />;
@@ -113,22 +139,23 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
       if (["fade", "slide", "typewriter", "random-reveal", "blur-slide", "scramble", "split-flap"].includes(layer.group)) return <FadeTitleTemplate spec={spec} />;
       return <ShotcraftTitleTemplate spec={spec} style={layer.group} transparentBackground />;
     }
-    case "emphasis": return <EmphasisTextTemplate spec={spec} />;
+    case "emphasis": return <EmphasisTextTemplate spec={spec} group={layer.group} />;
     case "news-flashback": return <NewsFlashbackTemplate spec={spec} />;
     default: throw new Error(`Unsupported template runtime kind: ${layer.kind}`);
   }
 };
 
-const RuntimeLayerCanvas = ({layer, timelineOffsetFrames, durationInFrames}: {
+const RuntimeLayerCanvas = ({layer, timelineOffsetFrames, durationInFrames, viewport}: {
   layer: MgRuntimeLayer;
   timelineOffsetFrames: number;
   durationInFrames: number;
+  viewport?: {width: number; height: number};
 }) => {
   const content = <Sequence from={-timelineOffsetFrames} layout="none">
     <RuntimeTemplate layer={layer} durationInFrames={durationInFrames} />
   </Sequence>;
-  if (layer.kind === "video-footage") return content;
-  return <ScaledCanvas full={layer.canvas === "full"}>{content}</ScaledCanvas>;
+  if (["video-footage", "image-plate", "cutout-cue", "speaker-quote"].includes(layer.kind)) return content;
+  return <ScaledCanvas full={layer.canvas === "full"} viewport={viewport}>{content}</ScaledCanvas>;
 };
 
 const Layer = ({layer}: {layer: MgRuntimeLayerPlacement}) => <Sequence
@@ -188,11 +215,15 @@ const CompositionVisibility = ({windows, children}: {
   }}>{children}</div>;
 };
 
-const NodeContent = ({node, durationInFrames, bounds}: {
+const NodeContent = ({node, durationInFrames, bounds, archiveChild=false}: {
   node: MgRuntimeCompositionNode;
   durationInFrames: number;
   bounds?: MgCompositionBounds;
+  archiveChild?: boolean;
 }) => {
+  const {width, height,fps} = useVideoConfig();
+  const localFrame=useCurrentFrame();
+  const reveal=archiveChild?archiveVideoAmount(localFrame/fps,{start:0,end:durationInFrames/fps}):1;
   const timelineOffsetFrames = node.timelineOffsetFrames ?? 0;
   const content = node.videoPath
     ? <CompositionVideo
@@ -210,6 +241,7 @@ const NodeContent = ({node, durationInFrames, bounds}: {
           layer={node.render}
           timelineOffsetFrames={timelineOffsetFrames}
           durationInFrames={durationInFrames}
+          viewport={bounds ? {width: width * bounds.width, height: height * bounds.height} : undefined}
         />
       </AbsoluteFill>
       : null;
@@ -223,12 +255,16 @@ const NodeContent = ({node, durationInFrames, bounds}: {
     height: `${bounds.height * 100}%`,
     overflow: "hidden",
     pointerEvents: "none",
+    opacity:reveal,
+    clipPath:archiveChild?`inset(0 0 0 ${(1-reveal)*100}% round 12px)`:undefined,
   }}>{content}</div>;
 };
 
-const Node = ({node, bounds}: {
+const Node = ({node, bounds,mediaWindows=[],archiveChild=false}: {
   node: MgRuntimeCompositionNode;
   bounds?: MgCompositionBounds;
+  mediaWindows?:readonly ChildMediaWindow[];
+  archiveChild?:boolean;
 }) => {
   const durationInFrames = Math.max(1, node.endFrame - node.startFrame);
   const rawActiveWindows = normalizeWindows(node.activeWindows, durationInFrames);
@@ -241,12 +277,12 @@ const Node = ({node, bounds}: {
       layout="none"
     >
       <Sequence from={-window.startFrame} layout="none">
-        <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} />
+        <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} archiveChild={archiveChild}/>
       </Sequence>
     </Sequence>)
     : rawActiveWindows
       ? null
-      : <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} />;
+      : <NodeContent node={node} durationInFrames={durationInFrames} bounds={bounds} archiveChild={archiveChild}/>;
   return <Sequence
     from={node.startFrame}
     durationInFrames={durationInFrames}
@@ -254,7 +290,7 @@ const Node = ({node, bounds}: {
     style={{zIndex: node.zIndex}}
   >
     <AbsoluteFill style={{overflow: "hidden", pointerEvents: "none"}}>
-      <CompositionVisibility windows={compositionWindows}>{content}</CompositionVisibility>
+      <ChildMediaContext.Provider value={mediaWindows}><CompositionVisibility windows={compositionWindows}>{content}</CompositionVisibility></ChildMediaContext.Provider>
     </AbsoluteFill>
   </Sequence>;
 };
@@ -274,18 +310,20 @@ const EpisodeComposition = ({episode}: {episode: MgRuntimeEpisodeInput}) => {
       nodes.map((node): [string, MgRuntimeCompositionNode] => [node.nodeId, node]),
     );
     if (nodesById.size !== nodes.length) throw new Error("MG 合成节点 nodeId 重复");
-    return nodes.map((node) => ({node, bounds: findInheritedCompositionBounds(node, nodesById)}));
-  }, [episode.nodes]);
+    return nodes.map((node) => ({node, bounds: findInheritedCompositionBounds(node, nodesById),mediaWindows:childMediaWindows(node,nodes,episode.fps),archiveChild:nodesById.get(node.parentNodeId??"")?.group==="archive-rail"||node.parentNodeId?.startsWith("progress-timeline::archive-rail::")}));
+  }, [episode.nodes,episode.fps]);
   return <AbsoluteFill style={{
     background: episode.transparentBackground ? "transparent" : "#000",
     overflow: "hidden",
   }}>
     {episode.baseFile ? <CompositionVideo videoPath={episode.baseFile} muted /> : null}
     {(episode.layers ?? []).map((layer) => <Layer key={layer.id} layer={layer} />)}
-    {placedNodes.map(({node, bounds}) => <Node
+    {placedNodes.map(({node, bounds,mediaWindows,archiveChild}) => <Node
       key={node.nodeId}
       node={node}
       bounds={bounds}
+      mediaWindows={mediaWindows}
+      archiveChild={archiveChild}
     />)}
   </AbsoluteFill>;
 };

@@ -28,7 +28,7 @@ export const emphasisParametersSchema = {
 export const emphasisFunctionDefinition = {
   type: "function",
   name: "create_emphasis_text_cue",
-  description: "Create one emphasis-text animation for an HTML group. The host supplies the annotation window; text is the exact HTML cue text. The template only scales one short sentence up and stays transparent over the original footage; it never needs images.",
+  description: "Create one transparent emphasis-text animation. The host supplies the annotation window; text is the exact HTML cue text. Group scale enlarges a short sentence. Group brush-shadow uses white brush calligraphy with yellow offset shadows: single 海/陆/空 chapter words drop from above, other headings reveal left to right. No images are needed.",
   strict: true,
   parameters: emphasisParametersSchema,
 } as const;
