@@ -93,7 +93,9 @@ test("Function Calls do not expose template-owned or pipeline-owned fields", () 
 
 test("template usage guidance covers every registered template", () => {
   const catalogTemplates = [...new Set(MG_STYLE_CATALOG.map((entry) => entry.template))];
-  assert.deepEqual(MG_TEMPLATE_USAGE.map((entry) => entry.template), catalogTemplates);
+  const usageTemplates = MG_TEMPLATE_USAGE.map((entry) => entry.template);
+  assert.equal(new Set(usageTemplates).size, usageTemplates.length, "usage entries must be unique");
+  assert.deepEqual([...usageTemplates].sort(), [...catalogTemplates].sort());
   for (const entry of MG_TEMPLATE_USAGE) {
     assert.deepEqual(Object.keys(entry).sort(), ["template", "useWhen"]);
     assert.ok(entry.useWhen.length > 0, entry.template);

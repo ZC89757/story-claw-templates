@@ -15,9 +15,20 @@ type Item = {
   isDefault?: boolean;
   useWhen: string;
   previewFile: string;
+  examples?: {label: string; file: string}[];
   layerRole: string;
   planningTools?: Tool[];
 };
+
+function TemplateVideo({item}: {item: Item}) {
+  const [src, setSrc] = useState(item.previewFile);
+  return <div className="detail-stage"><video key={src} controls playsInline src={src} />
+    {item.examples?.length ? <div style={{display:'flex',gap:12,padding:16,flexWrap:'wrap'}}>
+      <button onClick={()=>setSrc(item.previewFile)}>模板预览</button>
+      {item.examples.map(d=><button key={d.file} onClick={()=>setSrc(d.file)}>{d.label} · 完整 demo</button>)}
+    </div> : null}
+  </div>;
+}
 
 const keyOf = (item: Item) => `${item.template}::${item.style}`;
 
@@ -106,7 +117,7 @@ function Gallery({catalog}: {catalog: Item[]}) {
     return <main className="detail-main">
       <button className="back" onClick={() => setSelected(null)}>← 返回模板列表</button>
       <div className="detail-layout">
-        <div className="detail-stage"><video controls playsInline src={selected.previewFile} /></div>
+        <TemplateVideo key={keyOf(selected)} item={selected} />
         <article className="detail-panel">
           <div className="eyebrow">{selected.category} · {selected.layerRole}</div>
           <h2>{selected.name}</h2>

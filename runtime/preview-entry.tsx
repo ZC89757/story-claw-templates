@@ -1,3 +1,5 @@
+import {GenericProductionTemplate, GenericNumericTemplate} from "../src/documentary-generic";
+import {genericPreviewProduction, genericPreviewNumeric, genericPreviewCounts} from "../src/documentary-generic/demos";
 import {
   AbsoluteFill,
   Audio,
@@ -383,6 +385,9 @@ const MgCutoutDemoPlate = () => {
 const Preview = ({previewKind, style}: PreviewProps) => {
   let content: ReactNode;
   switch (previewKind) {
+    case "generic-production": content=<GenericProductionTemplate spec={genericPreviewProduction}/>;break;
+    case "generic-numeric": content=<GenericNumericTemplate spec={genericPreviewNumeric}/>;break;
+    case "generic-counts": content=<GenericNumericTemplate spec={genericPreviewCounts}/>;break;
     case "documentary-timeline": content=<><ArchiveRailTemplate spec={documentaryTimelineSpec} mediaWindow={documentaryDemoMeta.carWindow} media={<Sequence from={documentaryDemoMeta.carFromFrame} durationInFrames={documentaryDemoMeta.carDurationFrames} layout="none"><OffthreadVideo muted src={staticFile("documentary-demos/roadster.mp4")} style={{width:"100%",height:"100%",objectFit:"cover"}}/></Sequence>}/><Audio src={staticFile("documentary-demos/timeline.wav")}/></>;break;
     case "documentary-price": content=<><EditorialScaleTemplate spec={documentaryPriceSpec}/><Audio src={staticFile("documentary-demos/price.wav")}/></>;break;
     case "documentary-config": content=<><EditorialScaleTemplate spec={documentaryConfigSpec}/><Audio src={staticFile("documentary-demos/config.wav")}/></>;break;
@@ -477,7 +482,7 @@ const Root = () => <Composition
   calculateMetadata={({props}) => ({
     width: props.previewKind.startsWith("documentary-") ? 1280 : 960,
     height: props.previewKind.startsWith("documentary-") ? 720 : 540,
-    durationInFrames: props.previewKind.startsWith("documentary-") ? documentaryDemoMeta.durations[props.previewKind as keyof typeof documentaryDemoMeta.durations] : ["cutout-cue-duo","cutout-cue-duo-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.founders*30):["cutout-cue-pop","cutout-cue-pop-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.partnership*30):["speaker-quote-portrait","speaker-quote-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.quote*30):["canvas-path-follow", "canvas-subject-detail", "part-whole-pie", "dual-axis-overlay", "argument-evidence-gap", "image-comparison", "image-graph", "timeline-content-window"].includes(props.previewKind) ? 360 : props.previewKind === "ai-hot-opening-color-orb"
+    durationInFrames: props.previewKind.startsWith("generic-") ? 300 : props.previewKind.startsWith("documentary-") ? documentaryDemoMeta.durations[props.previewKind as keyof typeof documentaryDemoMeta.durations] : ["cutout-cue-duo","cutout-cue-duo-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.founders*30):["cutout-cue-pop","cutout-cue-pop-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.partnership*30):["speaker-quote-portrait","speaker-quote-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.quote*30):["canvas-path-follow", "canvas-subject-detail", "part-whole-pie", "dual-axis-overlay", "argument-evidence-gap", "image-comparison", "image-graph", "timeline-content-window"].includes(props.previewKind) ? 360 : props.previewKind === "ai-hot-opening-color-orb"
       ? 210
       : props.previewKind === "ai-hot-focus-stage" ? 630
         : props.previewKind === "subject-expansion-progressive" ? 480

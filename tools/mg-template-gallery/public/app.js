@@ -7,7 +7,11 @@
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -24491,6 +24495,19 @@
   var import_react = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+  function TemplateVideo({ item }) {
+    const [src, setSrc] = (0, import_react.useState)(item.previewFile);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "detail-stage", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", { controls: true, playsInline: true, src }, src),
+      item.examples?.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 12, padding: 16, flexWrap: "wrap" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => setSrc(item.previewFile), children: "\u6A21\u677F\u9884\u89C8" }),
+        item.examples.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => setSrc(d.file), children: [
+          d.label,
+          " \xB7 \u5B8C\u6574 demo"
+        ] }, d.file))
+      ] }) : null
+    ] });
+  }
   var keyOf = (item) => `${item.template}::${item.style}`;
   async function writeClipboard(value) {
     if (navigator.clipboard?.writeText) {
@@ -24574,7 +24591,7 @@
       return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: "detail-main", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "back", onClick: () => setSelected(null), children: "\u2190 \u8FD4\u56DE\u6A21\u677F\u5217\u8868" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "detail-layout", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "detail-stage", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", { controls: true, playsInline: true, src: selected.previewFile }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TemplateVideo, { item: selected }, keyOf(selected)),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "detail-panel", children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "eyebrow", children: [
               selected.category,

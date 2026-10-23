@@ -6,6 +6,8 @@ export type MgTemplateUsage = Readonly<{
 }>;
 
 export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
+  {template: "production-chain", useWhen: "多个参与方在有方向的阶段中协作，需要具体主体图、流转与可选部件按 appearAt 出现、mergeAt 融合；source.method 决定读取或生图，background.transparent 决定去背景；参与方、图片、关系由内容提供，不固定行业。一般回路继续用 image-directed-graph。"},
+  {template: "numeric-comparison", useWhen: "同一口径两对象数值比较，需主体图或数量阵列；绝对值共用单位，相对倍数明确基准；不得从句子猜精确价格。新项目优先于旧汽车 editorial-scale。"},
   {template: "image-plate", useWhen: "需要真实企业或场景静态图片作为底层，并在其上嵌套透明人物；16:9横屏用company-landscape，原company兼容保留；静态图片不做慢推"},
   {template: "cutout-cue", useWhen: "人物先左后右出现或品牌Logo点名弹入；16:9横屏用duo-landscape/pop-landscape，原duo/pop保留；两版参数相同，透明前景必须与真实人物/品牌对应"},
   {template: "speaker-quote", useWhen: "人物画像与观点按真实字级配音时间显示；16:9横屏用landscape，原portrait保留；译述或概括标为观点转述"},

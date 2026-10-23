@@ -149,6 +149,9 @@ const SHOTCRAFT_EFFECT_STYLES = makeShotcraftEntries(
 );
 
 export const MG_STYLE_CATALOG = Object.freeze([
+  {template:"production-chain",htmlTag:"production-chain",style:"production-chain",name:"纪录片 · 通用分工",structureName:"分工流程",category:"关系",renderMode:"replace",description:"由参与方、主体图与流向驱动的立体陈列。保持银灰舞台与蓝红动线；部件可选展开，无默认行业。",previewKind:"generic-production",isDefault:true},
+  {template:"numeric-comparison",htmlTag:"numeric-comparison",style:"editorial-scale",name:"纪录片 · 主体数值比较",structureName:"数值比较",category:"对比",renderMode:"replace",description:"两侧主体图与明确数值；支持同单位绝对量或相对倍数，边界值不画精确比例条。",previewKind:"generic-numeric",isDefault:true},
+  {template:"numeric-comparison",htmlTag:"numeric-comparison",style:"editorial-counts",name:"纪录片 · 数量阵列",structureName:"数值比较",category:"对比",renderMode:"replace",description:"结构化数量和每格单位，支持部分格和上下界。不读取文字关键词决定图形。",previewKind:"generic-counts",isDefault:false},
   {template:"progress-timeline",htmlTag:"progress-timeline",style:"archive-rail",name:"汽车工程 · 年份定位",structureName:"时间进度条",category:"引导",renderMode:"replace",description:"刻度横移、急刹定位与年份推近；多节点承接红色进度，间隔恢复原视频。相关口播开始才展开实拍窗口，结束收起；当前年份各显示一次，四角无碎字。",previewKind:"documentary-timeline",isDefault:false},
   {template:"side-by-side-comparison",htmlTag:"side-by-side-comparison",style:"editorial-scale",name:"汽车工程 · 实体对照",structureName:"左右对比",category:"对比",renderMode:"replace",description:"汽车价格用车辆示意与斜纹实体化比例槽，配置规模用有厚度的点阵；数值和统计口径各出现一次，不根据倍数编造精确价格。",previewKind:"documentary-price",isDefault:false},
   {template:"directed-graph",htmlTag:"directed-graph",style:"production-chain",name:"汽车工程 · 立体工位",structureName:"有向关系图",category:"关系",renderMode:"replace",description:"立体厂房、电芯与车体构件按口播进入，物料转移、部件悬停后归位；机构颜色图例各一次，职责清楚、四角无碎字。",previewKind:"documentary-factory",isDefault:false},

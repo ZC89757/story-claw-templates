@@ -1,3 +1,5 @@
+import {prepareDocumentaryImages} from "./documentary-generic/assets";
+import {productionFunctionDefinition, numericFunctionDefinition, resolveProduction, resolveNumeric, type ProductionSpec, type NumericSpec} from "./documentary-generic/schema";
 import {assertFunctionTiming, type FunctionCallTiming} from "./function-call.js";
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
@@ -289,6 +291,8 @@ const resolveEraShiftCall = (input: unknown, timing: FunctionCallTiming): Resolv
 };
 
 const bindings: readonly Binding[] = Object.freeze([
+  {name: productionFunctionDefinition.name, label: "通用分工流程", template: "production-chain", definition: productionFunctionDefinition, resolve: resolveProduction, elementAts: args => [...(args.stages ?? []).flatMap((s: any) => [s.at, ...(s.parts ?? []).flatMap((p: any) => [p.appearAt, p.mergeAt])]), ...(args.links ?? []).map((s: any) => s.at)], groups: ["production-chain"]},
+  {name: numericFunctionDefinition.name, label: "通用数值比较", template: "numeric-comparison", definition: numericFunctionDefinition, resolve: resolveNumeric, elementAts: args => [args.left.at, args.right.at], groups: ["editorial-scale", "editorial-counts"]},
   {name:routeMapFunctionDefinition.name,label:"全球供应链路线地图",template:"route-map",definition:routeMapFunctionDefinition,resolve:(input,timing)=>resolveRouteMapFunctionArgs(input as never,timing),elementAts:args=>[...(args.stops??[]).map((s:any)=>s.at),...(args.routes??[]).map((r:any)=>r.at)],groups:["supply-chain"]},
   {name: imagePlateFunctionDefinition.name, label: "公司静态图片底层", template: "image-plate", definition: imagePlateFunctionDefinition, resolve: resolveImagePlateFunctionArgs, elementAts: elementAts.root, groups: ["company","company-landscape"]},
   {name: cutoutCueFunctionDefinition.name, label: "抠图主体按点名入场", template: "cutout-cue", definition: cutoutCueFunctionDefinition, resolve: resolveCutoutCueFunctionArgs, elementAts: elementAts.cueItems, minDurationSeconds: 1.75, groups: ["duo","pop","duo-landscape","pop-landscape"]},
@@ -377,6 +381,8 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
   if (template === "progress-timeline" && group === "vertical") return "#191d21";
   if (template === "directed-graph" && group === "radial") return "#f4f0e8";
   const backgrounds: Record<MgTemplateName, string> = {
+    "production-chain": "#e5ebee",
+    "numeric-comparison": "#e5ebee",
     "image-plate": "#162126",
     "cutout-cue": "transparent",
     "speaker-quote": "#111c24",
@@ -424,7 +430,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
 };
 
 /** 这些模板自带整屏画面，必须是 full canvas 而不是 safe 内缩画布。 */
-const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["route-map", "image-plate", "speaker-quote", "video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus", "web-page-focus", "subject-expansion"]);
+const FULL_CANVAS_TEMPLATES = new Set<MgTemplateName>(["production-chain", "numeric-comparison", "route-map", "image-plate", "speaker-quote", "video-footage", "news-flashback", "ai-hot-focus-stage", "web-news-focus", "web-page-focus", "subject-expansion"]);
 
 const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown): MgRuntimeLayer => {
   const descriptor = descriptorByHtmlTag.get(htmlTagByTemplate.get(template) ?? "");
@@ -745,6 +751,24 @@ const prepareLayerAssets = async (
       items.push({...item,image:assertMgCutoutRiseSpec(cutout.spec).image});
     }
     layer.spec=assertCutoutCueSpec({items,prepared:true});
+    return;
+  }
+  if (layer.kind === "production-chain") {
+    const spec = layer.spec as ProductionSpec;
+    if (spec.prepared) return;
+    const stages = [];
+    for (const stage of spec.stages) {
+      const images = await prepareDocumentaryImages([stage.source, ...stage.parts.map(p => p.source)], resolveImage, publicRoot, context);
+      stages.push({...stage, image: images[0]!, parts: stage.parts.map((p, i) => ({...p, image: images[i + 1]!}))});
+    }
+    layer.spec = {...spec, stages, prepared: true};
+    return;
+  }
+  if (layer.kind === "numeric-comparison") {
+    const spec = layer.spec as NumericSpec;
+    if (spec.prepared) return;
+    const images = await prepareDocumentaryImages([spec.left.source, spec.right.source], resolveImage, publicRoot, context);
+    layer.spec = {...spec, left: {...spec.left, image: images[0]}, right: {...spec.right, image: images[1]}, prepared: true};
     return;
   }
   if (layer.kind === "mg-canvas" || layer.kind === "image-directed-graph" || layer.kind === "image-side-by-side") {
@@ -1230,6 +1254,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
       copyDirectoryIfPresent(path.join(publicRoot, "audio"), path.join(targetPublicDir, "audio")),
       copyDirectoryIfPresent(path.join(publicRoot, "people-cues"), path.join(targetPublicDir, "people-cues")),
       copyDirectoryIfPresent(path.join(publicRoot, "documentary-design-v3"), path.join(targetPublicDir, "documentary-design-v3")),
+      copyDirectoryIfPresent(path.join(publicRoot, "generic-documentary"), path.join(targetPublicDir, "generic-documentary")),
       copyDirectoryIfPresent(path.join(publicRoot, "era-shift"), path.join(targetPublicDir, "era-shift")),
       copyDirectoryIfPresent(path.join(publicRoot, "mg-effect"), path.join(targetPublicDir, "mg-effect")),
       copyDirectoryIfPresent(path.join(publicRoot, "video-footage", "sources"), path.join(targetPublicDir, "video-footage", "sources")),

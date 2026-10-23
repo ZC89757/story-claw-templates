@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "sourceHash": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5",
-  "generatedAt": "2026-10-22T13:13:01.338Z",
+  "sourceHash": "e7028feb47aae70ff56a4b21c42d57404b23e0b534faffc5025bb7a0bd78b024",
+  "generatedAt": "2026-10-23T13:39:56.897Z",
   "files": [
     "examples/abstract-relations.spec.json",
     "examples/ai-company-network.spec.json",
@@ -77,6 +77,13 @@
     "src/directed-graph/types.ts",
     "src/directed-graph/validate.ts",
     "src/documentary-design.tsx",
+    "src/documentary-generic/NumericTemplate.tsx",
+    "src/documentary-generic/ProductionTemplate.tsx",
+    "src/documentary-generic/assets.ts",
+    "src/documentary-generic/demos.ts",
+    "src/documentary-generic/index.ts",
+    "src/documentary-generic/schema.ts",
+    "src/documentary-generic/source.ts",
     "src/documentary-motion.ts",
     "src/documentary-previews.ts",
     "src/dual-axis-chart/DualAxisTemplate.tsx",
@@ -138,6 +145,8 @@
     "src/image-stack/types.ts",
     "src/image-stack/validate.ts",
     "src/index.ts",
+    "src/legacy-documentary/EditorialScaleTemplate.tsx",
+    "src/legacy-documentary/ProductionChainTemplate.tsx",
     "src/logo-assets.ts",
     "src/metric/EditorialMetricTemplate.tsx",
     "src/metric/MetricTemplate.tsx",
@@ -554,6 +563,9 @@
     "progress-timeline-archive-rail.mp4": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5",
     "side-by-side-comparison-editorial-scale.mp4": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5",
     "directed-graph-production-chain.mp4": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5",
-    "route-map-supply-chain.mp4": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5"
+    "route-map-supply-chain.mp4": "d8b642e9b4f18c6da4b10f5009b22d5cf78c97119df5457048dadad56ecf7ec5",
+    "production-chain-production-chain.mp4": "e7028feb47aae70ff56a4b21c42d57404b23e0b534faffc5025bb7a0bd78b024",
+    "numeric-comparison-editorial-scale.mp4": "e7028feb47aae70ff56a4b21c42d57404b23e0b534faffc5025bb7a0bd78b024",
+    "numeric-comparison-editorial-counts.mp4": "e7028feb47aae70ff56a4b21c42d57404b23e0b534faffc5025bb7a0bd78b024"
   }
 }

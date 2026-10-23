@@ -1,3 +1,4 @@
+import {GenericProductionTemplate, GenericNumericTemplate} from "../src/documentary-generic";
 import {useMemo, type ReactNode} from "react";
 import {
   AbsoluteFill,
@@ -90,6 +91,8 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
 }) => {
   const spec = layer.spec as never;
   switch (layer.kind) {
+    case "production-chain": return <GenericProductionTemplate spec={spec} />;
+    case "numeric-comparison": return <GenericNumericTemplate spec={spec} />;
     case "image-plate": return layer.group==="company-landscape"?<ImagePlateLandscapeTemplate spec={spec}/>:<ImagePlateTemplate spec={spec} />;
     case "cutout-cue": return layer.group.endsWith("-landscape")?<CutoutCueLandscapeTemplate spec={spec} group={layer.group}/>:<CutoutCueTemplate spec={spec} group={layer.group} />;
     case "speaker-quote": return layer.group==="landscape"?<SpeakerQuoteLandscapeTemplate spec={spec}/>:<SpeakerQuoteTemplate spec={spec} />;

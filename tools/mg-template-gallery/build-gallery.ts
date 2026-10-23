@@ -57,6 +57,7 @@ const makeCatalog = (previewBase: string) => {
     ...entry,
     useWhen: usageByTemplate.get(entry.template) ?? "原文存在适合该动画结构的明确语义",
     previewFile: `${previewBase}/${entry.template}-${entry.style}.mp4`,
+    examples: ["production-chain", "numeric-comparison"].includes(entry.template) ? [{label:"汽车",id:"automotive"},{label:"半导体",id:"semiconductor"},{label:"咖啡",id:"coffee"}].map(d=>({label:d.label,file:`${previewBase}/documentary-demo-${d.id}.mp4`})) : [],
     layerRole: entry.renderMode === "overlay" ? "overlay" : "scene",
     planningTools: provider.getPlanningTools([entry.htmlTag]).map((tool) => ({
       name: tool.name,

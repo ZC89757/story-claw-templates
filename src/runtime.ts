@@ -1,4 +1,6 @@
 export type MgTemplateName =
+  | "production-chain"
+  | "numeric-comparison"
   | "image-plate"
   | "cutout-cue"
   | "speaker-quote"

@@ -43,3 +43,5 @@ export * from "./cutout-cue";
 export * from "./image-plate";
 export * from "./speaker-quote";
 export * from "./route-map";
+
+export * from "./documentary-generic/index";
