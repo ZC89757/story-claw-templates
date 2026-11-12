@@ -113,9 +113,10 @@ import {newsFlashbackPlanningInstructions} from "./news-flashback/prompt.js";
 import {newsReportFunctionDefinition, resolveNewsReportFunctionArgs} from "./news-report/schema.js";
 import {newsReportPlanningInstructions} from "./news-report/prompt.js";
 import {webNewsFocusFunctionDefinition, resolveWebNewsFocusFunctionArgs} from "./web-news-focus/schema.js";
-import {WEB_NEWS_FOCUS_GROUP, type WebNewsFocusSpec} from "./web-news-focus/types.js";
+import {WEB_NEWS_FOCUS_GROUPS, type WebNewsFocusSpec} from "./web-news-focus/types.js";
 import {webNewsFocusPlanningInstructions} from "./web-news-focus/prompt.js";
 import {captureWebNewsFocus} from "./web-news-focus/capture.js";
+import {capturePaperNewsFocus} from "./web-news-focus/paper-capture.js";
 import {assertWebNewsFocusSpec} from "./web-news-focus/validate.js";
 import {webPageFocusFunctionDefinition, resolveWebPageFocusFunctionArgs} from "./web-page-focus/schema.js";
 import {WEB_PAGE_FOCUS_GROUP, type WebPageFocusSpec} from "./web-page-focus/types.js";
@@ -330,7 +331,7 @@ const bindings: readonly Binding[] = Object.freeze([
   {name: imageStackFunctionDefinition.name, label: "图片叠加", template: "image-stack", definition: imageStackFunctionDefinition, resolve: (input, timing) => resolveImageStackFunctionArgs(input as never, timing), elementAts: elementAts.images},
   {name: imageGridFunctionDefinition.name, label: "图片并列", template: "image-grid", definition: imageGridFunctionDefinition, resolve: (input, timing) => resolveImageGridFunctionArgs(input as never, timing), elementAts: elementAts.images},
   {name: newsReportFunctionDefinition.name, label: "新闻报道纸张", template: "news-report", definition: newsReportFunctionDefinition, resolve: (input, timing) => resolveNewsReportFunctionArgs(input as never, timing), elementAts: elementAts.root},
-  {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input, timing) => resolveWebNewsFocusFunctionArgs(input as never, timing), elementAts: elementAts.webNewsFocus, groups: [WEB_NEWS_FOCUS_GROUP]},
+  {name: webNewsFocusFunctionDefinition.name, label: "网页重点跟随", template: "web-news-focus", definition: webNewsFocusFunctionDefinition, resolve: (input, timing) => resolveWebNewsFocusFunctionArgs(input as never, timing), elementAts: elementAts.webNewsFocus, groups: [...WEB_NEWS_FOCUS_GROUPS]},
   {name: webPageFocusFunctionDefinition.name, label: "网页重点推近", template: "web-page-focus", definition: webPageFocusFunctionDefinition, resolve: (input, timing) => resolveWebPageFocusFunctionArgs(input as never, timing), elementAts: elementAts.webPageFocus, groups: [WEB_PAGE_FOCUS_GROUP]},
   {name: eraShiftFunctionDefinition.name, label: "策略转向", template: "era-shift", definition: eraShiftFunctionDefinition, resolve: resolveEraShiftCall, elementAts: elementAts.eraShift},
   {name: mgCutoutRiseFunctionDefinition.name, label: "透明主体上升", template: "mg-cutout", minDurationSeconds: MG_CUTOUT_MIN_DURATION_SECONDS, definition: mgCutoutRiseFunctionDefinition, resolve: (input, timing) => resolveMgCutoutRiseFunctionArgs(input as never, timing), elementAts: elementAts.mgCutoutRise, groups: [MG_CUTOUT_GROUP]},
@@ -381,11 +382,11 @@ const descriptorByHtmlTag = new Map(descriptors.map((descriptor) => [descriptor.
 const bindingByName = new Map(bindings.map((binding) => [binding.name, binding]));
 
 const backgroundFor = (template: MgTemplateName, group: string): string => {
+  if (isPortraitTemplate(template)) return portraitCatalogEntry(template)?.renderMode === "overlay" ? "transparent" : "#080a0f";
   if ((template === "progress-timeline" && group === "archive-rail") || (template === "side-by-side-comparison" && group === "editorial-scale") || (template === "directed-graph" && group === "production-chain")) return "#e5ebee";
   if (template === "image-stack" && group === "editorial-focus") return "#101b20";
   if (template === "progress-timeline" && group === "vertical") return "#191d21";
   if (template === "directed-graph" && group === "radial") return "#f4f0e8";
-  if (isPortraitTemplate(template)) return portraitCatalogEntry(template)?.renderMode === "overlay" ? "transparent" : "#080a0f";
   const backgrounds: Partial<Record<MgTemplateName, string>> = {
     "production-chain": "#e5ebee",
     "numeric-comparison": "#e5ebee",
@@ -511,6 +512,7 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.sele
 ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.groups.join("、")}`).join("\n")}
 
 标注协议：
+- <mg-v-*> 标签只用于9:16竖屏，group="portrait"，每个实例用 mode="together" 覆盖完整效果范围；values 只列正文里实际出现的内容锚点，媒体路径、网页地址和秒数留到规划阶段填写。item-cards、comment-panels、cutout-collage、document-highlight 是透明叠加，必须位于实际视频底片的范围内；其他 mg-v-* 自带场景。不要把同一竖屏模板拆成横屏旧模板拼接。
 - <article> 内只能保留原文文本节点和本 Provider 注册的自定义标签；禁止使用 p、div、span、br、strong 等原生 HTML 正文标签
 - 必须逐字保留原文及其换行，不得为排版添加、删除或移动空白，也不得自行增加标题、加粗或段落样式
 - group 必须从该标签的可用 group 中选择；首次生成使用默认样式：${defaultGroups()}
@@ -535,6 +537,7 @@ ${descriptors.map((descriptor) => `- <${descriptor.htmlTag}>：${descriptor.grou
 - <mg-effect group="object-drop"> 只用于正文明确出现产品或实体物体落下/砸落的节点；<mg-effect group="glass-fracture"> 只用于计划、方案或屏幕明确失败/破碎的节点。图片在后续规划阶段从模板固定目录选择，标注 HTML 不写 image。
 - <news-flashback group="project"> 用于“这句话有公开报道为证”的节点：规划阶段会先联网检索真实网页截图再生成动画；标注 HTML 只写标签和原文，不写 pages。它是整屏画面，会盖住该时间窗口内的原画，一段原文只标注一次。
 - <web-news-focus group="focus"> 用于“直接阅读真实报道并跟随页面重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、highlights、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择重点短语，并把高亮时间对齐清稿中对应语义。
+- <web-news-focus group="paper-focus"> 是同一网页重点标签的纸页证据样式：整页展示、倾斜下沉后推近、蓝底白字横向选中；参数、来源规则、原文保留及时间定位与 focus 相同。
 - <web-page-focus group="focus"> 用于“直接阅读可靠官网、公告、技术博客、产品文档或研究页面并跟随重点”的节点：标注 HTML 只写标签和清稿原文，不写 url、focus、entrance 或坐标；规划阶段搜索 canonical URL、读取所选网页正文，从网页中逐字选择定位短语，并把推近时间对齐清稿中对应语义；该模板不显示高亮、下划线或勾选。
 - <mg-title>、<emphasis> 和 <news-flashback> 的单个动画实例只能包裹一段文字`;
 
@@ -1038,7 +1041,8 @@ const prepareLayerAssets = async (
     let capture;
     try {
       const snapshotPath = await requireWebSnapshot(spec.url, webSnapshotDirectory);
-      capture = await captureWebNewsFocus({
+      const capturePage = layer.group === "paper-focus" ? capturePaperNewsFocus : captureWebNewsFocus;
+      capture = await capturePage({
         url: spec.url,
         highlights: spec.highlights.map((highlight) => highlight.text),
         snapshotPath,
@@ -1274,8 +1278,8 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   },
   copyRuntimeAssets: async (targetPublicDir) => {
     await Promise.all([
-      copyDirectoryIfPresent(path.join(publicRoot, "ai-company-logos"), path.join(targetPublicDir, "ai-company-logos")),
       copyDirectoryIfPresent(path.join(publicRoot, "portrait-mg"), path.join(targetPublicDir, "portrait-mg")),
+      copyDirectoryIfPresent(path.join(publicRoot, "ai-company-logos"), path.join(targetPublicDir, "ai-company-logos")),
       copyDirectoryIfPresent(path.join(publicRoot, "audio"), path.join(targetPublicDir, "audio")),
       copyDirectoryIfPresent(path.join(publicRoot, "people-cues"), path.join(targetPublicDir, "people-cues")),
       copyDirectoryIfPresent(path.join(publicRoot, "documentary-design-v3"), path.join(targetPublicDir, "documentary-design-v3")),

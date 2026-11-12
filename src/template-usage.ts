@@ -32,7 +32,7 @@ export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
   {template: "image-stack", useWhen: "多个具体图片或截图需要按顺序逐层展示"},
   {template: "image-grid", useWhen: "多个具体图片或截图需要在同一画面并列展示"},
   {template: "news-report", useWhen: "一段新闻报道需要用多张真实网页截图像纸张一样逐张摞起展示，且不需要中心标题"},
-  {template: "web-news-focus", useWhen: "需要直接阅读国内外主流新闻媒体原报道，并在清稿对应语义出现时高亮网页中的原话、推近和跟随镜头；公司公告、个人博客和社交帖子不适用"},
+  {template: "web-news-focus", useWhen: "需要直接阅读国内外主流新闻媒体原报道，并在清稿对应语义出现时高亮网页中的原话、推近和跟随镜头；focus 为浏览器窗口，paper-focus 为倾斜纸页、蓝底白字证据聚焦，两组参数相同；公司公告、个人博客和社交帖子不适用"},
   {template: "web-page-focus", useWhen: "需要直接阅读公司官网、官方公告、技术博客、产品文档或研究机构网页，并在重点出现时推近和跟随，但不需要高亮、下划线或勾选"},
   {template: "era-shift", useWhen: "原文解释一个公司、产品或产业发生明确的策略转向，适合用固定或按人物参考图生成的前景叠在两套代码生成的背景生态上，并在明确节点切换背景"},
   {template: "subject-expansion", useWhen: "围绕同一个主体逐步解释使用者、商业对象或约束条件；对象保留并按语义重新聚焦。progressive 平滑展开，impact 以翻牌拍桌、短震感和低频重拍建立节奏。两组共用参数。适合关系累积，不适合两方对比或任意因果图。支持透明主体图及独立时段的嵌套素材"},

@@ -1,0 +1,412 @@
+[
+  {
+    "id": "V01_001",
+    "function": "create_portrait_torn_split",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "upper": [
+        {
+          "media": {
+            "source": "assets/upper-a.mp4",
+            "sourceStart": 0
+          },
+          "at": 120
+        },
+        {
+          "media": {
+            "source": "assets/upper-b.mp4",
+            "sourceStart": 0
+          },
+          "at": 125
+        }
+      ],
+      "lower": {
+        "source": "assets/lower.mp4",
+        "sourceStart": 0
+      },
+      "title": "台前幕后"
+    }
+  },
+  {
+    "id": "V01_002",
+    "function": "create_portrait_picture_in_picture",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "background": {
+        "source": "assets/backdrop.jpg",
+        "sourceStart": null
+      },
+      "clips": [
+        {
+          "media": {
+            "source": "assets/portrait-a.mp4",
+            "sourceStart": 0
+          },
+          "at": 120
+        },
+        {
+          "media": {
+            "source": "assets/portrait-b.mp4",
+            "sourceStart": 0
+          },
+          "at": 125
+        }
+      ]
+    }
+  },
+  {
+    "id": "V01_003",
+    "function": "create_portrait_dual_window",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "upper": {
+        "media": {
+          "source": "assets/comparison-a.mp4",
+          "sourceStart": 0
+        },
+        "at": 121
+      },
+      "lower": {
+        "media": {
+          "source": "assets/comparison-b.mp4",
+          "sourceStart": 0
+        },
+        "at": 121.5
+      }
+    }
+  },
+  {
+    "id": "V01_005",
+    "function": "create_portrait_item_cards",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "cards": [
+        {
+          "image": "assets/item-a.png",
+          "text": "轻量机身",
+          "at": 121
+        },
+        {
+          "image": "assets/item-b.png",
+          "text": "长续航电池",
+          "at": 124
+        }
+      ]
+    }
+  },
+  {
+    "id": "V01_006",
+    "function": "create_portrait_comment_panels",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "panels": [
+        {
+          "layout": "wide",
+          "comments": [
+            {
+              "text": "这个过程解释得很清楚。",
+              "author": null,
+              "avatar": null
+            }
+          ],
+          "at": 121
+        },
+        {
+          "layout": "tall",
+          "comments": [
+            {
+              "text": "想看进一步的对比。",
+              "author": "示例读者",
+              "avatar": null
+            }
+          ],
+          "at": 125
+        }
+      ]
+    }
+  },
+  {
+    "id": "V01_007",
+    "function": "create_portrait_vertical_relation",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "nodes": [
+        {
+          "media": {
+            "source": "assets/person.png",
+            "sourceStart": null
+          },
+          "label": "发起者",
+          "at": 120
+        },
+        {
+          "media": {
+            "source": "assets/team.png",
+            "sourceStart": null
+          },
+          "label": "执行团队",
+          "at": 124
+        }
+      ]
+    }
+  },
+  {
+    "id": "V03_001",
+    "function": "create_portrait_cutout_collage",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "people": [
+        {
+          "image": "assets/person-left.png",
+          "at": 120
+        },
+        {
+          "image": "assets/person-right.png",
+          "at": 121
+        }
+      ]
+    }
+  },
+  {
+    "id": "V04_001",
+    "function": "create_portrait_person_profile",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "portraitImage": "assets/profile.png",
+      "cards": [
+        {
+          "image": "assets/achievement-a.jpg",
+          "text": "代表作品",
+          "at": 122
+        },
+        {
+          "image": "assets/achievement-b.jpg",
+          "text": "重要成果",
+          "at": 125
+        }
+      ],
+      "headline": {
+        "text": "持续探索新的方向",
+        "at": 128
+      }
+    }
+  },
+  {
+    "id": "V04_002",
+    "function": "create_portrait_page_perspective",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "url": "https://example.com/article",
+      "focusText": null
+    }
+  },
+  {
+    "id": "V05_001",
+    "function": "create_portrait_archive_window",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "background": {
+        "source": "assets/background.mp4",
+        "sourceStart": 0
+      },
+      "archive": {
+        "source": "assets/archive.mp4",
+        "sourceStart": 4
+      }
+    }
+  },
+  {
+    "id": "V05_002",
+    "function": "create_portrait_filmstrip",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "clips": [
+        {
+          "media": {
+            "source": "assets/film-a.mp4",
+            "sourceStart": 0
+          },
+          "at": 120
+        },
+        {
+          "media": {
+            "source": "assets/film-b.mp4",
+            "sourceStart": 2
+          },
+          "at": 125
+        }
+      ]
+    }
+  },
+  {
+    "id": "V07_003",
+    "function": "create_portrait_document_highlight",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "url": "https://example.com/report",
+      "excerpt": {
+        "text": "示例摘录文字",
+        "at": 122
+      },
+      "highlights": [
+        {
+          "text": "示例重点原文",
+          "at": 126
+        }
+      ]
+    }
+  },
+  {
+    "id": "V10_004",
+    "function": "create_portrait_ink_title",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "text": "看清变化"
+    }
+  },
+  {
+    "id": "V10_005",
+    "function": "create_portrait_process_correction",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "subject": {
+        "image": "assets/subject.jpg",
+        "label": "处理流程"
+      },
+      "rejected": {
+        "text": "只看单一环节",
+        "at": 122
+      },
+      "replacement": {
+        "text": "关注完整链路",
+        "at": 126
+      }
+    }
+  },
+  {
+    "id": "V11_001",
+    "function": "create_portrait_flash_cutout",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "image": "assets/cutout.png",
+      "background": {
+        "source": "assets/background.mp4",
+        "sourceStart": 0
+      }
+    }
+  },
+  {
+    "id": "V11_002",
+    "function": "create_portrait_gradient_dual_card",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "cards": [
+        {
+          "text": "投入阶段",
+          "at": 120
+        },
+        {
+          "text": "回报阶段",
+          "at": 124
+        }
+      ]
+    }
+  },
+  {
+    "id": "V12_001",
+    "function": "create_portrait_rotating_document",
+    "hostTiming": {
+      "start": 120,
+      "end": 132
+    },
+    "arguments": {
+      "group": "portrait",
+      "order": null,
+      "coverImage": "assets/cover.png",
+      "body": {
+        "image": "assets/body.png",
+        "at": 129
+      }
+    }
+  }
+]

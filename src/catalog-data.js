@@ -437,6 +437,18 @@ export const MG_STYLE_CATALOG = Object.freeze([
     isDefault: true,
   },
   {
+    template: "web-news-focus",
+    htmlTag: "web-news-focus",
+    style: "paper-focus",
+    name: "纸页证据聚焦",
+    structureName: "纸页透视重点",
+    category: "素材",
+    renderMode: "replace",
+    description: "真实网页纸页从整页倾斜推近，蓝底白字连续选中重点；沿用网页重点跟随的参数和定位逻辑。",
+    previewKind: "web-news-paper-focus",
+    isDefault: false,
+  },
+  {
     template: "web-page-focus",
     htmlTag: "web-page-focus",
     style: "focus",

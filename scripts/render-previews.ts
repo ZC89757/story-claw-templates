@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 import {bundle} from "@remotion/bundler";
 import {renderMedia, selectComposition} from "@remotion/renderer";
 import {MG_STYLE_CATALOG} from "../src/catalog-data.js";
+import {referenceDemoFiles} from "../src/portrait-mg/reference-scene";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputDir = path.join(root, "public", "mg-previews");
@@ -12,28 +13,34 @@ const manifestPath = path.join(outputDir, "manifest.json");
 const entryPoint = path.join(root, "runtime", "preview-entry.tsx");
 const force = process.argv.includes("--force");
 const checkOnly = process.argv.includes("--check");
+const concurrencyArg = process.argv.find((arg) => arg.startsWith("--concurrency="))?.slice("--concurrency=".length);
+const portraitConcurrency = concurrencyArg === undefined ? 2 : Number(concurrencyArg);
+if (!Number.isInteger(portraitConcurrency) || portraitConcurrency < 1 || portraitConcurrency > 8) throw new Error("--concurrency must be an integer from 1 to 8");
 const onlyArg = process.argv.find((arg) => arg.startsWith("--only="))?.slice("--only=".length)
   ?? (() => {
     const index = process.argv.indexOf("--only");
     return index >= 0 ? process.argv[index + 1] : undefined;
   })();
 
-const walk = async (directory: string): Promise<string[]> => {
+const walk = async (directory: string, allFiles = false): Promise<string[]> => {
   // 目录可能不存在（例如旧展示稿已从仓库移除），此时按空集合处理。
   try { await fs.access(directory); } catch { return []; }
   const entries = await fs.readdir(directory, {withFileTypes: true});
   const files: string[] = [];
   for (const entry of entries) {
     const fullPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await walk(fullPath));
-    else if (/\.(?:ts|tsx|js|json)$/.test(entry.name)) files.push(fullPath);
+    if (entry.isDirectory()) files.push(...await walk(fullPath, allFiles));
+    else if (allFiles || /\.(?:ts|tsx|js|json|py)$/.test(entry.name)) files.push(fullPath);
   }
   return files;
 };
 
+const externalPortraitFixtures = referenceDemoFiles.filter(file => !file.startsWith("portrait-mg/"));
 const sourceFiles = [
+  ...externalPortraitFixtures.map(file => path.join(root, "public", file)),
   ...(await walk(path.join(root, "src"))),
   ...(await walk(path.join(root, "examples"))),
+  ...(await walk(path.join(root, "public", "portrait-mg"), true)),
   path.join(root, "runtime", "preview-entry.tsx"),
 ].sort();
 const hash = crypto.createHash("sha256");
@@ -52,6 +59,7 @@ const renderItems = onlyNames
   ? MG_STYLE_CATALOG.filter((item) => {
     const fileName = `${item.template}-${item.style}.mp4`;
     return onlyNames.has(fileName)
+      || (onlyNames.has("portrait-mg") && item.previewKind.startsWith("portrait-"))
       || onlyNames.has(`${item.template}:${item.style}`)
       || onlyNames.has(item.style);
   })
@@ -87,9 +95,21 @@ if (checkOnly) {
 } else {
   await fs.mkdir(outputDir, {recursive: true});
   console.log(`[preview] source changed or files missing; rendering ${renderItems.length}${onlyNames ? " selected" : ""} previews`);
+  // A portrait-only pass must not copy the unrelated multi-gigabyte footage library.
+  let bundlePublicDir = path.join(root, "public");
+  if (renderItems.every((item) => item.previewKind.startsWith("portrait-"))) {
+    bundlePublicDir = path.join(root, "scratch", "portrait-mg", "preview-public");
+    await fs.mkdir(bundlePublicDir, {recursive:true});
+    await fs.cp(path.join(root,"public","portrait-mg"), path.join(bundlePublicDir,"portrait-mg"), {recursive:true});
+    for (const file of externalPortraitFixtures) {
+      const target = path.join(bundlePublicDir, file);
+      await fs.mkdir(path.dirname(target), {recursive:true});
+      await fs.copyFile(path.join(root, "public", file), target);
+    }
+  }
   const serveUrl = await bundle({
     entryPoint,
-    publicDir: path.join(root, "public"),
+    publicDir: bundlePublicDir,
     onProgress: (progress) => {
       if (progress === 1 || Math.round(progress * 100) % 20 === 0) console.log(`[preview] bundle ${Math.round(progress * 100)}%`);
     },
@@ -109,6 +129,7 @@ if (checkOnly) {
       crf: 20,
       x264Preset: "veryfast",
       pixelFormat: "yuv420p",
+      concurrency: renderItems.every((candidate) => candidate.previewKind.startsWith("portrait-")) ? portraitConcurrency : undefined,
       logLevel: "warn",
     });
   }

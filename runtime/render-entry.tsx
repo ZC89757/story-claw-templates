@@ -44,7 +44,7 @@ import {CollageNetworkTemplate} from "../src/collage-network";
 import {ImageStackTemplate} from "../src/image-stack";
 import {ImageGridTemplate} from "../src/image-grid";
 import {NewsReportTemplate} from "../src/news-report";
-import {WebNewsFocusTemplate} from "../src/web-news-focus";
+import {WebNewsFocusTemplate, PaperFocusTemplate} from "../src/web-news-focus";
 import {WebPageFocusTemplate} from "../src/web-page-focus";
 import {EraShiftTemplate} from "../src/era-shift";
 import {RouteShiftTemplate} from "../src/route-shift";
@@ -118,7 +118,7 @@ const RuntimeTemplate = ({layer, durationInFrames}: {
     case "image-stack": return <ImageStackTemplate spec={spec} group={layer.group} />;
     case "image-grid": return <ImageGridTemplate spec={spec} />;
     case "news-report": return <NewsReportTemplate spec={spec} />;
-    case "web-news-focus": return <WebNewsFocusTemplate spec={spec} />;
+    case "web-news-focus": return layer.group === "paper-focus" ? <PaperFocusTemplate spec={spec} /> : <WebNewsFocusTemplate spec={spec} />;
     case "web-page-focus": return <WebPageFocusTemplate spec={spec} />;
     case "era-shift": return <EraShiftTemplate spec={spec} />;
     case "route-shift": return <RouteShiftTemplate spec={spec} />;

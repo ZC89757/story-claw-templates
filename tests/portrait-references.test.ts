@@ -8,9 +8,9 @@ import {referenceProfiles} from "../src/portrait-mg/reference-profiles";
 
 const provider = getMgTemplateProvider();
 
-test("all 38 portrait reference effects have a Provider binding, renderer and preview", () => {
-  assert.equal(PORTRAIT_CATALOG.length, 38);
-  assert.equal(new Set(PORTRAIT_CATALOG.map(entry => entry.id)).size, 38);
+test("all registered portrait effects have a Provider binding, renderer and preview", () => {
+  assert.equal(PORTRAIT_CATALOG.length, Object.keys(portraitRenderers).length);
+  assert.equal(new Set(PORTRAIT_CATALOG.map(entry => entry.id)).size, PORTRAIT_CATALOG.length);
   for (const entry of PORTRAIT_CATALOG) {
     assert.equal(provider.supportsGroup(entry.htmlTag, "portrait"), true, entry.id);
     assert.equal(provider.getPlanningTools([entry.htmlTag]).length, 1, entry.id);

@@ -229,7 +229,7 @@ test("multi-series chart groups share one Function Call and remain runtime group
 test("web-news-focus uses a scene layer and keeps camera geometry provider-owned", () => {
   const descriptor = provider.templates.find((item) => item.htmlTag === "web-news-focus");
   assert.deepEqual(Object.keys(descriptor ?? {}).sort(), ["groups", "htmlTag", "layerRole", "selectionHint"]);
-  assert.deepEqual(descriptor?.groups, ["focus"]);
+  assert.deepEqual(descriptor?.groups, ["focus", "paper-focus"]);
   assert.equal(descriptor?.layerRole, "scene");
   const tools = provider.getPlanningTools(["web-news-focus"]);
   assert.deepEqual(tools.map((tool) => tool.name), ["create_web_news_focus"]);

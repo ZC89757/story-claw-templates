@@ -52,6 +52,37 @@
 | V25_001 | s47 04:39.400–04:44.467 | `mg-v-blue-gold-nameplate` | 新增 |
 | V10_001 | s48 04:44.467–05:00.533 | `mg-v-offset-media-collage` | 新增 |
 
+## 早先的 17 套竖屏模板
+
+早先实现的 17 个 `mg-v-*` 标签，统一 `group="portrait"`，360×640 设计坐标，正式预览 720×1280 / 30fps。所有能力由模板包 Provider 提供，Story Claw 主项目无需改动。
+
+`catalog.js` 管理目录与场景/叠加角色，`definitions.ts` 是已确认的最小 Function Calling Schema，`schema.ts` 负责闭合参数校验和绝对时间转局部时间。`groups/` 注册正式组件及演示配置；预览直接使用正式组件，不播放原成片冒充实现。
+
+## 参数与素材
+
+- 整段时间由宿主传入；元素 `at` 使用绝对秒数。不要把整段 `at/startTime/endTime` 加入函数参数。
+- Media 为 `{source, sourceStart}`。图片入点为 `null`；视频入点为素材内非负秒数。路径必须指向已经准备的本地文件，或 `portrait-mg/` 中实际存在的包内素材。
+- 颜色、布局、纹理、曲线和动效速度固定在模板内部。人物和物品前景需要带有效 Alpha 的 PNG。
+- `assets.ts` 检查文件格式及所需视频时长，禁止循环/冻帧补足。外部视频裁切为有界 data URI，适配现有宿主的图像素材解析接口。
+- 人物介绍和闪白抠像通过 `people/prepare.py` 从新输入图片生成静态形变图和数值场。`_prepared` 仅为运行时内部数据，不属于 FC Schema，也不是预渲染成片。
+- 网页模板读取规划阶段保存的真实网页快照，唯一匹配文字并记录换行矩形，禁止找不到文字时编造页面。`capture` 为内部数据。两个预览使用原 Python 工程生成的本地演示页面，并明确设置 `fixture: true`。
+- 运行素材准备需要 FFmpeg / FFprobe 和 Python（Pillow、NumPy、OpenCV）；网页抓图需要已安装的 Chromium / Chrome / Edge。可用 `FFMPEG_PATH`、`FFPROBE_PATH`、`STORY_CLAW_PYTHON_PATH` 指定可执行文件。
+
+透明叠加：`mg-v-item-cards`、`mg-v-comment-panels`、`mg-v-cutout-collage`、`mg-v-document-highlight`。其余标签为场景层。叠加预览底片仅存在于 demo 配置，不进入业务 Schema。
+
+## 验证与预览
+
+```sh
+npm run typecheck
+npm run test:portrait
+npm run render:previews -- --only portrait-mg --force
+npm run check:previews -- --only portrait-mg
+```
+
+批量预览默认并发 2，按目录复制依赖素材。早先的 17 个正式预览写入 `public/mg-previews/mg-v-*-portrait.mp4`；源码和包内媒体均进入清单校验哈希。
+
+每项 demo 的 `reference/referenceStart` 明确记录原版对照片及剥离起点。通用模板剥离示例专属片头尾切、日期、点赞数、比分和签名，保留对应 MG 效果。实现阶段对照记录在 `scratch/portrait-mg/audit/` 及各分组目录；独立审计已按用户要求停止，最终视觉验收由用户亲自完成。交付脚本 `scratch/portrait-mg/delivery/build-delivery.ts` 生成新版和同步对比浏览页。
+
 ## 验证
 
 ```sh

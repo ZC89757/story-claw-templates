@@ -59,7 +59,7 @@
     "dist:win": "npm run build:pack && node scripts/package-template-pack.mjs",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/xy-chart.test.ts tests/progress-timeline.test.ts tests/directed-graph.test.ts tests/title.test.ts tests/emphasis.test.ts tests/news-flashback.test.ts tests/timed-table.test.ts tests/multi-series-chart.test.ts tests/containment.test.ts tests/decomposition.test.ts tests/weighted-comparison.test.ts tests/collage-network.test.ts tests/image-media.test.ts tests/function-calling.test.ts tests/sc-longtake.test.ts tests/video-footage.test.ts tests/shotcraft-mg.test.ts tests/provider.test.ts tests/era-shift.test.ts tests/ai-hot-opening.test.ts tests/ai-hot-focus-stage.test.ts tests/mg-cutout.test.ts tests/web-news-focus.test.ts tests/web-page-focus.test.ts tests/subject-expansion.test.ts tests/explainer-templates.test.ts tests/editorial-style.test.ts",
-    "test:portrait": "tsx --test tests/portrait-references.test.ts",
+    "test:portrait": "tsx --test tests/portrait-mg.test.ts tests/portrait-references.test.ts",
     "test:subject-expansion": "tsx --test tests/subject-expansion.test.ts",
     "test:explainer": "tsx --test tests/explainer-templates.test.ts",
     "render:previews": "tsx scripts/render-previews.ts",

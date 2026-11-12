@@ -1,4 +1,5 @@
 export * from "./WebNewsFocusTemplate";
+export {PaperFocusTemplate} from "./PaperFocusTemplate";
 export {
   webNewsFocusFunctionDefinition,
   webNewsFocusParametersSchema,

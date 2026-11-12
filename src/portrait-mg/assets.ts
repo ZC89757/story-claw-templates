@@ -74,6 +74,13 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
   };
   const at=(value:any,label:string)=>{if(typeof value!=="number"||!Number.isFinite(value)||value<0||value>=duration)return fail(label,`at 必须在 [0, ${duration}) 秒内`);return value;};
   const playlist=async(items:any[],label:string)=>{for(let i=0;i<items.length;i++){const start=at(items[i].at,`${label}[${i}].at`);const end=i+1<items.length?at(items[i+1].at,`${label}[${i+1}].at`):duration;if(end<=start)return fail(label,"换镜时间必须严格递增");await media(items[i].media,`${label}[${i}].media`,end-start);}};
+  const preparePerson=async(mode:"flash"|"intro",file:string)=>{
+    const output=path.join(await temp(),mode==="flash"?"flash":"portrait.png");
+    await execute(process.env.STORY_CLAW_PYTHON_PATH||"python",[path.join(packageRoot,"src","portrait-mg","people","prepare.py"),mode,file,output],{windowsHide:true,maxBuffer:4*1024*1024,timeout:120000});
+    spec._prepared={...spec._prepared};
+    if(mode==="intro")spec._prepared.portraitImage=await context.resolveImage(output);
+    else {const metadata=JSON.parse(await fs.readFile(path.join(output,"flash.json"),"utf8"));metadata.binary=`data:application/octet-stream;base64,${(await fs.readFile(path.join(output,"flash.bin"))).toString("base64")}`;spec._prepared.flashData=`data:application/json;base64,${Buffer.from(JSON.stringify(metadata)).toString("base64")}`;}
+  };
   try {
     const profile = getReferenceProfile(id);
     if (profile) {
@@ -96,10 +103,17 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
     switch(id){
       case "V01_001":await playlist(spec.upper,"upper");await media(spec.lower,"lower",duration);break;
       case "V01_002":await media(spec.background,"background",duration);await playlist(spec.clips,"clips");break;
+      case "V01_003":for(const key of ["upper","lower"])await media(spec[key].media,`${key}.media`,duration-at(spec[key].at,`${key}.at`));break;
+      case "V01_005":for(const [i,card]of spec.cards.entries())card.image=(await image(card.image,`cards[${i}].image`,true,true)).source;break;
       case "V01_006":for(const [i,panel]of spec.panels.entries())for(const [j,comment]of panel.comments.entries())if(comment.avatar!==null)comment.avatar=(await image(comment.avatar,`panels[${i}].comments[${j}].avatar`)).source;break;
+      case "V01_007":for(const [i,node]of spec.nodes.entries())await media(node.media,`nodes[${i}].media`,duration-at(node.at,`nodes[${i}].at`));break;
+      case "V03_001":for(const [i,person]of spec.people.entries())person.image=(await image(person.image,`people[${i}].image`,true)).source;break;
+      case "V04_001":{const portrait=await image(spec.portraitImage,"portraitImage",true);spec.portraitImage=portrait.source;await preparePerson("intro",portrait.file);for(const [i,card]of spec.cards.entries())card.image=(await image(card.image,`cards[${i}].image`)).source;break;}
       case "V04_002":case "V07_003":spec.capture=await preparePortraitCapture(id,spec,context);break;
+      case "V05_001":await media(spec.background,"background",duration);await media(spec.archive,"archive",duration);break;
       case "V05_002":await playlist(spec.clips,"clips");break;
       case "V10_005":spec.subject.image=(await image(spec.subject.image,"subject.image")).source;break;
+      case "V11_001":{const portrait=await image(spec.image,"image",true);spec.image=portrait.source;await preparePerson("flash",portrait.file);await media(spec.background,"background",duration);break;}
       case "V12_001":spec.coverImage=(await image(spec.coverImage,"coverImage")).source;if(spec.body)spec.body.image=(await image(spec.body.image,"body.image")).source;break;
     }
     return spec;

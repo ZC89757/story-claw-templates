@@ -21,3 +21,18 @@ const processPaint:Painter=async(g,local,spec)=>{
  if(local>=rejected){const tint=g.getImageData(134,742,460,200);for(let j=0;j<tint.data.length;j+=4){tint.data[j]=tint.data[j]*.79+10;tint.data[j+1]=tint.data[j+1]*.79+46;tint.data[j+2]=tint.data[j+2]*.79+68;}g.putImageData(tint,134,742);g.drawImage(panel.image,0,0,360,640);const text=local>=replacement?spec.replacement.text:spec.rejected.text;const width=local>=replacement?203:165,tile=await wornTile(textTile(text,'PortraitProcess',width,35,'#ccb351',false,5*240/280),local>=replacement?'replacement':'rejected',width,35);g.drawImage(tile,180-width/2,404.5,width,35);}
 };
 export const ProcessCorrection:React.FC<{spec:any}>=p=><CanvasStage {...p} paint={processPaint}/>;
+const waves=[0,.5,1.9,3.7,5.8,6.1,2.8,1.25,.75,.35,.18];
+const cardPaint:Painter=async(g,frame,spec)=>{
+ const [bg,upper,lower,marks]=await Promise.all([raster('portrait-mg/V11_002/background.png'),raster('portrait-mg/V11_002/upper.png'),raster('portrait-mg/V11_002/lower.png'),raster('portrait-mg/V11_002/marks.png'),loadFont('PortraitCards','portrait-mg/V11_002/brush.ttf')]);
+ g.drawImage(bg.image,0,0,360,640);
+ for(let i=0;i<spec.cards.length;i++){const age=Math.floor(frame-spec.cards[i].at*30);if(age<0)continue;const y=i===0?56:281;
+ g.drawImage((i===0?upper:lower).image,53,y,253,173);
+ const art=offscreen(759,519),ctx=art.getContext('2d')!;if(i===0)ctx.drawImage(marks.image,0,0,759,519);
+ const text=spec.cards[i].text,letters=[...text];
+ if(letters.length===2){const boxes=i===0?[[52,58,58,56],[133,55,63,58]]:[[56,63,57,52],[132,60,64,58]];letters.forEach((letter,j)=>{const [x,y,w,h]=boxes[j],glyph=textTile(letter,'PortraitCards',w,h);ctx.drawImage(glyph,x*3,y*3,w*3,h*3);});}
+ else {const tw=Math.min(222,Math.max(145,letters.length*40)),th=Math.min(62,tw/Math.max(1,letters.length)),tile=textTile(text,'PortraitCards',tw,th);ctx.drawImage(tile,(253-tw)/2*3,(86-th/2)*3,tw*3,th*3);}
+ const amp=(i===0?1:.92)*(waves[age]??0),phase=.25+age*.085;
+ for(let row=0;row<173*3;row++){const yy=row/3,dx=amp*(.13+.82*Math.sin((yy-58)*.319+phase)+.16*Math.sin((yy-57)*.61-phase));g.drawImage(art,0,row,759,1,53+dx,y+yy,253,.4);}
+ }
+};
+export const GradientDualCard:React.FC<{spec:any}>=p=><CanvasStage {...p} paint={cardPaint}/>;

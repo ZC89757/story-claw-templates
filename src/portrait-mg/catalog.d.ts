@@ -1,6 +1,6 @@
 import type {referenceProfiles} from "./reference-profiles";
 
-type LegacyPortraitName = "mg-v-torn-split" | "mg-v-picture-in-picture" | "mg-v-comment-panels" | "mg-v-page-perspective" | "mg-v-filmstrip" | "mg-v-document-highlight" | "mg-v-ink-title" | "mg-v-process-correction" | "mg-v-rotating-document";
+type LegacyPortraitName = "mg-v-torn-split" | "mg-v-picture-in-picture" | "mg-v-dual-window" | "mg-v-item-cards" | "mg-v-comment-panels" | "mg-v-vertical-relation" | "mg-v-cutout-collage" | "mg-v-person-profile" | "mg-v-page-perspective" | "mg-v-archive-window" | "mg-v-filmstrip" | "mg-v-document-highlight" | "mg-v-ink-title" | "mg-v-process-correction" | "mg-v-flash-cutout" | "mg-v-gradient-dual-card" | "mg-v-rotating-document";
 export type PortraitTemplateName = LegacyPortraitName | (typeof referenceProfiles)[keyof typeof referenceProfiles]["tag"];
 export type PortraitCatalogEntry = {
   id: string;

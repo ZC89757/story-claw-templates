@@ -2,6 +2,7 @@ import {MAJOR_NEWS_HOSTS} from "./source-policy";
 
 /** Instructions injected only when the web-news-focus template is present. */
 export const webNewsFocusPlanningInstructions = `网页重点跟随模板补充规则：
+- group="paper-focus" 使用纸页透视推近和蓝底白字选中；与 group="focus" 使用完全相同的参数、网页来源和时间规则，仅视觉呈现不同，不传纸页、旋转、颜色等额外参数。
 - <web-news-focus group="focus"> 用真实浏览器打开一篇原网页，把可读的报道页面作为横屏画面，并在清稿对应语义出现的时间点自动高亮网页原话、推近和跟随镜头。
 - 规划时先调用 search_web({query}) 寻找与事件直接相关的国内外主流新闻媒体原报道，再调用 search_web({url}) 读取选定报道正文；传入原文章 URL，不要传搜索结果页 URL、screenshotUrl 或 imageUrl。优先 Reuters、AP、BBC、TechCrunch、The Verge、Ars Technica、MIT Technology Review 等媒体；国内媒体也必须是有编辑责任的主流新闻机构。
 - 此模板只选主流新闻媒体的编辑部原报道；媒体域名下的个人专栏、用户投稿和转载聚合内容仍不合格。优先采用 search_web 返回的 sourceQuality=major-media，并核验实际文章出处。程序目前接受这些媒体域名及其新闻子域名：${[...MAJOR_NEWS_HOSTS].join("、")}；其他域名不能直接提交，应继续搜索清单内的报道。官方公告、研究页面和技术文档请改用 web-page-focus；X、微博、个人博客、随机评论、匿名账号、转载聚合页、低权重博客和搜索摘要不能作为此模板的最终来源。

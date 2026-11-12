@@ -1,4 +1,5 @@
 export const WEB_NEWS_FOCUS_GROUP = "focus" as const;
+export const WEB_NEWS_FOCUS_GROUPS = [WEB_NEWS_FOCUS_GROUP, "paper-focus"] as const;
 
 export const WEB_NEWS_FOCUS_ENTRANCES = ["fade", "slide-right", "cut"] as const;
 export type WebNewsFocusEntrance = (typeof WEB_NEWS_FOCUS_ENTRANCES)[number];

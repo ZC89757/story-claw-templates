@@ -155,6 +155,8 @@ const demoVideo = [
 const demoImage = ["web-news/accelerated-clean.png", "web-news/nvidia-newsroom-clean.png", "portrait-mg/V04_002/fixture-page.png", "web-news/nvidia-arch.png"];
 const demoCutout = ["portrait-mg/V10_005/subject.png", "portrait-mg/reference/subject-alt.png"];
 
+export const referenceDemoFiles = [...new Set([...demoVideo, ...demoImage, ...demoCutout])];
+
 export function getReferenceDemo(id: string): PortraitDemo | undefined {
   const profile = getReferenceProfile(id);
   if (!profile) return undefined;

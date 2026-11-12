@@ -508,4 +508,5 @@ export const captureWebPageFocus = async (request: {url: string; focus: readonly
   };
 };
 
+// Shared browser primitives; existing capture policies remain unchanged.
 export {findChromeExecutable, getFreePort, waitForPageTarget, waitForExit};

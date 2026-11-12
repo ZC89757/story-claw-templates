@@ -2,7 +2,7 @@ import React from 'react';
 import {Img, Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
 import {PortraitMedia, asset} from '../common';
 import {tornGeometry} from '../media/geometry';
-import {PixelMedia,insetBackdrop,screenedBackdrop,usePixelAssets,filmProcess} from '../media/pixels';
+import {PixelMedia,archiveBackdrop,insetBackdrop,screenedBackdrop,usePixelAssets,filmProcess} from '../media/pixels';
 
 type Media={source:string;sourceStart:number|null};
 type TimedMedia={media:Media;at:number};
@@ -53,6 +53,30 @@ const PictureInPicture:React.FC<Props>=({spec})=>{
   <div style={{position:'absolute',left:32,top:123,width:297,height:394,overflow:'hidden'}}><ClipSequence clips={spec.clips}/><div style={{...box,background:'white',opacity:level}}/><Img src={asset(imagePath('V01_002','inset-vignette.png'))} style={{...box,width:297,height:394}}/></div>
  </div>;
 };
+const SLIDE=[325,287,250,212,176,141,110,82,58,38,23,12,5,1,0];
+const DualWindow:React.FC<Props>=({spec})=>{
+ const frame=useCurrentFrame(),{fps,durationInFrames}=useVideoConfig(),time=frame/fps;
+ return <div style={box}>
+  <PixelMedia media={{source:imagePath('V01_003','medals.png'),sourceStart:null}} width={360} height={640} style={{...box,width:360,height:640,filter:'blur(.46px)'}} process={screenedBackdrop(frame/Math.max(1,durationInFrames-1))}/>
+  {(['upper','lower'] as const).map((key,i)=>{const c=spec[key],f=(time-c.at)*30;if(f<0)return null;const shift=sample(SLIDE,f)*(i?1:-1);return <div key={key} style={{position:'absolute',left:(i?13:-4)+shift,top:i?341:41,width:352,height:254,opacity:f<1?.18:f<2?.55:1}}>
+   <Img src={asset(imagePath('V01_003','window-border.png'))} style={{...box,width:352,height:254}}/>
+   <div style={{position:'absolute',left:11,top:13,width:330,height:228,borderRadius:2.5,overflow:'hidden'}}><Sequence from={Math.round(c.at*fps)} layout="none"><PortraitMedia media={c.media}/></Sequence></div>
+   <Img src={asset(imagePath('V01_003','window-specks.png'))} style={{...box,width:352,height:254}}/>
+  </div>})}
+ </div>;
+};
+
+const ArchiveWindow:React.FC<Props>=({spec})=>{
+ const frame=useCurrentFrame(),{fps}=useVideoConfig(),f=frame/fps*30;
+ const travel=sample([326,322,275,227,189,161,129,97,73,53,33,21,11,5,1,-1,-1,0],f),opacity=sample([0,.23,.58,.84,.96,1],f);
+ return <div style={{...box,background:'#111523'}}>
+  <div style={box}><PixelMedia media={spec.background} width={360} height={640} process={archiveBackdrop}/></div>
+  <Img src={asset(imagePath('V05_001','brush.png'))} style={{...box,width:360,height:640,opacity:clamp((f-8)/13)}}/>
+  <div style={{position:'absolute',left:15.5,top:155.5+travel,width:331,height:311,borderRadius:26,overflow:'hidden',transform:'rotate(-3.25deg)',opacity,filter:'grayscale(1) brightness(1.47) blur(.65px)'}}><PortraitMedia media={spec.archive}/></div>
+  <Img src={asset(imagePath('V05_001','paddles.png'))} style={{position:'absolute',left:2,top:380+travel,width:96,height:109,opacity}}/>
+ </div>;
+};
+
 const ROLL=[-89,57,195,329,444,551,642,723,795,850,904,950,993,1027,1060,1084,1107,1122,1136,1142,1147,1145,1144,1142,1141,1140,1139,1138,1138,1137,1137,1138,1138,1140,1140.5,1141,1141.5,1141.8,1142];
 const PRINT=[-1264,-1122,-985,-851,-735,-604,-516,-434,-370,-288,-235,-188,-146,-112,-80,-55,-32,-18,-4,2,6,5,4,2,1,0,-1,-2,-3,-3,-3,-2,-2,-2,-1,0,0,0,0];
 const Filmstrip:React.FC<Props>=({spec})=>{
@@ -67,10 +91,12 @@ const Filmstrip:React.FC<Props>=({spec})=>{
  return <div style={box}><Sequence from={Math.round(current.at*fps)} layout="none"><PixelMedia media={current.media} width={276} height={292} style={{position:'absolute',inset:0,width:360,height:640}} process={(input,target)=>{target.width=360;target.height=640;filmProcess(assets,offset,printOffset,f,index,speed,residual)(input,target)}}/></Sequence></div>;
 };
 
-export const mediaRenderers:Record<string,React.FC<Props>>={V01_001:TornSplit,V01_002:PictureInPicture,V05_002:Filmstrip};
+export const mediaRenderers:Record<string,React.FC<Props>>={V01_001:TornSplit,V01_002:PictureInPicture,V01_003:DualWindow,V05_001:ArchiveWindow,V05_002:Filmstrip};
 const media=(id:string,file:string,sourceStart:number|null=0):Media=>({source:imagePath(id,file),sourceStart});
 export const mediaDemos:Record<string,{spec:any;durationInFrames:number;fps:30;reference:string;referenceStart?:number}>={
  V01_001:{spec:{upper:['upper-01.mp4','upper-02.mp4','upper-03.mp4'].map((file,i)=>({media:media('V01_001',file),at:[0,32/30,65/30][i]})),lower:media('V01_001','lower-beam.mp4'),title:'舞台上下两个世界'},durationInFrames:90,fps:30,reference:'D:/MG_Work/V01_001/delivery/V01_001.mp4'},
  V01_002:{spec:{background:media('V01_002','backdrop.jpg',null),clips:[1,2,3,4,5].map((n,i)=>({media:media('V01_002',`inset-0${n}.mp4`),at:[0,23/30,59/30,91/30,123/30][i]}))},durationInFrames:135,fps:30,reference:'D:/MG_Work/V01_002/delivery/V01_002.mp4',referenceStart:0},
+ V01_003:{spec:{upper:{media:media('V01_003','upper-framed.mp4'),at:1/30},lower:{media:media('V01_003','lower-framed.mp4'),at:1/30}},durationInFrames:115,fps:30,reference:'D:/MG_Work/V01_003/delivery/V01_003.mp4',referenceStart:34/30},
+ V05_001:{spec:{background:media('V05_001','background-framed.mp4'),archive:media('V05_001','archive-framed.mp4')},durationInFrames:135,fps:30,reference:'D:/MG_Work/V05_001/delivery/V05_001.mp4'},
  V05_002:{spec:{clips:['01-entrance.mp4','02-close.mp4','03-table.mp4'].map((file,i)=>({media:media('V05_002',file),at:[0,33/30,130/30][i]}))},durationInFrames:173,fps:30,reference:'D:/MG_Work/V05_002/delivery/V05_002.mp4',referenceStart:0},
 };

@@ -1,6 +1,6 @@
 import {
   WEB_NEWS_FOCUS_ENTRANCES,
-  WEB_NEWS_FOCUS_GROUP,
+  WEB_NEWS_FOCUS_GROUPS,
   type WebNewsFocusSpec,
 } from "./types";
 import {isMajorNewsSource} from "./source-policy";
@@ -84,5 +84,5 @@ export const assertWebNewsFocusSpec = (input: unknown): WebNewsFocusSpec => {
 };
 
 export const assertWebNewsFocusGroup = (group: string): void => {
-  if (group !== WEB_NEWS_FOCUS_GROUP) throw new Error(`web-news-focus group must be ${WEB_NEWS_FOCUS_GROUP}`);
+  if (!WEB_NEWS_FOCUS_GROUPS.includes(group as never)) throw new Error(`web-news-focus group must be ${WEB_NEWS_FOCUS_GROUPS.join(" or ")}`);
 };

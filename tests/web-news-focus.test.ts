@@ -8,8 +8,24 @@ import {webNewsFocusPlanningInstructions} from "../src/web-news-focus/prompt";
 import {assertWebNewsFocusSpec, validateWebNewsFocusSpec} from "../src/web-news-focus/validate";
 import {isMajorNewsSource} from "../src/web-news-focus/source-policy";
 import {buildTranslationBatches, MAX_TRANSLATION_NODE_HTML_LENGTH, parseBingSession} from "../src/web-news-focus/translate";
+import {paperRevealRects} from "../src/web-news-focus/PaperFocusTemplate";
 
 const newsUrl = "https://www.reuters.com/technology/article";
+
+test("paper reading cursor does not reveal a later link early and joins contiguous panels",()=>{
+  const fragments=[{x:0,y:0,width:100,height:20},{x:100,y:0,width:40,height:20}];
+  assert.deepEqual(paperRevealRects(fragments,.5),[{x:0,y:0,width:70,height:20}]);
+  assert.deepEqual(paperRevealRects([{x:0,y:0,width:100,height:20},{x:0,y:20,width:100,height:20}],1),[{x:0,y:0,width:100,height:40}]);
+});
+
+test("paper-focus changes only the group, not the resolved spec or timing", () => {
+  const args={group:"focus",order:null,url:newsUrl,entrance:"fade" as const,highlights:[{text:"source phrase",at:22}]};
+  const timing={start:20,end:28};
+  const original=resolveWebNewsFocusFunctionArgs(args,timing);
+  const paper=resolveWebNewsFocusFunctionArgs({...args,group:"paper-focus"},timing);
+  assert.equal(paper.group,"paper-focus");
+  assert.deepEqual(paper.spec,original.spec);
+});
 
 test("web-news-focus exposes only URL, exact highlights and fixed entrance", () => {
   assert.deepEqual(Object.keys(webNewsFocusFunctionDefinition.parameters.properties), [

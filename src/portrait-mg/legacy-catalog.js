@@ -1,4 +1,4 @@
-export const LEGACY_PORTRAIT_CATALOG = [
+export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
   {
     "id": "V01_001",
     "template": "mg-v-torn-split",
@@ -28,6 +28,34 @@ export const LEGACY_PORTRAIT_CATALOG = [
     "useWhen": "仅9:16竖屏。背景压暗虚化，内窗按 clips 换镜；窗口、闪白和边线固定。 clips 首项 at=start，其后严格递增；背景与各片段按各自可见区间校验长度。"
   },
   {
+    "id": "V01_003",
+    "template": "mg-v-dual-window",
+    "htmlTag": "mg-v-dual-window",
+    "style": "portrait",
+    "name": "竖屏 · 双窗口对照",
+    "structureName": "双窗口对照",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "网点底景由模板生成，上下两窗入场后同时保留至结束。",
+    "previewKind": "portrait-V01_003",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。网点底景由模板生成，上下两窗入场后同时保留至结束。 两窗至少存在共同可见区间；素材从各自 at 播放到 end；所有入场应在 end 前完整结束。"
+  },
+  {
+    "id": "V01_005",
+    "template": "mg-v-item-cards",
+    "htmlTag": "mg-v-item-cards",
+    "style": "portrait",
+    "name": "竖屏 · 物品信息卡",
+    "structureName": "物品信息卡",
+    "category": "素材",
+    "renderMode": "overlay",
+    "description": "透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。",
+    "previewKind": "portrait-V01_005",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。 image 必须为可解码透明主体图；cards.at 非递减；文字超出可读范围报错，不静默截断。"
+  },
+  {
     "id": "V01_006",
     "template": "mg-v-comment-panels",
     "htmlTag": "mg-v-comment-panels",
@@ -42,6 +70,48 @@ export const LEGACY_PORTRAIT_CATALOG = [
     "useWhen": "仅9:16竖屏。横卡与竖卡各有固定排版和入场；下一块 panel 替换上一块，不切换宿主底片。 panels.at 严格递增；wide 最多 2 条，tall 最多 5 条；署名头像无值则省略，不虚构点赞数、日期或平台记录。"
   },
   {
+    "id": "V01_007",
+    "template": "mg-v-vertical-relation",
+    "htmlTag": "mg-v-vertical-relation",
+    "style": "portrait",
+    "name": "竖屏 · 纵向关系图",
+    "structureName": "纵向关系图",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "恰好两个上下节点；下节点出现后自动按固定节奏画连接箭头，背景纹理由模板提供。",
+    "previewKind": "portrait-V01_007",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。恰好两个上下节点；下节点出现后自动按固定节奏画连接箭头，背景纹理由模板提供。 数组顺序即上、下节点，at 非递减；只用于正文确实存在的上到下关系；不自动加入旗帜或行业标志。"
+  },
+  {
+    "id": "V03_001",
+    "template": "mg-v-cutout-collage",
+    "htmlTag": "mg-v-cutout-collage",
+    "style": "portrait",
+    "name": "竖屏 · 人物抠像拼贴",
+    "structureName": "人物抠像拼贴",
+    "category": "素材",
+    "renderMode": "overlay",
+    "description": "左右人物对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。",
+    "previewKind": "portrait-V03_001",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。左右人物对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。 恰好两张透明人物图，顺序为左、右；at 非递减且有足够入场时间；示例比分不内置到通用样式。"
+  },
+  {
+    "id": "V04_001",
+    "template": "mg-v-person-profile",
+    "htmlTag": "mg-v-person-profile",
+    "style": "portrait",
+    "name": "竖屏 · 人物介绍",
+    "structureName": "人物介绍",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "固定暗色舞台、人物入场、图文履历卡、烟雾及片尾标题；画像从实例开头入场。",
+    "previewKind": "portrait-V04_001",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。固定暗色舞台、人物入场、图文履历卡、烟雾及片尾标题；画像从实例开头入场。 画像为透明主体图；卡片时间非递减；headline.at 不早于最后卡片；内容应有依据，背景不暗含奖项等事实。"
+  },
+  {
     "id": "V04_002",
     "template": "mg-v-page-perspective",
     "htmlTag": "mg-v-page-perspective",
@@ -54,6 +124,20 @@ export const LEGACY_PORTRAIT_CATALOG = [
     "previewKind": "portrait-V04_002",
     "isDefault": true,
     "useWhen": "仅9:16竖屏。真实网页截图按固定透视轨迹展开和移动；正文与页面标识来自截图，不重造网页。 准备阶段加载真实页面并保存截图；focusText 非空时须定位到原文，歧义/找不到均报错。"
+  },
+  {
+    "id": "V05_001",
+    "template": "mg-v-archive-window",
+    "htmlTag": "mg-v-archive-window",
+    "style": "portrait",
+    "name": "竖屏 · 旧影像圆角窗",
+    "structureName": "旧影像圆角窗",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "背景暗蓝虚化，旧影像在圆角窗入场；边框、旧化和装饰固定，连续播放至片尾。",
+    "previewKind": "portrait-V05_001",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。背景暗蓝虚化，旧影像在圆角窗入场；边框、旧化和装饰固定，连续播放至片尾。 两路媒体均覆盖各自可见区间；不循环或冻结不足的视频；archive 的入场延迟固定在模板内。"
   },
   {
     "id": "V05_002",
@@ -112,6 +196,34 @@ export const LEGACY_PORTRAIT_CATALOG = [
     "useWhen": "仅9:16竖屏。圆标上移、第一标签出现并画红叉、替换标签并显示向下箭头；固定蓝黑底景。 只用于明确否定第一说法并提出第二说法的内容；rejected.at < replacement.at，间隔须足以完成固定红叉笔画；不把普通流程自动解释为否定。"
   },
   {
+    "id": "V11_001",
+    "template": "mg-v-flash-cutout",
+    "htmlTag": "mg-v-flash-cutout",
+    "style": "portrait",
+    "name": "竖屏 · 闪白人物抠像",
+    "structureName": "闪白人物抠像",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "人物白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。",
+    "previewKind": "portrait-V11_001",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。人物白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。 人物必须是带 Alpha 的主体图；背景覆盖全段；主体进场从实例 start 开始，白剪影和彩色显现时间由模板控制。"
+  },
+  {
+    "id": "V11_002",
+    "template": "mg-v-gradient-dual-card",
+    "htmlTag": "mg-v-gradient-dual-card",
+    "style": "portrait",
+    "name": "竖屏 · 渐变双卡对照",
+    "structureName": "渐变双卡对照",
+    "category": "效果",
+    "renderMode": "replace",
+    "description": "固定上下渐变卡、细点边和暗网点底；每张卡出现时文字短暂波动，位置不漂移。",
+    "previewKind": "portrait-V11_002",
+    "isDefault": true,
+    "useWhen": "仅9:16竖屏。固定上下渐变卡、细点边和暗网点底；每张卡出现时文字短暂波动，位置不漂移。 数组顺序为上、下，at 非递减；两卡出现后保持至结束；用于简短对照语句，不能超出固定字区。"
+  },
+  {
     "id": "V12_001",
     "template": "mg-v-rotating-document",
     "htmlTag": "mg-v-rotating-document",
@@ -125,4 +237,4 @@ export const LEGACY_PORTRAIT_CATALOG = [
     "isDefault": true,
     "useWhen": "仅9:16竖屏。封面图随纸面卷曲、旋转、舒平和悬浮；body 非空时在指定时间硬切正文页。 输入为已准备好的页面图片，PDF/网页先转换为页面图；body.at 须晚于固定旋开阶段；body=null 时封面停留至结束，避免多余的时间参数。"
   }
-];
+]);

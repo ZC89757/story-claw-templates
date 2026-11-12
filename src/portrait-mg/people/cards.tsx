@@ -1,6 +1,6 @@
 import React, {useId} from 'react';
-import {Img, useCurrentFrame, useVideoConfig} from 'remotion';
-import {asset, clamp, ease} from '../common';
+import {Img, Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
+import {asset, clamp, ease, PortraitMedia} from '../common';
 
 export const FONT = 'Microsoft YaHei, sans-serif';
 export const full: React.CSSProperties = {position:'absolute',left:0,top:0,width:360,height:640};
@@ -10,6 +10,7 @@ export const arrayAt=(a:readonly number[],f:number)=>a[Math.min(a.length-1,Math.
 const textSize=(text:string,max:number,width:number,min=9)=>Math.max(min,Math.min(max,width/Math.max(1,Array.from(text).reduce((n,c)=>n+(/[\x00-\x7F]/.test(c)?.56:1),0))));
 export const FitLabel=({text,size,width,style}: {text:string;size:number;width:number;style?:React.CSSProperties})=><div style={{fontFamily:FONT,fontWeight:700,fontSize:textSize(text,size,width),width,textAlign:'center',whiteSpace:'nowrap',...style}}>{text}</div>;
 
+export const ItemCards:React.FC<{spec:any}>=({spec})=>{const f=local30();return <div style={full}>{spec.cards.map((c:any,i:number)=>f<c.at*30?null:<div key={i} style={{position:'absolute',left:i?114:15,top:i?306:115,width:231,height:173,borderRadius:10.5,boxSizing:'border-box',background:'linear-gradient(166deg,rgba(146,143,151,.79),rgba(114,205,171,.79))',border:'1.3px solid rgba(250,248,238,.87)'}}><div style={{position:'absolute',inset:'5px 5px',border:'0.65px solid rgba(238,241,231,.38)',borderRadius:6}}/><Img src={asset(c.image)} style={{position:'absolute',left:'50%',top:`calc(50% + ${i?10:1}px)`,transform:'translate(-50%,-50%)',width:i?166:124,height:i?131:154,objectFit:'contain'}}/><FitLabel text={c.text} size={i?33:35} width={219} style={{position:'absolute',left:5,top:'50%',transform:'translateY(-50%)',color:'#fcfefb',fontWeight:400,WebkitTextStroke:'.25px #fcfefb',textShadow:'1px 3px 3px rgba(25,33,29,.77)'}}/></div>)}</div>;};
 
 type Quad=number[][];
 const add=(q:Quad,x:number,y=0)=>q.map(p=>[p[0]+x,p[1]+y]);
@@ -29,3 +30,5 @@ export const CommentPanels:React.FC<{spec:any}>=({spec})=>{const f=local30();let
  else if(old<58){layers.push(<Projected key="rear" quad={REAR} brightness={(old<53?.86:.91)+flash*.3}>{texture}</Projected>);if(old<53)layers.push(<Projected key="front" quad={add(FRONT,sample([[29,20],[36,0],[45,-3],[51,-3]],old))} width={299} brightness={1+flash*.3} shadow={.68}><div style={{marginLeft:-41}}>{texture}</div></Projected>);else {const q=old<55?mix(add(FRONT,-3),REAR,(old-53)/2):mix(REAR,mix(REAR,SINGLE,.6),(old-55)/2);const crop=sample([[53,32.5],[54,17],[55,0]],old);layers.push(<Projected key="merge" quad={q} width={340-crop} brightness={1+flash*.3} shadow={.4}><div style={{marginLeft:-crop}}>{texture}</div></Projected>);}}
  else {const dy=sample([[60,0],[75,-35],[79,-44],[100,-92],[130,-162],[153,-215]],old);layers=[<Projected key="single" quad={add(SINGLE,0,dy)} brightness={1+flash*.3} shadow={.12}>{texture}</Projected>];}
  return <div style={{...full,clipPath:'inset(0 11px 0 10px)'}}>{layers}</div>;};
+
+export const VerticalRelation:React.FC<{spec:any}>=({spec})=>{const frame=useCurrentFrame(),{fps}=useVideoConfig();const f=frame/fps;const lower=spec.nodes[1].at;return <div style={{...full,background:'linear-gradient(110deg,#5e84b7,#779dbb)'}}>{f>=lower&&<div style={{...full,clipPath:`inset(0 0 ${640-(222+112*ease((f-lower)/.55))}px 0)`}}><Img src={asset('portrait-mg/V01_007/arrows.png')} style={full}/></div>}{spec.nodes.map((n:any,i:number)=>{const rect=i?[58,342,260,148]:[90,74,179,136],border=i?5:1.4;return <Sequence key={i} from={Math.round(n.at*fps)} layout="none"><div style={{position:'absolute',left:rect[0],top:rect[1],width:rect[2],height:rect[3],boxSizing:'border-box',border:`${border}px solid ${i?'#f0fbf7':'#f6f5f0'}`,borderRadius:i?7:4.5,overflow:'hidden',boxShadow:i?'4px 4px 8px #0006':'4px 4px 8px #0003'}}><PortraitMedia media={n.media}/><FitLabel text={n.label} size={i?32:36} width={rect[2]-18} style={{position:'absolute',left:9-border,top:(i?94:103)-border,transform:'translateY(-50%)',color:'#fffdfc',...(n.label.length>14?{fontSize:Math.min(i?32:36,(rect[2]-18)/Math.ceil(n.label.length/2)),whiteSpace:'normal' as const,overflowWrap:'anywhere' as const,lineHeight:1.1}:{}),textShadow:i?'2px 2px 1px #662316,-1px -1px 1px #662316':'.3px .3px #e8dddd'}}/></div></Sequence>;})}</div>;};

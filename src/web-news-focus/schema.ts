@@ -10,7 +10,7 @@ import {
 } from "../function-call";
 import {
   WEB_NEWS_FOCUS_ENTRANCES,
-  WEB_NEWS_FOCUS_GROUP,
+  WEB_NEWS_FOCUS_GROUPS,
   type WebNewsFocusSpec,
 } from "./types";
 import {assertWebNewsFocusGroup, assertWebNewsFocusSpec} from "./validate";
@@ -26,7 +26,7 @@ export const webNewsFocusParametersSchema = {
   additionalProperties: false,
   required: ["group", "order", "url", "highlights", "entrance"],
   properties: {
-    group: {...functionGroupSchema, description: `固定填写 ${WEB_NEWS_FOCUS_GROUP}。`},
+    group: {...functionGroupSchema, description: `样式选择：${WEB_NEWS_FOCUS_GROUPS.join("、")}；其余参数和语义相同。`},
     order: functionOrderSchema,
     url: {
       type: "string",
