@@ -1,3 +1,4 @@
+import {PortraitPreview, getPortraitDemo} from "../src/portrait-mg";
 import {GenericProductionTemplate, GenericNumericTemplate} from "../src/documentary-generic";
 import {genericPreviewProduction, genericPreviewNumeric, genericPreviewCounts} from "../src/documentary-generic/demos";
 import {
@@ -383,6 +384,7 @@ const MgCutoutDemoPlate = () => {
 };
 
 const Preview = ({previewKind, style}: PreviewProps) => {
+  if (previewKind.startsWith("portrait-")) return <PortraitPreview previewKind={previewKind}/>;
   let content: ReactNode;
   switch (previewKind) {
     case "generic-production": content=<GenericProductionTemplate spec={genericPreviewProduction}/>;break;
@@ -479,7 +481,7 @@ const Root = () => <Composition
   height={540}
   fps={30}
   durationInFrames={150}
-  calculateMetadata={({props}) => ({
+  calculateMetadata={({props}) => props.previewKind.startsWith("portrait-") ? {width: 720, height: 1280, fps: 30, durationInFrames: getPortraitDemo(props.previewKind).durationInFrames} : ({
     width: props.previewKind.startsWith("documentary-") ? 1280 : 960,
     height: props.previewKind.startsWith("documentary-") ? 720 : 540,
     durationInFrames: props.previewKind.startsWith("generic-") ? 300 : props.previewKind.startsWith("documentary-") ? documentaryDemoMeta.durations[props.previewKind as keyof typeof documentaryDemoMeta.durations] : ["cutout-cue-duo","cutout-cue-duo-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.founders*30):["cutout-cue-pop","cutout-cue-pop-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.partnership*30):["speaker-quote-portrait","speaker-quote-landscape"].includes(props.previewKind)?Math.ceil(peopleCueDemoDurations.quote*30):["canvas-path-follow", "canvas-subject-detail", "part-whole-pie", "dual-axis-overlay", "argument-evidence-gap", "image-comparison", "image-graph", "timeline-content-window"].includes(props.previewKind) ? 360 : props.previewKind === "ai-hot-opening-color-orb"

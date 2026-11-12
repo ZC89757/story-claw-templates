@@ -1,0 +1,51 @@
+import {LEGACY_PORTRAIT_CATALOG} from "./legacy-catalog.js";
+
+const referenceCatalog = [
+  ["V07_004","mg-v-question-reveal","问号转答案","口播先提出问题再落下答案。虚化动背景和圆角视频窗连续播放，发光问号闪退后出现结论。"],
+  ["V19_005","mg-v-particle-sphere-title","粒子球标题","实拍先铺满，关键词放大，背后长字横移，细白粒子在同一视频上围成球壳。"],
+  ["V20_006","mg-v-torn-oval-inset","双画面与椭圆窗","上下两个真实视频用撕纸边连接，下窗升入后，白边椭圆视频在接缝横向展开。"],
+  ["V22_002","mg-v-circle-roll-drop","圆窗换字下坠","背景与圆窗保持真实视频，斜牌由提问纵滚到答案，随后整窗向下退场。"],
+  ["V19_006","mg-v-staggered-price-cards","双报价卡","两路原有产品视频依次呈现，左上与右下报价卡先后升起，每张有标题和三条独立口播锚点。"],
+  ["V28_002","mg-v-round-object-swap","三个物件圆窗换主体","底部抠像一直保留，三张圆形图片渐隐，随后一张上方透明主体图淡入。"],
+  ["V19_001","mg-v-perspective-faceoff","透视对阵","两侧素材或抠像对阵。中央保留金色 VS，白、红竖题从相反方向滑入，透视网格包围主体。"],
+  ["V31_003","mg-v-two-option-click","双按钮点选","实拍画幅内亮起两个选项；换景时右选项退走，左选项移中，白色光标点选。"],
+  ["V21_009","mg-v-radiant-round-tag","放射光圆牌","带双色光边的圆形黑牌从上落下，数码底爆发放射光。只显示正文实际点出的短标签。"],
+  ["V27_006","mg-v-assembled-two-lines","双行字符聚合","保留实际暗背景，蓝色发光板升起，两行按口播先后聚合在同一板上。"],
+  ["V24_001","mg-v-torn-title-reversal","撕边视频与前后标题","中央撕边窗换镜，原有白字撤下后切到暗实拍和红字，白烟从红字背后横过。"],
+  ["V10_008","mg-v-stacked-footage-strips","横条素材分屏","实拍引入后，从黑底展开多条横向视频槽。每槽只保留原有的短标签。"],
+  ["V13_003","mg-v-report-scroll-window","报道滚动窗","真实长文截图在白色圆角窗内持续上滚，窗外保留人物或场景视频，正文使用图片原文。"],
+  ["V16_002","mg-v-folded-three-photos","三张透视图","三张静态图片以交替朝向的透视折面错位滑入，在背景视频前短暂并列。"],
+  ["V21_005","mg-v-document-row-focus","文档队列与摘行","静态文档排成透视队列；白光标点选中间文档，展开后用真实摘句图突出指定行。"],
+  ["V20_009","mg-v-same-card-text-sweep","同牌换字","上方始终是真实视频，下方蓝色牌保持原位，原字清空后粒子扫出第二个短语。"],
+  ["V20_003","mg-v-two-window-switch","双画面切换","上圆角近景和下全景为真实视频；全景先叠化，上窗再横滑换镜，最后退出下窗。"],
+  ["V18_003","mg-v-strip-join-inset","横条拼合视频窗","实拍前的错向横条拼成视频窗。黄字扫描后，闪白切成完整圆角窗并继续播放。"],
+  ["V21_002","mg-v-gold-price-arrow","金牌虚线箭头","透明主体带白色竖向拖影现身，上方两块金牌分时显字，中间虚线箭头从左向右。"],
+  ["V21_008","mg-v-one-large-two-small","一大两小信息卡","虚化实拍上先落一张紫色大卡，再左右落两张较小的紫色卡，三张一直保留。"],
+  ["V28_001","mg-v-electric-frame-title","电弧扫出标题","暗化实拍的四边保持蓝色电光，中央横扫露出短标题和原版矩形框。"],
+  ["V18_002","mg-v-red-scroll-quote","红底引文滚动","正文按原顺序从窄矩形红底内向上滚动，亮闪后切满宽圆角红底和新背景，继续展示剩余引文。"],
+  ["V26_001","mg-v-three-diagonal-clips","三格斜切","三个真实视频分别占据三条斜切槽，按口播在各自槽内显露和短促提亮。"],
+  ["V11_003","mg-v-torn-label-stages","撕纸分区与标签","下窗持续播放，上方先两条彩牌分别飞入，再切换到错落的三条彩牌自下向上露字。"],
+  ["V16_001","mg-v-sliding-document-pair","资料滑换","上方固定红色标题；两张真实白底文件截图先左入，后从右侧接替。"],
+  ["V20_007","mg-v-three-gradient-ribbons","三条渐变字牌","深色蓝粒子背景上，三条不同颜色的字牌从上到下卷出，成形后一起保留。"],
+  ["V21_006","mg-v-fragment-electric-title","碎字聚合与电光","全屏实拍虚化；破碎笔画聚合成一个白色短语，字下蓝色电弧扩亮。"],
+  ["V25_001","mg-v-blue-gold-nameplate","实拍金字横牌","学校或场景实拍连续播放，蓝牌横向拖影入场，牌内金字逐个变清并短暂回弹。"],
+  ["V10_001","mg-v-offset-media-collage","多窗口错位拼贴","城市剪影或实拍底上依次叠入白边素材窗，图片窗和连续视频窗分别保留原素材类型。"]
+];
+
+export const PORTRAIT_CATALOG = Object.freeze([
+  ...LEGACY_PORTRAIT_CATALOG,
+  ...referenceCatalog.map(([id, template, title, description]) => ({
+    id,
+    template,
+    htmlTag: template,
+    style: "portrait",
+    name: "竖屏 · " + title,
+    structureName: title,
+    category: "效果",
+    renderMode: "replace",
+    description,
+    previewKind: "portrait-" + id,
+    isDefault: true,
+    useWhen: "仅9:16竖屏。" + description,
+  })),
+]);

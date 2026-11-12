@@ -1,3 +1,5 @@
+import {PortraitTemplate} from "../src/portrait-mg";
+import {isPortraitTemplate} from "../src/portrait-mg/schema";
 import {GenericProductionTemplate, GenericNumericTemplate} from "../src/documentary-generic";
 import {useMemo, type ReactNode} from "react";
 import {
@@ -154,6 +156,7 @@ const RuntimeLayerCanvas = ({layer, timelineOffsetFrames, durationInFrames, view
   durationInFrames: number;
   viewport?: {width: number; height: number};
 }) => {
+  if (isPortraitTemplate(layer.kind)) return <Sequence from={-timelineOffsetFrames} layout="none"><PortraitTemplate kind={layer.kind} spec={layer.spec} viewport={viewport}/></Sequence>;
   const content = <Sequence from={-timelineOffsetFrames} layout="none">
     <RuntimeTemplate layer={layer} durationInFrames={durationInFrames} />
   </Sequence>;

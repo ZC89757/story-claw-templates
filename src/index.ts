@@ -45,3 +45,4 @@ export * from "./speaker-quote";
 export * from "./route-map";
 
 export * from "./documentary-generic/index";
+export {PortraitTemplate, PortraitPreview, portraitDemos, portraitRenderers} from "./portrait-mg";

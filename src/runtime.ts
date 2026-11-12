@@ -1,4 +1,7 @@
+import type {PortraitTemplateName} from "./portrait-mg/catalog.js";
+
 export type MgTemplateName =
+  | PortraitTemplateName
   | "production-chain"
   | "numeric-comparison"
   | "image-plate"

@@ -1,3 +1,5 @@
+import {portraitBindings, isPortraitTemplate, portraitCatalogEntry, portraitPlanningInstructions} from "./portrait-mg/schema";
+import {preparePortraitAssets} from "./portrait-mg/assets";
 import {prepareDocumentaryImages} from "./documentary-generic/assets";
 import {productionFunctionDefinition, numericFunctionDefinition, resolveProduction, resolveNumeric, type ProductionSpec, type NumericSpec} from "./documentary-generic/schema";
 import {assertFunctionTiming, type FunctionCallTiming} from "./function-call.js";
@@ -290,7 +292,10 @@ const resolveEraShiftCall = (input: unknown, timing: FunctionCallTiming): Resolv
   return resolved;
 };
 
+const portraitAssetJobs = new WeakMap<object, Promise<unknown>>();
+
 const bindings: readonly Binding[] = Object.freeze([
+  ...portraitBindings,
   {name: productionFunctionDefinition.name, label: "通用分工流程", template: "production-chain", definition: productionFunctionDefinition, resolve: resolveProduction, elementAts: args => [...(args.stages ?? []).flatMap((s: any) => [s.at, ...(s.parts ?? []).flatMap((p: any) => [p.appearAt, p.mergeAt])]), ...(args.links ?? []).map((s: any) => s.at)], groups: ["production-chain"]},
   {name: numericFunctionDefinition.name, label: "通用数值比较", template: "numeric-comparison", definition: numericFunctionDefinition, resolve: resolveNumeric, elementAts: args => [args.left.at, args.right.at], groups: ["editorial-scale", "editorial-counts"]},
   {name:routeMapFunctionDefinition.name,label:"全球供应链路线地图",template:"route-map",definition:routeMapFunctionDefinition,resolve:(input,timing)=>resolveRouteMapFunctionArgs(input as never,timing),elementAts:args=>[...(args.stops??[]).map((s:any)=>s.at),...(args.routes??[]).map((r:any)=>r.at)],groups:["supply-chain"]},
@@ -380,7 +385,8 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
   if (template === "image-stack" && group === "editorial-focus") return "#101b20";
   if (template === "progress-timeline" && group === "vertical") return "#191d21";
   if (template === "directed-graph" && group === "radial") return "#f4f0e8";
-  const backgrounds: Record<MgTemplateName, string> = {
+  if (isPortraitTemplate(template)) return portraitCatalogEntry(template)?.renderMode === "overlay" ? "transparent" : "#080a0f";
+  const backgrounds: Partial<Record<MgTemplateName, string>> = {
     "production-chain": "#e5ebee",
     "numeric-comparison": "#e5ebee",
     "image-plate": "#162126",
@@ -426,7 +432,7 @@ const backgroundFor = (template: MgTemplateName, group: string): string => {
     rhythm: "transparent",
     effect: "transparent",
   };
-  return backgrounds[template];
+  return backgrounds[template] ?? "transparent";
 };
 
 /** 这些模板自带整屏画面，必须是 full canvas 而不是 safe 内缩画布。 */
@@ -440,7 +446,7 @@ const makeRuntimeLayer = (template: MgTemplateName, group: string, spec: unknown
     group,
     spec,
     layerRole: descriptor.layerRole,
-    canvas: ["archive-rail","editorial-scale","production-chain"].includes(group) || FULL_CANVAS_TEMPLATES.has(template) || descriptor.layerRole === "overlay" || ["mg-canvas", "part-whole-chart", "mg-argument", "image-side-by-side", "image-directed-graph"].includes(template) || (template === "progress-timeline" && group === "content-window") || (template === "image-stack" && group === "editorial-focus") ? "full" : "safe",
+    canvas: isPortraitTemplate(template) || ["archive-rail","editorial-scale","production-chain"].includes(group) || FULL_CANVAS_TEMPLATES.has(template) || descriptor.layerRole === "overlay" || ["mg-canvas", "part-whole-chart", "mg-argument", "image-side-by-side", "image-directed-graph"].includes(template) || (template === "progress-timeline" && group === "content-window") || (template === "image-stack" && group === "editorial-focus") ? "full" : "safe",
     background: backgroundFor(template, group),
   };
 };
@@ -751,6 +757,22 @@ const prepareLayerAssets = async (
       items.push({...item,image:assertMgCutoutRiseSpec(cutout.spec).image});
     }
     layer.spec=assertCutoutCueSpec({items,prepared:true});
+    return;
+  }
+  if (isPortraitTemplate(layer.kind)) {
+    const spec = layer.spec as object;
+    let job = portraitAssetJobs.get(spec);
+    if (!job) {
+      const prepared = structuredClone(spec);
+      job = preparePortraitAssets(layer.kind, prepared, {publicRoot, resolveImage, webSnapshotDirectory})
+        .then(() => Object.assign(spec, prepared))
+        .catch(error => {
+          portraitAssetJobs.delete(spec);
+          throw error;
+        });
+      portraitAssetJobs.set(spec, job);
+    }
+    await job;
     return;
   }
   if (layer.kind === "production-chain") {
@@ -1116,6 +1138,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   getTemplatePlanningInstructions: (htmlTags) => {
     const requested = new Set(htmlTags);
     return [
+      htmlTags.some(isPortraitTemplate) ? portraitPlanningInstructions : "",
       requested.has("news-flashback") ? newsFlashbackPlanningInstructions : "",
       requested.has("news-report") ? newsReportPlanningInstructions : "",
       requested.has("web-news-focus") ? webNewsFocusPlanningInstructions : "",
@@ -1232,6 +1255,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   validateAnnotatedInstance: ({htmlTag, tagCount}) => {
     const template = templateByHtmlTag.get(htmlTag);
     if (!template) throw new Error(`不支持的 MG 标签 <${htmlTag}>`);
+    if (isPortraitTemplate(template) && tagCount !== 1) throw new Error(`<${htmlTag}> 的单个竖屏动画实例只能出现一次`);
     if ((["image-plate", "cutout-cue", "speaker-quote", "sc-video", "sc-longtake", "video-footage", "era-shift", "ai-hot-opening", "ai-hot-focus-stage", "subject-expansion"].includes(template)) && tagCount !== 1) {
       throw new Error(`<${htmlTag}> 的单个动画实例只能出现一次`);
     }
@@ -1251,6 +1275,7 @@ export const mgTemplateProvider: MgTemplateProvider = Object.freeze({
   copyRuntimeAssets: async (targetPublicDir) => {
     await Promise.all([
       copyDirectoryIfPresent(path.join(publicRoot, "ai-company-logos"), path.join(targetPublicDir, "ai-company-logos")),
+      copyDirectoryIfPresent(path.join(publicRoot, "portrait-mg"), path.join(targetPublicDir, "portrait-mg")),
       copyDirectoryIfPresent(path.join(publicRoot, "audio"), path.join(targetPublicDir, "audio")),
       copyDirectoryIfPresent(path.join(publicRoot, "people-cues"), path.join(targetPublicDir, "people-cues")),
       copyDirectoryIfPresent(path.join(publicRoot, "documentary-design-v3"), path.join(targetPublicDir, "documentary-design-v3")),

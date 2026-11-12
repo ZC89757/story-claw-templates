@@ -121,7 +121,7 @@ const waitForPageTarget = async (port: number, child: ChildProcess): Promise<Jso
   throw new Error(`Chrome DevTools page endpoint did not start${lastError ? `: ${lastError}` : ""}`);
 };
 
-class CdpClient {
+export class CdpClient {
   private readonly socket: WebSocket;
   private sequence = 0;
   private readonly pending = new Map<number, {method: string; resolve: (value: any) => void; reject: (error: Error) => void; timer: NodeJS.Timeout}>();
@@ -507,3 +507,5 @@ export const captureWebPageFocus = async (request: {url: string; focus: readonly
     temporaryDirectory: captured.temporaryDirectory,
   };
 };
+
+export {findChromeExecutable, getFreePort, waitForPageTarget, waitForExit};

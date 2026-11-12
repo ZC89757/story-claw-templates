@@ -1,3 +1,5 @@
+import {PORTRAIT_CATALOG} from "./portrait-mg/catalog.js";
+
 const displayName = (style) => style
   .split("-")
   .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -149,6 +151,7 @@ const SHOTCRAFT_EFFECT_STYLES = makeShotcraftEntries(
 );
 
 export const MG_STYLE_CATALOG = Object.freeze([
+  ...PORTRAIT_CATALOG.map(({id, useWhen, ...entry}) => entry),
   {template:"production-chain",htmlTag:"production-chain",style:"production-chain",name:"纪录片 · 通用分工",structureName:"分工流程",category:"关系",renderMode:"replace",description:"由参与方、主体图与流向驱动的立体陈列。保持银灰舞台与蓝红动线；部件可选展开，无默认行业。",previewKind:"generic-production",isDefault:true},
   {template:"numeric-comparison",htmlTag:"numeric-comparison",style:"editorial-scale",name:"纪录片 · 主体数值比较",structureName:"数值比较",category:"对比",renderMode:"replace",description:"两侧主体图与明确数值；支持同单位绝对量或相对倍数，边界值不画精确比例条。",previewKind:"generic-numeric",isDefault:true},
   {template:"numeric-comparison",htmlTag:"numeric-comparison",style:"editorial-counts",name:"纪录片 · 数量阵列",structureName:"数值比较",category:"对比",renderMode:"replace",description:"结构化数量和每格单位，支持部分格和上下界。不读取文字关键词决定图形。",previewKind:"generic-counts",isDefault:false},
