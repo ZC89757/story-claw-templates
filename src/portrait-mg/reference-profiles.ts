@@ -342,8 +342,8 @@ export const referenceProfiles = {
   V16_001: {
     tag: "mg-v-sliding-document-pair", name: "资料滑换", hint: "上方固定红色标题；两张真实白底文件截图先左入，后从右侧接替。",
     duration: 5.7,
-    slots: {background: video("压暗虚化的视频底景", 2), title: text("固定红牌标题", "工信部", 10, .35),
-      first: image("第一份真实资料截图", 2, .65), second: image("从右侧滑换的第二份资料", 1, 3.1)},
+    slots: {background: video("压暗虚化的视频底景", 2), title: text("固定红牌标题", "英伟达", 10, .35),
+      first: image("第一份真实资料截图", 3, .65), second: image("从右侧滑换的第二份资料", 1, 3.1)},
     order: ["title", "first", "second"],
     tracks: [media("background", full, {image: {...dim, filter: "blur(16px) brightness(.72)"}}), art("net", full, {css: {opacity: .28}}),
       words("title", [35, 63, 290, 79], 42, {motion: "drop", css: {...captionPanel, ...gloss}}),
