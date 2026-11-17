@@ -1,0 +1,16 @@
+{
+  "assets": {
+    "car-showroom-demo.mp4": {
+      "source": "BV1tQEv6FEw8/original.mp4",
+      "sourceStart": 30.7,
+      "sourceEnd": 33.8,
+      "crop": [
+        72,
+        72,
+        224,
+        398
+      ],
+      "role": "可替换的汽车展厅实拍演示底片"
+    }
+  }
+}

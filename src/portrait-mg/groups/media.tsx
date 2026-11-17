@@ -35,20 +35,22 @@ const TornSplit:React.FC<Props>=({spec})=>{
  const exitDx=sample([27,47],exitF),exitDy=sample([-22,-44],exitF),exitScale=sample([1.04,1.09],exitF);
  const amount=exiting?sample([.95,.88],exitF):f<=10?sample([.16,.34,.42,.62,.70,.79,.87,.94,1],f-2):1;
  const title=typeof spec.title==='string'?spec.title.replace(/\s/g,''):'';
- const spacing=title.length<=8?74:560/title.length;
+ const spacing=74;
  return <div style={{...box,background:'#050305'}}>
   <div style={{...box,clipPath:`path('${upperPath}')`}}><div style={{position:'absolute',left:reveal-360,top:0,width:360,height:374}}><ClipSequence clips={spec.upper}/><div style={{...box,background:'white',opacity:flash(spec.upper,frame/fps)}}/></div></div>
   <div style={{...box,clipPath:`path('${lowerPath}')`}}><div style={{position:'absolute',left:0,top:260,width:360,height:380,transform:`scale(${zoom})`,transformOrigin:'217px 283px',filter:blur?`blur(${blur}px)`:undefined}}><PortraitMedia media={spec.lower}/></div></div>
   {f>=2&&<svg width="360" height="640" style={{position:'absolute',inset:0,opacity:Math.min(1,f/6),filter:f<13?`blur(${.28+2.9*Math.pow(1-f/13,1.35)}px)`:undefined}}><defs><pattern id="portrait-torn-paper" width="360" height="640" patternUnits="userSpaceOnUse"><image href={asset(imagePath('V01_001','paper-texture.png'))} width="360" height="640"/></pattern><clipPath id="portrait-torn-reach"><rect width={Math.min(360,Math.max(0,(f-1)*77))} height="640"/></clipPath></defs><g clipPath="url(#portrait-torn-reach)"><polyline points={points} fill="none" stroke="#17131b" strokeOpacity=".26" strokeWidth="6" transform="translate(0 3)"/><path d={paperPath} fill="url(#portrait-torn-paper)"/></g></svg>}
-  {title&&f>1&&exitF<2&&<div style={{...box,overflow:'visible',transform:`translate(${exiting?exitDx:dx}px,${exiting?exitDy:titleDy}px) scale(${exiting?exitScale:scale})`,transformOrigin:'324px 320px',opacity:amount,filter:f<10||exiting?`blur(${Math.max(.6,3.6*(1-Math.min(1,amount))+.65)}px)`:undefined}}>{[...title].map((c,i)=><div key={i} style={{position:'absolute',left:292,top:52+i*spacing-29,width:64,height:58,textAlign:'center',fontFamily:'STXingkai, STXingka, KaiTi, serif',fontSize:Math.min(58,spacing*.83),lineHeight:'58px',color:'#ffe298',textShadow:'-13px 9px 3px rgba(176,149,87,.69),1.5px 1.3px 2px #32220e'}}>{c}</div>)}</div>}
+  {title&&f>1&&exitF<2&&<div style={{...box,overflow:'visible',transform:`translate(${exiting?exitDx:dx}px,${exiting?exitDy:titleDy}px) scale(${exiting?exitScale:scale})`,transformOrigin:'324px 320px',opacity:amount,filter:f<10||exiting?`blur(${Math.max(.6,3.6*(1-Math.min(1,amount))+.65)}px)`:undefined}}>{[...title].map((c,i)=><div key={i} style={{position:'absolute',left:292,top:52+i*spacing-29,width:64,height:58,textAlign:'center',fontFamily:'STXingkai, STXingka, KaiTi, serif',fontSize:58,lineHeight:'58px',color:'#ffe298',textShadow:'-13px 9px 3px rgba(176,149,87,.69),1.5px 1.3px 2px #32220e'}}>{c}</div>)}</div>}
  </div>;
 };
 
+// Original inset backdrop has a fixed low-saturation gray-green / mauve grade.
+const pictureBackdrop=(amount:number)=>(source:HTMLCanvasElement,target:HTMLCanvasElement)=>{insetBackdrop(amount)(source,target);const ctx=target.getContext('2d')!,im=ctx.getImageData(0,0,target.width,target.height);for(let y=0;y<target.height;y++){const low=clamp((y-240)/300);for(let x=0;x<target.width;x++){const i=(y*target.width+x)*4,r=im.data[i],g=im.data[i+1],b=im.data[i+2],l=.2126*r+.7152*g+.0722*b;im.data[i]=l*(.52+.24*low)+10+22*low+(r-l)*.10;im.data[i+1]=l*(.52+.18*low)+14+15*low+(g-l)*.10;im.data[i+2]=l*(.52+.27*low)+13+25*low+(b-l)*.10;}}ctx.putImageData(im,0,0);};
 const PictureInPicture:React.FC<Props>=({spec})=>{
  const frame=useCurrentFrame(),{fps}=useVideoConfig();
  const level=Math.max(0,...(spec.clips as TimedMedia[]).slice(1).map((c,i)=>{let x=Math.round((frame/fps-c.at)*30*10000)/10000;const values=i===1?[.33,.67,1,.67,.33]:[.17,.50,.83,.84,.50,.17];return x>=-3&&x<=values.length-4?sample(values,x+3):0}));
  return <div style={{...box,background:'#050305'}}>
-  <div style={box}><PixelMedia media={spec.background} width={360} height={640} process={insetBackdrop(frame/fps<11/30?.887:1)}/></div>
+  <div style={box}><PixelMedia media={spec.background} width={360} height={640} process={pictureBackdrop(frame/fps<11/30?.887:1)}/></div>
   <Img src={asset(imagePath('V01_002','inset-border.png'))} style={{position:'absolute',left:29,top:120,width:303,height:400,opacity:.79}}/>
   <div style={{position:'absolute',left:32,top:123,width:297,height:394,overflow:'hidden'}}><ClipSequence clips={spec.clips}/><div style={{...box,background:'white',opacity:level}}/><Img src={asset(imagePath('V01_002','inset-vignette.png'))} style={{...box,width:297,height:394}}/></div>
  </div>;
@@ -57,7 +59,7 @@ const SLIDE=[325,287,250,212,176,141,110,82,58,38,23,12,5,1,0];
 const DualWindow:React.FC<Props>=({spec})=>{
  const frame=useCurrentFrame(),{fps,durationInFrames}=useVideoConfig(),time=frame/fps;
  return <div style={box}>
-  <PixelMedia media={{source:imagePath('V01_003','medals.png'),sourceStart:null}} width={360} height={640} style={{...box,width:360,height:640,filter:'blur(.46px)'}} process={screenedBackdrop(frame/Math.max(1,durationInFrames-1))}/>
+  <PixelMedia media={{source:spec.backgroundImage??imagePath('V01_003','medals.png'),sourceStart:null}} width={360} height={640} style={{...box,width:360,height:640,filter:'blur(.46px)'}} process={screenedBackdrop(frame/Math.max(1,durationInFrames-1))}/>
   {(['upper','lower'] as const).map((key,i)=>{const c=spec[key],f=(time-c.at)*30;if(f<0)return null;const shift=sample(SLIDE,f)*(i?1:-1);return <div key={key} style={{position:'absolute',left:(i?13:-4)+shift,top:i?341:41,width:352,height:254,opacity:f<1?.18:f<2?.55:1}}>
    <Img src={asset(imagePath('V01_003','window-border.png'))} style={{...box,width:352,height:254}}/>
    <div style={{position:'absolute',left:11,top:13,width:330,height:228,borderRadius:2.5,overflow:'hidden'}}><Sequence from={Math.round(c.at*fps)} layout="none"><PortraitMedia media={c.media}/></Sequence></div>
@@ -71,9 +73,9 @@ const ArchiveWindow:React.FC<Props>=({spec})=>{
  const travel=sample([326,322,275,227,189,161,129,97,73,53,33,21,11,5,1,-1,-1,0],f),opacity=sample([0,.23,.58,.84,.96,1],f);
  return <div style={{...box,background:'#111523'}}>
   <div style={box}><PixelMedia media={spec.background} width={360} height={640} process={archiveBackdrop}/></div>
-  <Img src={asset(imagePath('V05_001','brush.png'))} style={{...box,width:360,height:640,opacity:clamp((f-8)/13)}}/>
+  {spec.brushImage !== null && <Img src={asset(spec.brushImage ?? imagePath('V05_001','brush.png'))} style={{...box,width:360,height:640,opacity:clamp((f-8)/13)}}/>}
   <div style={{position:'absolute',left:15.5,top:155.5+travel,width:331,height:311,borderRadius:26,overflow:'hidden',transform:'rotate(-3.25deg)',opacity,filter:'grayscale(1) brightness(1.47) blur(.65px)'}}><PortraitMedia media={spec.archive}/></div>
-  <Img src={asset(imagePath('V05_001','paddles.png'))} style={{position:'absolute',left:2,top:380+travel,width:96,height:109,opacity}}/>
+  {spec.objectImage !== null && <Img src={asset(spec.objectImage ?? imagePath('V05_001','paddles.png'))} style={{position:'absolute',left:2,top:380+travel,width:96,height:109,opacity,objectFit:spec.objectImage ? 'contain' : undefined}}/>}
  </div>;
 };
 
@@ -96,7 +98,7 @@ const media=(id:string,file:string,sourceStart:number|null=0):Media=>({source:im
 export const mediaDemos:Record<string,{spec:any;durationInFrames:number;fps:30;reference:string;referenceStart?:number}>={
  V01_001:{spec:{upper:['upper-01.mp4','upper-02.mp4','upper-03.mp4'].map((file,i)=>({media:media('V01_001',file),at:[0,32/30,65/30][i]})),lower:media('V01_001','lower-beam.mp4'),title:'舞台上下两个世界'},durationInFrames:90,fps:30,reference:'D:/MG_Work/V01_001/delivery/V01_001.mp4'},
  V01_002:{spec:{background:media('V01_002','backdrop.jpg',null),clips:[1,2,3,4,5].map((n,i)=>({media:media('V01_002',`inset-0${n}.mp4`),at:[0,23/30,59/30,91/30,123/30][i]}))},durationInFrames:135,fps:30,reference:'D:/MG_Work/V01_002/delivery/V01_002.mp4',referenceStart:0},
- V01_003:{spec:{upper:{media:media('V01_003','upper-framed.mp4'),at:1/30},lower:{media:media('V01_003','lower-framed.mp4'),at:1/30}},durationInFrames:115,fps:30,reference:'D:/MG_Work/V01_003/delivery/V01_003.mp4',referenceStart:34/30},
- V05_001:{spec:{background:media('V05_001','background-framed.mp4'),archive:media('V05_001','archive-framed.mp4')},durationInFrames:135,fps:30,reference:'D:/MG_Work/V05_001/delivery/V05_001.mp4'},
+ V01_003:{spec:{backgroundImage:imagePath('V01_003','medals.png'),upper:{media:media('V01_003','upper-framed.mp4'),at:1/30},lower:{media:media('V01_003','lower-framed.mp4'),at:1/30}},durationInFrames:115,fps:30,reference:'D:/MG_Work/V01_003/delivery/V01_003.mp4',referenceStart:34/30},
+ V05_001:{spec:{brushImage:imagePath('V05_001','brush.png'),objectImage:imagePath('V05_001','paddles.png'),background:media('V05_001','background-framed.mp4'),archive:media('V05_001','archive-framed.mp4')},durationInFrames:135,fps:30,reference:'D:/MG_Work/V05_001/delivery/V05_001.mp4'},
  V05_002:{spec:{clips:['01-entrance.mp4','02-close.mp4','03-table.mp4'].map((file,i)=>({media:media('V05_002',file),at:[0,33/30,130/30][i]}))},durationInFrames:173,fps:30,reference:'D:/MG_Work/V05_002/delivery/V05_002.mp4',referenceStart:0},
 };

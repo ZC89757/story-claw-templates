@@ -1,0 +1,84 @@
+{
+  "sourceRoot": "D:/MG_Reference_Library/creators/eshuocaijing/effects",
+  "assets": {
+    "electric-edge-*.webp": {
+      "source": "V28_001",
+      "frames": [
+        0,
+        65
+      ],
+      "role": "Only outer 12px cyan electric edge isolated; central title and footage excluded"
+    },
+    "electric-line-*.webp": {
+      "source": "V21_006",
+      "frames": [
+        0,
+        55
+      ],
+      "role": "Cyan electric stroke, limited to x18..346/y286..400; no title text retained"
+    },
+    "round-badge.png": {
+      "source": "V21_009",
+      "frame": 35,
+      "box": [
+        68,
+        160,
+        238,
+        238
+      ],
+      "role": "Fixed circle and ornament, original editable text locally removed"
+    },
+    "digital-background.mp4": {
+      "source": "V21_009",
+      "frames": [
+        0,
+        119
+      ],
+      "role": "Original moving digital/ray background. Circle and narration subtitle areas inpainted; obscured clean background unavailable."
+    },
+    "blue-particles.mp4": {
+      "source": "V20_007",
+      "role": "Original 88-frame particle motion retained outside animated ribbon regions. Editable ribbon regions and narrator subtitles locally inpainted, black top field restored; no loop or freeze."
+    },
+    "gold-particles.mp4": {
+      "source": "V20_003",
+      "frames": [
+        0,
+        359
+      ],
+      "role": "Only exposed black/gold inter-window field retained; both original media windows excluded"
+    },
+    "gold-frame.png": {
+      "source": "V18_003",
+      "role": "Original gold upper border, narrow lower gold rim, and fixed Edward signature; scene and narrator subtitle excluded"
+    },
+    "skyline.png": {
+      "source": "V10_001",
+      "frame": 0,
+      "role": "Replaceable city silhouette demo. Manually traced alpha; narrator subtitle band inpainted."
+    },
+    "office-demo.mp4": {
+      "source": "D:/CodexTemp/guanggao-full-v3/main/media/office.mp4",
+      "sourceStart": 0.3,
+      "duration": 15,
+      "role": "Replaceable continuous footage"
+    },
+    "documents-demo.mp4": {
+      "source": "D:/CodexTemp/guanggao-full-v3/main/media/news.mp4",
+      "sourceStart": 0.3,
+      "duration": 15,
+      "role": "Replaceable continuous footage"
+    },
+    "social-feed-demo.mp4": {
+      "source": "public/video-footage/sources/byte-douyin-2020-creator-brandfilm.mp4",
+      "sourceStart": 19.25,
+      "sourceEnd": 22.35,
+      "role": "Replaceable portrait demo footage for the three gradient ribbons"
+    }
+  },
+  "font": "Existing readonly Noto Sans SC and Pangmen brush; original exact fonts unconfirmed",
+  "warnings": [
+    "Extracted reference decorations contain reconstruction approximations, not pixel-exact source layers.",
+    "No composite reference MP4 is used as the template implementation."
+  ]
+}

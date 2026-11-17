@@ -1,3 +1,5 @@
+import {replaceableBackgroundVideos} from "./legacy-video-windows";
+import {contentTimingIds, referenceVideoWindow} from "./content-timing";
 import {execFile} from "node:child_process";
 import {promisify} from "node:util";
 import fs from "node:fs/promises";
@@ -55,12 +57,13 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
       if(min>=250||max<20)return fail(label,"PNG 必须同时包含透明区域和可见主体，不能是全不透明或全透明图片");
       if(crop&&(x0>0||y0>0||x1<png.width-1||y1<png.height-1)){const out=new PNG({width:x1-x0+1,height:y1-y0+1});PNG.bitblt(png,out,x0,y0,out.width,out.height,0,0);file=path.join(await temp(),`crop-${serial++}.png`);await fs.writeFile(file,PNG.sync.write(out));}
     }
-    return {file,source:file===located.file&&located.relative?located.relative:await context.resolveImage(file)};
+    return {file,width:Number(stream.width),height:Number(stream.height),source:file===located.file&&located.relative?located.relative:await context.resolveImage(file)};
   };
   const media=async(value:any,label:string,needed:number)=>{
     if(!Number.isFinite(needed)||needed<=0)return fail(label,"媒体可见区间必须大于零");
     if(value.sourceStart===null){value.source=(await image(value.source,label)).source;return;}
     if(typeof value.sourceStart!=="number"||!Number.isFinite(value.sourceStart)||value.sourceStart<0)return fail(label,"视频 sourceStart 必须为非负秒数；图片必须为 null");
+    if(value.sourceEnd!==undefined && (!Number.isFinite(value.sourceEnd)||value.sourceEnd<value.sourceStart+needed-.001))return fail(label,"指定视频时间范围不足以覆盖片段，禁止循环或冻帧补足");
     const located=await locate(value.source,label);if(!videoExtensions.has(path.extname(located.file).toLowerCase()))return fail(label,"sourceStart 为数字时必须提供视频文件");
     const info=await probe(located.file,label);const stream=info.streams[0];
     if(/(?:_pipe|image2|apng|gif)/.test(info.format?.format_name??""))return fail(label,"文件实际内容不是视频，不能仅更换扩展名");
@@ -70,7 +73,7 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
     const output=path.join(await temp(),`clip-${serial++}.mp4`);
     // H.264 at source frame cadence, bounded to exactly the consumed interval; no tpad/loop.
     await execute(process.env.FFMPEG_PATH||"ffmpeg",["-v","error","-y","-ss",String(value.sourceStart),"-i",located.file,"-t",String(needed),"-map","0:v:0","-an","-vf","scale=trunc(iw/2)*2:trunc(ih/2)*2","-c:v","libx264","-preset","fast","-crf","18","-pix_fmt","yuv420p","-movflags","+faststart",output],{windowsHide:true,maxBuffer:4*1024*1024,timeout:180000});
-    const bytes=await fs.readFile(output);value.source=`data:video/mp4;base64,${bytes.toString("base64")}`;value.sourceStart=0;
+    const bytes=await fs.readFile(output);value.source=`data:video/mp4;base64,${bytes.toString("base64")}`;value.sourceStart=0;if(value.sourceEnd!==undefined)value.sourceEnd=needed;
   };
   const at=(value:any,label:string)=>{if(typeof value!=="number"||!Number.isFinite(value)||value<0||value>=duration)return fail(label,`at 必须在 [0, ${duration}) 秒内`);return value;};
   const playlist=async(items:any[],label:string)=>{for(let i=0;i<items.length;i++){const start=at(items[i].at,`${label}[${i}].at`);const end=i+1<items.length?at(items[i+1].at,`${label}[${i+1}].at`):duration;if(end<=start)return fail(label,"换镜时间必须严格递增");await media(items[i].media,`${label}[${i}].media`,end-start);}};
@@ -82,12 +85,27 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
     else {const metadata=JSON.parse(await fs.readFile(path.join(output,"flash.json"),"utf8"));metadata.binary=`data:application/octet-stream;base64,${(await fs.readFile(path.join(output,"flash.bin"))).toString("base64")}`;spec._prepared.flashData=`data:application/json;base64,${Buffer.from(JSON.stringify(metadata)).toString("base64")}`;}
   };
   try {
+    if (spec.signature?.source) {
+      spec.signature.source = (await image(spec.signature.source, "signature.source", true)).source;
+    }
+    if (replaceableBackgroundVideos.has(id) && spec.background) {
+      await media(spec.background, "background", duration);
+    }
     const profile = getReferenceProfile(id);
     if (profile) {
       for (const [key, slot] of Object.entries(profile.slots)) {
         const value = spec[key];
+        if (slot.optional && value == null) continue;
+        if (id === "V10_008" && value === undefined) continue;
         if (slot.type === "video") {
-          const start = value.at ?? 0;
+          if (contentTimingIds.has(id)) {
+            const span = referenceVideoWindow(id, key, spec, 0, duration);
+            await media(value, key, span.duration);
+            continue;
+          }
+          // The original diagonal montage contains all three moving windows from frame zero.
+          // Legacy middle/lower at values remain accepted but do not shorten source coverage.
+          const start = id === "V26_001" ? 0 : value.at ?? 0;
           const windows = profile.tracks.filter(track => track.slot === key);
           const stop = Math.max(...windows.map(track => {
             const end = track.until ? spec[track.until].at + (track.overlap ?? 0) : duration;
@@ -95,7 +113,14 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
           }));
           await media(value, key, Math.min(stop, duration) - start);
         } else if (slot.type === "image" || slot.type === "cutout") {
-          value.source = (await image(value.source, key, slot.type === "cutout")).source;
+          const prepared = await image(value.source, key, slot.type === "cutout");
+          if (id === "V13_003" && key === "document") {
+            const requiredHeight = 193 + 60 * Math.max(0, duration - (value.at ?? 0));
+            const renderedHeight = prepared.height * 292 / prepared.width;
+            if (renderedHeight + .01 < requiredHeight) fail(key, `长图按固定宽度292绘制后仅${renderedHeight.toFixed(1)}px高，需要至少${requiredHeight.toFixed(1)}px才能保持原版60px/s滚动；请提供更长的真实截图或缩短片段，禁止减速、冻帧或露空白补足`);
+          }
+          if (id === "V28_004" && key === "document") spec._documentAspect = prepared.width / prepared.height;
+          value.source = prepared.source;
         }
       }
       return spec;
@@ -103,14 +128,20 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
     switch(id){
       case "V01_001":await playlist(spec.upper,"upper");await media(spec.lower,"lower",duration);break;
       case "V01_002":await media(spec.background,"background",duration);await playlist(spec.clips,"clips");break;
-      case "V01_003":for(const key of ["upper","lower"])await media(spec[key].media,`${key}.media`,duration-at(spec[key].at,`${key}.at`));break;
+      case "V01_003":if(spec.backgroundImage)spec.backgroundImage=(await image(spec.backgroundImage,"backgroundImage")).source;for(const key of ["upper","lower"])await media(spec[key].media,`${key}.media`,duration-at(spec[key].at,`${key}.at`));break;
       case "V01_005":for(const [i,card]of spec.cards.entries())card.image=(await image(card.image,`cards[${i}].image`,true,true)).source;break;
       case "V01_006":for(const [i,panel]of spec.panels.entries())for(const [j,comment]of panel.comments.entries())if(comment.avatar!==null)comment.avatar=(await image(comment.avatar,`panels[${i}].comments[${j}].avatar`)).source;break;
       case "V01_007":for(const [i,node]of spec.nodes.entries())await media(node.media,`nodes[${i}].media`,duration-at(node.at,`nodes[${i}].at`));break;
       case "V03_001":for(const [i,person]of spec.people.entries())person.image=(await image(person.image,`people[${i}].image`,true)).source;break;
-      case "V04_001":{const portrait=await image(spec.portraitImage,"portraitImage",true);spec.portraitImage=portrait.source;await preparePerson("intro",portrait.file);for(const [i,card]of spec.cards.entries())card.image=(await image(card.image,`cards[${i}].image`)).source;break;}
+      case "V04_001":{if(spec.backgroundImages)spec.backgroundImages=await Promise.all(spec.backgroundImages.map(async (source:string,i:number)=>(await image(source,`backgroundImages[${i}]`)).source));const portrait=await image(spec.portraitImage,"portraitImage",true);spec.portraitImage=portrait.source;await preparePerson("intro",portrait.file);for(const [i,card]of spec.cards.entries())card.image=(await image(card.image,`cards[${i}].image`)).source;break;}
       case "V04_002":case "V07_003":spec.capture=await preparePortraitCapture(id,spec,context);break;
-      case "V05_001":await media(spec.background,"background",duration);await media(spec.archive,"archive",duration);break;
+      case "V05_001":
+        await media(spec.background,"background",duration);
+        await media(spec.archive,"archive",duration);
+        for (const key of ["brushImage", "objectImage"]) {
+          if (spec[key]) spec[key] = (await image(spec[key], key, true)).source;
+        }
+        break;
       case "V05_002":await playlist(spec.clips,"clips");break;
       case "V10_005":spec.subject.image=(await image(spec.subject.image,"subject.image")).source;break;
       case "V11_001":{const portrait=await image(spec.image,"image",true);spec.image=portrait.source;await preparePerson("flash",portrait.file);await media(spec.background,"background",duration);break;}

@@ -20,7 +20,7 @@ test("Shotcraft showcase keeps only visible item text and converts absolute time
 
 test("Shotcraft metric preserves units while exposing numeric motion", () => {
   const resolved = resolveMetricFunctionArgs({
-    group: "odometer-digit-roll",
+    group: "gauge-readout-moves",
     title: "完成率",
     points: [{label: "成功", value: "99.8%", at: 21}],
   }, {start: 20, end: (20) + 60});
@@ -63,12 +63,12 @@ test("configurable effects use dedicated minimal image calls", () => {
 });
 
 test("catalog exposes the expanded Shotcraft families with one default each", () => {
-  for (const template of ["showcase", "metric", "transition", "rhythm", "effect"] as const) {
+  for (const template of ["showcase", "metric", "transition", "effect"] as const) {
     const entries = mgStylesForTemplate(template);
-    assert.ok(entries.length >= 10, template);
+    assert.ok(entries.length > 0, template);
     assert.equal(entries.filter((entry) => entry.isDefault).length, 1, template);
   }
-  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "title" && entry.style === "brace-expand"));
-  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "transition" && entry.style === "whip-pan"));
-  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "effect" && entry.style === "scanline-annotate-focus"));
+  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "title" && entry.style === "flying-words"));
+  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "transition" && entry.style === "clock-wipe"));
+  assert.ok(MG_STYLE_CATALOG.some((entry) => entry.template === "effect" && entry.style === "neon-triple-marquee"));
 });

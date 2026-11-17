@@ -40,7 +40,7 @@ export const metricParametersSchema = {
 export const metricFunctionDefinition = {
   type: "function",
   name: "create_metric_timeline",
-  description: "Create one data/metric animation for an HTML group. Supply only labels, visible values and absolute timestamps; gauges, rolling digits, particles, colors and easing are fixed by the selected style.",
+  description: "Create one data/metric animation for an HTML group. Supply only labels, visible values and absolute timestamps; gauges, waveforms, bars, colors and easing are fixed by the selected style.",
   strict: true,
   parameters: metricParametersSchema,
 } as const;

@@ -1,0 +1,79 @@
+{
+  "referenceDirectory": "D:/MG_Reference_Library/creators/eshuocaijing/effects",
+  "assets": [
+    {
+      "files": "report/*.png",
+      "reference": "V13_003",
+      "frames": [
+        0
+      ],
+      "content": "Gold curtain and lower rule only"
+    },
+    {
+      "files": "torn-oval/*",
+      "reference": "V20_006",
+      "frames": [
+        0,
+        124
+      ],
+      "content": "Neutral paper fibres, isolated animated masks, and local displacement fields with measured upper-left boundary tracks"
+    },
+    {
+      "files": "sweep/background/*.png",
+      "reference": "V20_009",
+      "frames": [
+        0,
+        105
+      ],
+      "content": "Original live blue backdrop outside the video window, with subtitle, card and gold pixels removed",
+      "limitations": "Hidden or occluded portions reconstructed without the original typography or footage."
+    },
+    {
+      "files": "sweep/card.png",
+      "reference": "V20_009",
+      "frames": [
+        66
+      ],
+      "content": "Fixed empty card without lettering"
+    },
+    {
+      "files": "sweep/gold/*.png",
+      "reference": "V20_009",
+      "frames": [
+        67,
+        84
+      ],
+      "content": "Gold separation of the original sweep",
+      "limitations": "Composited lettering and card edge residues are excluded before recovering the core brightness. Hidden particles and color/alpha are estimated."
+    },
+    {
+      "files": "sweep/letter-mask/*.png",
+      "reference": "V20_009",
+      "frames": [
+        69,
+        75
+      ],
+      "content": "Alpha-only particle modulation at the new lettering's entrance",
+      "limitations": "Derived from the separated gold color and alpha, without letter shapes from the reference."
+    },
+    {
+      "files": "torn-title/window-*.png",
+      "reference": "V24_001",
+      "frames": [
+        0,
+        88
+      ],
+      "content": "Neutral torn paper fibers and two isolated media masks"
+    },
+    {
+      "files": "torn-title/smoke/*.png",
+      "reference": "V24_001",
+      "frames": [
+        133,
+        174
+      ],
+      "content": "Visible unoccluded parts of the original plume and particle trail",
+      "limitations": "Moving fine grains are recovered outside the reference words and subtitles. Behind mixed plate shadows and occlusions, cloud density is estimated without the original footage."
+    }
+  ]
+}

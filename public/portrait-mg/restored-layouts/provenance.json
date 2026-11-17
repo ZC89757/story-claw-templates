@@ -1,0 +1,313 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "torn-decoration.png",
+      "reference": "V11_003",
+      "frame": 40,
+      "designSize": [
+        360,
+        640
+      ],
+      "role": "Static empty textile background and torn-paper edging; central footage pixels cleared to transparent black",
+      "replaced": [
+        "all original footage",
+        "all original captions"
+      ]
+    },
+    {
+      "file": "gold-frame.png",
+      "reference": "V16_002",
+      "frame": 30,
+      "designSize": [
+        360,
+        640
+      ],
+      "role": "Top gold-mesh header and thin lower gold rim only",
+      "retainedRows": [
+        [
+          0,
+          69
+        ],
+        [
+          469,
+          473
+        ]
+      ],
+      "excluded": [
+        "footage",
+        "subtitle",
+        "signature"
+      ]
+    },
+    {
+      "file": "torn-background.png",
+      "reference": "V11_003",
+      "frame": 13,
+      "role": "Empty opening textile background",
+      "cleanup": "Original subtitle rows rebuilt from adjacent textile luminance and high-frequency weave."
+    },
+    {
+      "file": "torn-final-top.png",
+      "reference": "V11_003",
+      "frame": 203,
+      "box": [
+        151,
+        31,
+        151,
+        40
+      ],
+      "role": "Fixed label backing cropped before any text is revealed"
+    },
+    {
+      "file": "torn-final-middle.png",
+      "reference": "V11_003",
+      "frame": 216,
+      "box": [
+        34,
+        108,
+        151,
+        40
+      ],
+      "role": "Fixed label backing cropped before any text is revealed"
+    },
+    {
+      "file": "torn-final-bottom.png",
+      "reference": "V11_003",
+      "frame": 231,
+      "box": [
+        149,
+        181,
+        152,
+        40
+      ],
+      "role": "Fixed label backing cropped before any text is revealed"
+    },
+    {
+      "file": "torn-first.png",
+      "reference": "V11_003",
+      "frame": 120,
+      "role": "Fixed label backing estimated from the visible plate with the lettering masked",
+      "referenceFrames": [
+        100,
+        198
+      ],
+      "cleanup": "Robust smooth color surface fit with original side and top/bottom material retained and light matching grain."
+    },
+    {
+      "file": "torn-second.png",
+      "reference": "V11_003",
+      "frame": 120,
+      "role": "Fixed label backing estimated from the visible plate with the lettering masked",
+      "referenceFrames": [
+        100,
+        198
+      ],
+      "cleanup": "Robust smooth color surface fit with original side and top/bottom material retained and light matching grain."
+    },
+    {
+      "file": "torn-mask.png",
+      "reference": "V11_003",
+      "role": "Independent fractional alpha mask following the outer edge of the persistent paper ridge"
+    },
+    {
+      "file": "torn-rim.png",
+      "reference": "V11_003",
+      "frame": 40,
+      "role": "Fixed paper fibers extracted as alpha from the neutral ridge recurring across reference frames 40–298; all non-paper color replaced with a neutral paper pigment"
+    },
+    {
+      "file": "documents-plate.png",
+      "reference": "V16_001",
+      "frame": 25,
+      "role": "Red title backing with the original lettering removed from the central area"
+    },
+    {
+      "file": "documents-demo-background.mp4",
+      "type": "video",
+      "source": "D:/CodexTemp/guanggao-full-v3/main/media/news.mp4",
+      "sourceStart": 0.25,
+      "duration": 10,
+      "role": "Replaceable preview video only"
+    },
+    {
+      "file": "office-demo-background.mp4",
+      "type": "video",
+      "source": "D:/CodexTemp/guanggao-full-v3/main/media/office.mp4",
+      "sourceStart": 0.3,
+      "duration": 10,
+      "role": "Replaceable preview video only"
+    },
+    {
+      "file": "woven-00.webp through woven-17.webp",
+      "type": "decoration image atlases",
+      "reference": "V11_003",
+      "sourceFrames": [
+        13,
+        299
+      ],
+      "framesPerAtlas": 16,
+      "cellSize": [
+        360,
+        640
+      ],
+      "role": "Fixed textile weave and original light movement only",
+      "removed": [
+        "original clip region at every frame",
+        "original captions",
+        "all label regions including their approach blur"
+      ],
+      "occlusions": "Original texture retained on unobstructed visible pixels. Under the replaced media and text, opening weave is combined with a low-frequency lighting field estimated from unobstructed neighboring pixels in the same frame."
+    },
+    {
+      "file": "documents-heavy.woff2",
+      "source": "Noto Sans SC, Adobe copyright 2014–2021",
+      "role": "OFL variable font instantiated at weight 900 and renamed Portrait Document Heavy. The template draws its own white outer stroke and skew.",
+      "license": "documents-heavy-OFL.txt"
+    }
+  ],
+  "geometry": {
+    "V26_001": {
+      "topEdge": "247 - 0.1667*x",
+      "bottomEdge": "444 - 0.161*x",
+      "source": "Original reference and verified advertisement main/multi.py slide_traps"
+    },
+    "V16_002": {
+      "projectiveCorners": [
+        [
+          [
+            42,
+            171
+          ],
+          [
+            317,
+            104
+          ],
+          [
+            317,
+            246
+          ],
+          [
+            42,
+            184
+          ]
+        ],
+        [
+          [
+            43,
+            186
+          ],
+          [
+            317,
+            251
+          ],
+          [
+            317,
+            265
+          ],
+          [
+            43,
+            317
+          ]
+        ],
+        [
+          [
+            42,
+            337
+          ],
+          [
+            317,
+            273
+          ],
+          [
+            317,
+            403
+          ],
+          [
+            42,
+            345
+          ]
+        ]
+      ],
+      "photoPlaneCorners": [
+        [
+          [
+            42,
+            132
+          ],
+          [
+            317,
+            104
+          ],
+          [
+            317,
+            246
+          ],
+          [
+            42,
+            224
+          ]
+        ],
+        [
+          [
+            43,
+            186
+          ],
+          [
+            317,
+            212
+          ],
+          [
+            317,
+            310
+          ],
+          [
+            43,
+            317
+          ]
+        ],
+        [
+          [
+            42,
+            301
+          ],
+          [
+            317,
+            273
+          ],
+          [
+            317,
+            403
+          ],
+          [
+            42,
+            381
+          ]
+        ]
+      ],
+      "photoPlanePurpose": "Independent non-degenerate perspective planes underneath the measured trim contours."
+    },
+    "V11_003": {
+      "finalCards": [
+        [
+          151,
+          31,
+          151,
+          40
+        ],
+        [
+          34,
+          108,
+          151,
+          40
+        ],
+        [
+          149,
+          181,
+          152,
+          40
+        ]
+      ]
+    }
+  }
+}

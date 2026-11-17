@@ -1,12 +1,14 @@
+import {VideoCanvasStage} from '../batch-a/video-canvas';
 import {wornTile} from './lettering';
 import React from 'react';
 import {CanvasStage,clamp,key,loadFont,offscreen,path,raster,sample,textTile,type Painter} from './canvas';
 const processPaint:Painter=async(g,local,spec)=>{
  const f=Math.min(local+20,119),[bg,hood,panel,subject,a,b]=await Promise.all([raster('portrait-mg/V10_005/backdrop.png'),raster('portrait-mg/V10_005/hood.png'),raster('portrait-mg/V10_005/panel.png'),raster(spec.subject.image),raster('portrait-mg/V10_005/stroke-0.png'),raster('portrait-mg/V10_005/stroke-1.png'),loadFont('PortraitProcess','portrait-mg/V10_004/fallback.ttf')]);
- g.drawImage(bg.image,-(5+Math.min(f,74)*.21),-(6+Math.min(f,74)*.03),400,670);
+ if(spec._backgroundRaster)g.drawImage(spec._backgroundRaster.image,0,0,360,640);
+ else g.drawImage(bg.image,-(5+Math.min(f,74)*.21),-(6+Math.min(f,74)*.03),400,670);
  const sway=key(f,[[0,-11],[18,-6],[36,-11],[48,-5],[74,11],[91,12],[119,8]]),bend=key(f,[[0,1],[20,0],[35,54],[53,48],[74,96],[99,96],[109,76],[119,87]]),dy=-6+.052*f;
  // Independent hood texture is bent by scanlines in its own source coordinate space.
- for(let y=0;y<690;y+=.5){const shift=bend*clamp((y-12-428)/218)**1.08;g.drawImage(hood.image,0,y*2,840,1,sway-32-shift,y+dy-12,420,.65);}
+ if(!spec._backgroundRaster)for(let y=0;y<690;y+=.5){const shift=bend*clamp((y-12-428)/218)**1.08;g.drawImage(hood.image,0,y*2,840,1,sway-32-shift,y+dy-12,420,.65);}
  const rejected=spec.rejected.at*30,replacement=spec.replacement.at*30;
  if(local>=replacement){for(const x of [143,208])for(let row=0;row<5;row++)for(let band=0;band<4;band++){
  const y=234+row*27.5+band*4,starts=[-4,-1,4,7],ends=[11,15,19,23],phase=(local-replacement-starts[band])%31,lit=phase>=0&&phase<ends[band]-starts[band];path(g,[[x-15.2,y],[x,y+10],[x+15.2,y]],undefined,lit?'rgba(6,169,252,.965)':'rgba(30,81,122,.624)',1.4);
@@ -17,20 +19,20 @@ const processPaint:Painter=async(g,local,spec)=>{
  ct.putImageData(pixels,0,0);g.drawImage(c,0,0,360,640);
  }
  const cy=Math.max(134.2,283.8-local*2.115);g.save();g.beginPath();g.arc(173,cy,96,0,Math.PI*2);g.clip();const ss=Math.max(192/subject.width,192/subject.height),sw=subject.width*ss,sh=subject.height*ss;g.drawImage(subject.image,173-sw/2,cy-sh/2,sw,sh);g.restore();g.beginPath();g.arc(173,cy,95.3,0,Math.PI*2);g.strokeStyle='#e2ddcf';g.lineWidth=1.5;g.stroke();
- const label=await wornTile(textTile(spec.subject.label,'PortraitProcess',164,32,'#fff',false,2*240/280),'subject',164,32);g.drawImage(label,91,cy-16,164,32);
- if(local>=rejected){const tint=g.getImageData(134,742,460,200);for(let j=0;j<tint.data.length;j+=4){tint.data[j]=tint.data[j]*.79+10;tint.data[j+1]=tint.data[j+1]*.79+46;tint.data[j+2]=tint.data[j+2]*.79+68;}g.putImageData(tint,134,742);g.drawImage(panel.image,0,0,360,640);const text=local>=replacement?spec.replacement.text:spec.rejected.text;const width=local>=replacement?203:165,tile=await wornTile(textTile(text,'PortraitProcess',width,35,'#ccb351',false,5*240/280),local>=replacement?'replacement':'rejected',width,35);g.drawImage(tile,180-width/2,404.5,width,35);}
+ const labelWidth=41*[...spec.subject.label].length;const label=await wornTile(textTile(spec.subject.label,'PortraitProcess',labelWidth,32,'#fff',false,2*240/280),'subject',labelWidth,32);g.drawImage(label,173-labelWidth/2,cy-16,labelWidth,32);
+ if(local>=rejected){const tint=g.getImageData(134,742,460,200);for(let j=0;j<tint.data.length;j+=4){tint.data[j]=tint.data[j]*.79+10;tint.data[j+1]=tint.data[j+1]*.79+46;tint.data[j+2]=tint.data[j+2]*.79+68;}g.putImageData(tint,134,742);g.drawImage(panel.image,0,0,360,640);const text=local>=replacement?spec.replacement.text:spec.rejected.text;const width=(local>=replacement?40.6:41.25)*[...text].length,tile=await wornTile(textTile(text,'PortraitProcess',width,35,'#ccb351',false,5*240/280),local>=replacement?'replacement':'rejected',width,35);g.drawImage(tile,180-width/2,404.5,width,35);}
 };
-export const ProcessCorrection:React.FC<{spec:any}>=p=><CanvasStage {...p} paint={processPaint}/>;
+export const ProcessCorrection:React.FC<{spec:any}>=p=><VideoCanvasStage {...p} paint={processPaint} source={p.spec.background?.source ?? "portrait-mg/batch-a/hood-background.mp4"} start={p.spec.background?.sourceStart ?? 20/30}/>;
 const waves=[0,.5,1.9,3.7,5.8,6.1,2.8,1.25,.75,.35,.18];
 const cardPaint:Painter=async(g,frame,spec)=>{
- const [bg,upper,lower,marks]=await Promise.all([raster('portrait-mg/V11_002/background.png'),raster('portrait-mg/V11_002/upper.png'),raster('portrait-mg/V11_002/lower.png'),raster('portrait-mg/V11_002/marks.png'),loadFont('PortraitCards','portrait-mg/V11_002/brush.ttf')]);
+ const [bg,upper,lower,marks]=await Promise.all([raster('portrait-mg/V11_002/background.png'),raster('portrait-mg/V11_002/upper.png'),raster('portrait-mg/V11_002/lower.png'),raster('portrait-mg/V11_002/question-marks.png'),loadFont('PortraitCards','portrait-mg/V11_002/brush.ttf')]);
  g.drawImage(bg.image,0,0,360,640);
  for(let i=0;i<spec.cards.length;i++){const age=Math.floor(frame-spec.cards[i].at*30);if(age<0)continue;const y=i===0?56:281;
  g.drawImage((i===0?upper:lower).image,53,y,253,173);
  const art=offscreen(759,519),ctx=art.getContext('2d')!;if(i===0)ctx.drawImage(marks.image,0,0,759,519);
  const text=spec.cards[i].text,letters=[...text];
  if(letters.length===2){const boxes=i===0?[[52,58,58,56],[133,55,63,58]]:[[56,63,57,52],[132,60,64,58]];letters.forEach((letter,j)=>{const [x,y,w,h]=boxes[j],glyph=textTile(letter,'PortraitCards',w,h);ctx.drawImage(glyph,x*3,y*3,w*3,h*3);});}
- else {const tw=Math.min(222,Math.max(145,letters.length*40)),th=Math.min(62,tw/Math.max(1,letters.length)),tile=textTile(text,'PortraitCards',tw,th);ctx.drawImage(tile,(253-tw)/2*3,(86-th/2)*3,tw*3,th*3);}
+ else {const tw=61*letters.length,th=58,tile=textTile(text,'PortraitCards',tw,th);ctx.drawImage(tile,(253-tw)/2*3,(86-th/2)*3,tw*3,th*3);}
  const amp=(i===0?1:.92)*(waves[age]??0),phase=.25+age*.085;
  for(let row=0;row<173*3;row++){const yy=row/3,dx=amp*(.13+.82*Math.sin((yy-58)*.319+phase)+.16*Math.sin((yy-57)*.61-phase));g.drawImage(art,0,row,759,1,53+dx,y+yy,253,.4);}
  }

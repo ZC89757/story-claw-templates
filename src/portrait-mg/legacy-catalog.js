@@ -18,8 +18,8 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "template": "mg-v-picture-in-picture",
     "htmlTag": "mg-v-picture-in-picture",
     "style": "portrait",
-    "name": "竖屏 · 人物画中画",
-    "structureName": "人物画中画",
+    "name": "竖屏 · 连续换镜画中画",
+    "structureName": "连续换镜画中画",
     "category": "效果",
     "renderMode": "replace",
     "description": "背景压暗虚化，内窗按 clips 换镜；窗口、闪白和边线固定。",
@@ -36,10 +36,10 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "structureName": "双窗口对照",
     "category": "效果",
     "renderMode": "replace",
-    "description": "网点底景由模板生成，上下两窗入场后同时保留至结束。",
+    "description": "使用相关图片作为网点底景。上下两窗各自入场，同时保留，适合并列对照或补充同一重点。",
     "previewKind": "portrait-V01_003",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。网点底景由模板生成，上下两窗入场后同时保留至结束。 两窗至少存在共同可见区间；素材从各自 at 播放到 end；所有入场应在 end 前完整结束。"
+    "useWhen": "仅9:16竖屏。使用相关图片作为网点底景。上下两窗各自入场，同时保留，适合并列对照或补充同一重点。 两窗至少存在共同可见区间；素材从各自 at 播放到 end；所有入场应在 end 前完整结束。"
   },
   {
     "id": "V01_005",
@@ -50,10 +50,10 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "structureName": "物品信息卡",
     "category": "素材",
     "renderMode": "overlay",
-    "description": "透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。",
+    "description": "透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。适合用两张透明图和短标签并列展示同一主题的两个对象。",
     "previewKind": "portrait-V01_005",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。 image 必须为可解码透明主体图；cards.at 非递减；文字超出可读范围报错，不静默截断。"
+    "useWhen": "仅9:16竖屏。透明卡片层；按数组顺序放在左上、右下，出现后保留，背景由外层内容提供。适合用两张透明图和短标签并列展示同一主题的两个对象。 image 必须为可解码透明主体图；cards.at 非递减；文字超出可读范围报错，不静默截断。"
   },
   {
     "id": "V01_006",
@@ -78,38 +78,38 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "structureName": "纵向关系图",
     "category": "效果",
     "renderMode": "replace",
-    "description": "恰好两个上下节点；下节点出现后自动按固定节奏画连接箭头，背景纹理由模板提供。",
+    "description": "适合两个信息点具有从上到下的关系。上下节点叠在所选视频上，下方节点出现后触发原箭头。",
     "previewKind": "portrait-V01_007",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。恰好两个上下节点；下节点出现后自动按固定节奏画连接箭头，背景纹理由模板提供。 数组顺序即上、下节点，at 非递减；只用于正文确实存在的上到下关系；不自动加入旗帜或行业标志。"
+    "useWhen": "仅9:16竖屏。适合两个信息点具有从上到下的关系。上下节点叠在所选视频上，下方节点出现后触发原箭头。 数组顺序为上、下节点，at 非递减。"
   },
   {
     "id": "V03_001",
     "template": "mg-v-cutout-collage",
     "htmlTag": "mg-v-cutout-collage",
     "style": "portrait",
-    "name": "竖屏 · 人物抠像拼贴",
-    "structureName": "人物抠像拼贴",
+    "name": "竖屏 · 双主体抠像拼贴",
+    "structureName": "双主体抠像拼贴",
     "category": "素材",
     "renderMode": "overlay",
-    "description": "左右人物对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。",
+    "description": "两个透明主体从两侧对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。",
     "previewKind": "portrait-V03_001",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。左右人物对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。 恰好两张透明人物图，顺序为左、右；at 非递减且有足够入场时间；示例比分不内置到通用样式。"
+    "useWhen": "仅9:16竖屏。两个透明主体从两侧对向滑入、上下错位、下缘羽化和固定火花层；外层提供视频或图片背景。 恰好两张透明主体图，顺序为左、右；at 非递减且有足够入场时间。"
   },
   {
     "id": "V04_001",
     "template": "mg-v-person-profile",
     "htmlTag": "mg-v-person-profile",
     "style": "portrait",
-    "name": "竖屏 · 人物介绍",
-    "structureName": "人物介绍",
+    "name": "竖屏 · 主体与双图文卡",
+    "structureName": "主体与双图文卡",
     "category": "效果",
     "renderMode": "replace",
-    "description": "固定暗色舞台、人物入场、图文履历卡、烟雾及片尾标题；画像从实例开头入场。",
+    "description": "适合围绕同一主体依次讲两个要点，再收束到一个标题。三张暗底图按原节奏切换，主体、图文卡、烟雾和标题保留原入场。",
     "previewKind": "portrait-V04_001",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。固定暗色舞台、人物入场、图文履历卡、烟雾及片尾标题；画像从实例开头入场。 画像为透明主体图；卡片时间非递减；headline.at 不早于最后卡片；内容应有依据，背景不暗含奖项等事实。"
+    "useWhen": "仅9:16竖屏。适合围绕同一主体依次讲两个要点，再收束到一个标题。三张暗底图按原节奏切换，主体、图文卡、烟雾和标题保留原入场。 主体为透明 PNG；卡片时间非递减；headline.at 不早于最后卡片。"
   },
   {
     "id": "V04_002",
@@ -134,10 +134,10 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "structureName": "旧影像圆角窗",
     "category": "效果",
     "renderMode": "replace",
-    "description": "背景暗蓝虚化，旧影像在圆角窗入场；边框、旧化和装饰固定，连续播放至片尾。",
+    "description": "背景暗蓝虚化，内窗播放希望突出的资料或回顾视频。内窗旧化、左下物件的入场及位置固定。",
     "previewKind": "portrait-V05_001",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。背景暗蓝虚化，旧影像在圆角窗入场；边框、旧化和装饰固定，连续播放至片尾。 两路媒体均覆盖各自可见区间；不循环或冻结不足的视频；archive 的入场延迟固定在模板内。"
+    "useWhen": "仅9:16竖屏。背景暗蓝虚化，内窗播放希望突出的资料或回顾视频。内窗旧化、左下物件的入场及位置固定。 两路媒体均覆盖各自可见区间；不循环或冻结不足的视频；archive 的入场延迟固定在模板内。"
   },
   {
     "id": "V05_002",
@@ -186,28 +186,28 @@ export const LEGACY_PORTRAIT_CATALOG = Object.freeze([
     "template": "mg-v-process-correction",
     "htmlTag": "mg-v-process-correction",
     "style": "portrait",
-    "name": "竖屏 · 产业流程图（否定后转向）",
-    "structureName": "产业流程图（否定后转向）",
+    "name": "竖屏 · 否定后转向",
+    "structureName": "否定后转向",
     "category": "效果",
     "renderMode": "replace",
-    "description": "圆标上移、第一标签出现并画红叉、替换标签并显示向下箭头；固定蓝黑底景。",
+    "description": "圆标上移、第一标签出现并画红叉、替换标签并显示向下箭头；底景使用与主题相关的视频。",
     "previewKind": "portrait-V10_005",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。圆标上移、第一标签出现并画红叉、替换标签并显示向下箭头；固定蓝黑底景。 只用于明确否定第一说法并提出第二说法的内容；rejected.at < replacement.at，间隔须足以完成固定红叉笔画；不把普通流程自动解释为否定。"
+    "useWhen": "仅9:16竖屏。圆标上移、第一标签出现并画红叉、替换标签并显示向下箭头；底景使用与主题相关的视频。 适合明确否定前项并给出替代项，如纠正误解、淘汰旧方案或转向。rejected.at < replacement.at，间隔须足以完成原红叉。"
   },
   {
     "id": "V11_001",
     "template": "mg-v-flash-cutout",
     "htmlTag": "mg-v-flash-cutout",
     "style": "portrait",
-    "name": "竖屏 · 闪白人物抠像",
-    "structureName": "闪白人物抠像",
+    "name": "竖屏 · 闪白主体抠像",
+    "structureName": "闪白主体抠像",
     "category": "效果",
     "renderMode": "replace",
-    "description": "人物白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。",
+    "description": "主体白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。",
     "previewKind": "portrait-V11_001",
     "isDefault": true,
-    "useWhen": "仅9:16竖屏。人物白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。 人物必须是带 Alpha 的主体图；背景覆盖全段；主体进场从实例 start 开始，白剪影和彩色显现时间由模板控制。"
+    "useWhen": "仅9:16竖屏。主体白色剪影停留后显现彩色主体；背景虚化、闪白曲线、边缘与构图固定。 主体必须是带 Alpha 的图；背景覆盖全段；主体进场从实例 start 开始，白剪影和彩色显现时间由模板控制。"
   },
   {
     "id": "V11_002",

@@ -1,3 +1,6 @@
+import {RestoredTitles, restoredTitleTags} from './restored-titles';
+import {RestoredLayouts, hasRestoredLayout} from './restored-layouts';
+import {RestoredDetails} from './restored-details';
 import type {CSSProperties} from "react";
 import {Sequence, useCurrentFrame, useVideoConfig} from "remotion";
 import {PortraitMedia, clamp, ease, type PortraitDemo} from "./common";
@@ -139,6 +142,10 @@ export function ReferenceScene({profile, spec}: {profile: Profile; spec: Referen
   const {fps} = useVideoConfig();
   const time = frame / fps;
   const duration = Number(spec._duration ?? profile.duration);
+  if (restoredTitleTags.has(profile.tag)) return <RestoredTitles profile={profile} spec={spec}/>;
+  if (hasRestoredLayout(profile.tag)) return <RestoredLayouts profile={profile} spec={spec}/>;
+  const detailId = Object.entries(referenceProfiles).find(([, p]) => p.tag === profile.tag)?.[0];
+  if (detailId && ['V13_003','V20_006','V20_009','V24_001'].includes(detailId)) return <RestoredDetails id={detailId} spec={spec}/>;
   return <div style={{...full, background: "#05080d"}}>
     {profile.tracks.map((track, index) => <TrackLayer key={index} track={track} spec={spec} time={time} duration={duration}/>)}
   </div>;
@@ -155,7 +162,21 @@ const demoVideo = [
 const demoImage = ["web-news/accelerated-clean.png", "web-news/nvidia-newsroom-clean.png", "portrait-mg/V04_002/fixture-page.png", "web-news/nvidia-arch.png"];
 const demoCutout = ["portrait-mg/V10_005/subject.png", "portrait-mg/reference/subject-alt.png"];
 
-export const referenceDemoFiles = [...new Set([...demoVideo, ...demoImage, ...demoCutout])];
+const strictDemoSources: Record<string, Record<string, string>> = {
+  V07_004: {background: "portrait-mg/restored-titles/city-demo.mp4", clip: "portrait-mg/restored-titles/city-demo.mp4"},
+  V21_008: {background: "portrait-mg/restored-layouts/documents-demo-background.mp4"},
+  V27_006: {background: "portrait-mg/restored-layouts/office-demo-background.mp4"},
+  V11_003: {clip: "portrait-mg/restored-layouts/documents-demo-background.mp4"},
+  V16_001: {background: "portrait-mg/restored-layouts/documents-demo-background.mp4", first: "portrait-mg/strict-demo/document-first.png", second: "portrait-mg/strict-demo/document-second.png"},
+  V16_002: {background: "portrait-mg/restored-layouts/office-demo-background.mp4", top: "portrait-mg/strict-demo/photo-top.png", middle: "portrait-mg/strict-demo/photo-middle.jpg", bottom: "portrait-mg/strict-demo/photo-bottom.jpg"},
+  V26_001: {upper: "portrait-mg/restored-titles/city-demo.mp4", middle: "portrait-mg/restored-layouts/documents-demo-background.mp4", lower: "portrait-mg/restored-layouts/office-demo-background.mp4"},
+  V20_006: {upper: "portrait-mg/restored-layouts/office-demo-background.mp4", lower: "portrait-mg/restored-layouts/documents-demo-background.mp4", oval: "portrait-mg/restored-titles/city-demo.mp4"},
+  V20_009: {upper: "portrait-mg/restored-layouts/office-demo-background.mp4"},
+  V13_003: {background: "portrait-mg/restored-layouts/documents-demo-background.mp4", document: "portrait-mg/strict-demo/report-long.png"},
+  V24_001: {background: "portrait-mg/restored-layouts/office-demo-background.mp4", clip: "portrait-mg/restored-layouts/documents-demo-background.mp4", nextClip: "portrait-mg/restored-layouts/office-demo-background.mp4"},
+};
+
+export const referenceDemoFiles = [...new Set([...demoVideo, ...demoImage, ...demoCutout, ...Object.values(strictDemoSources).flatMap(slots => Object.values(slots))])];
 
 export function getReferenceDemo(id: string): PortraitDemo | undefined {
   const profile = getReferenceProfile(id);
@@ -165,12 +186,13 @@ export function getReferenceDemo(id: string): PortraitDemo | undefined {
     if (slot.type === "cue") return [key, timed];
     if (slot.type === "text") return [key, {...timed, text: slot.demo}];
     const sources = slot.type === "video" ? demoVideo : slot.type === "cutout" ? demoCutout : demoImage;
-    return [key, {...timed, source: sources[Number(slot.demo)], sourceStart: slot.type === "video" ? 0 : null}];
+    return [key, {...timed, source: strictDemoSources[id]?.[key] ?? sources[Number(slot.demo)], sourceStart: slot.type === "video" ? 0 : null}];
   }));
   return {
     spec: {...slots, _duration: profile.duration},
-    durationInFrames: Math.ceil(profile.duration * 30),
+    durationInFrames: Math.ceil(profile.duration * 30 - 1e-6),
     fps: 30 as const,
     reference: "eshuocaijing:" + id,
+    referenceStart: id === "V07_004" ? 24 / 30 : id === "V11_003" ? 13 / 30 : 0,
   };
 }

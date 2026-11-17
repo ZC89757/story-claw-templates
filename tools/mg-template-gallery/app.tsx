@@ -1,5 +1,6 @@
 import React, {useMemo, useRef, useState} from "react";
 import {createRoot} from "react-dom/client";
+import {previewOrientation, type PreviewOrientation} from "./preview-orientation";
 
 type Tool = {name: string; label: string; description: string; parameters: unknown};
 type Item = {
@@ -29,6 +30,8 @@ function TemplateVideo({item}: {item: Item}) {
     </div> : null}
   </div>;
 }
+
+const displayName = (name: string) => name.replace(/^竖屏\s*·\s*/, "");
 
 const keyOf = (item: Item) => `${item.template}::${item.style}`;
 
@@ -90,6 +93,8 @@ function HoverVideo({src}: {src: string}) {
 }
 
 function Gallery({catalog}: {catalog: Item[]}) {
+  const [orientation, setOrientation] = useState<PreviewOrientation>("landscape");
+  const orientedCatalog = useMemo(() => catalog.filter((item) => previewOrientation(item) === orientation), [catalog, orientation]);
   const [category, setCategory] = useState("全部");
   const [structure, setStructure] = useState("");
   const [query, setQuery] = useState("");
@@ -97,20 +102,20 @@ function Gallery({catalog}: {catalog: Item[]}) {
   const [selected, setSelected] = useState<Item | null>(null);
   const tree = useMemo(() => {
     const categories = new Map<string, Map<string, Item[]>>();
-    catalog.forEach((item) => {
+    orientedCatalog.forEach((item) => {
       if (!categories.has(item.category)) categories.set(item.category, new Map());
       const groups = categories.get(item.category)!;
       if (!groups.has(item.structureName)) groups.set(item.structureName, []);
       groups.get(item.structureName)!.push(item);
     });
     return [...categories];
-  }, [catalog]);
-  const rows = useMemo(() => catalog.filter((item) =>
+  }, [orientedCatalog]);
+  const rows = useMemo(() => orientedCatalog.filter((item) =>
     (category === "全部" || item.category === category)
     && (!structure || item.structureName === structure)
     && (!query || [item.name, item.style, item.template, item.structureName, item.category, item.description]
       .join(" ").toLowerCase().includes(query.toLowerCase())),
-  ), [catalog, category, structure, query]);
+  ), [orientedCatalog, category, structure, query]);
 
   if (selected) {
     const detailJson = detailJsonFor(selected);
@@ -120,7 +125,7 @@ function Gallery({catalog}: {catalog: Item[]}) {
         <TemplateVideo key={keyOf(selected)} item={selected} />
         <article className="detail-panel">
           <div className="eyebrow">{selected.category} · {selected.layerRole}</div>
-          <h2>{selected.name}</h2>
+          <h2>{displayName(selected.name)}</h2>
           <p className="detail-id">{selected.template} / {selected.style}</p>
           <p className="detail-description">{selected.description}</p>
           <div className="facts">
@@ -149,7 +154,7 @@ function Gallery({catalog}: {catalog: Item[]}) {
         <button className={`nav-btn ${category === "全部" && !structure ? "active" : ""}`} onClick={() => {
           setCategory("全部");
           setStructure("");
-        }}><span>全部样式</span><span className="count">{catalog.length}</span></button>
+        }}><span>全部样式</span><span className="count">{orientedCatalog.length}</span></button>
         {tree.map(([cat, groups]) => {
           const isOpen = open.has(cat);
           const count = [...groups.values()].reduce((total, items) => total + items.length, 0);
@@ -175,12 +180,28 @@ function Gallery({catalog}: {catalog: Item[]}) {
         })}
       </nav>
     </aside>
-    <main>
-      <div className="toolbar"><label className="search">⌕<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索名称、样式 ID、模板类型…" /></label></div>
+    <main className={orientation === "portrait" ? "portrait-gallery" : undefined}>
+      <div className="toolbar"><div className="toolbar-top"><label className="search">⌕<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索名称、样式 ID、模板类型…" /></label>
+          <div className="orientation-switch" role="group" aria-label="预览画面方向">
+            {([["landscape", "横屏"], ["portrait", "竖屏"]] as const).map(([value, label]) =>
+              <button key={value} type="button" aria-pressed={orientation === value} onClick={() => {
+                if (value === orientation) return;
+                setOrientation(value);
+                setCategory("全部");
+                setStructure("");
+                setQuery("");
+
+              }}>{label}</button>,
+            )}
+          </div>
+        </div>
+      </div>
       <div className="active-row"><strong>{category === "全部" ? "全部模板" : structure ? `${category} / ${structure}` : `${category}分类`}</strong><span>{rows.length} 个结果</span></div>
-      <section className="gallery">{rows.map((item) => <article className="card" key={keyOf(item)} onClick={() => setSelected(item)}>
+      <section className="gallery">{rows.map((item) => <article
+        className="card"
+        key={keyOf(item)} onClick={() => setSelected(item)}>
         <div className="video-wrap"><HoverVideo src={item.previewFile} /><span className="play-hint">▶</span></div>
-        <div className="card-body"><div className="category">{item.category}{item.isDefault ? " · 默认" : ""}</div><h2>{item.name}</h2><div className="style-id">{item.style}</div></div>
+        <div className="card-body"><div className="category">{item.category}{item.isDefault ? " · 默认" : ""}</div><h2>{displayName(item.name)}</h2><div className="style-id">{item.style}</div></div>
       </article>)}</section>
     </main>
   </>;

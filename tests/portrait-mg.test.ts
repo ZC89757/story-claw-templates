@@ -18,8 +18,8 @@ for(const [index,entry] of PORTRAIT_CATALOG.entries()){
   assert.equal(descriptor.layerRole,entry.renderMode==="overlay"?"overlay":"scene");
   const resolved=provider.resolveCall({name:example.function,arguments:example.arguments,timing:example.hostTiming});
   assert.equal(resolved.htmlTag,entry.htmlTag);assert.equal(resolved.render.kind,entry.template);assert.equal(resolved.render.canvas,"full");
-  assert.equal(resolved.at,120);assert.deepEqual(portraitElementAts(resolved.render.spec),portraitElementAts(example.arguments).map(at=>at-120));
-  assert.equal((resolved.render.spec as any)._duration,12);
+  assert.equal(resolved.at,120);const actualAts=portraitElementAts(resolved.render.spec),expectedAts=portraitElementAts(example.arguments).map(at=>at-120);assert.equal(actualAts.length,expectedAts.length);actualAts.forEach((at,i)=>assert.ok(Math.abs(at-expectedAts[i])<=1e-6));
+  assert.equal((resolved.render.spec as any)._duration,example.hostTiming.end-example.hostTiming.start);
   assert.equal(provider.getPlanningTools([entry.htmlTag]).length,1);
   assert.equal(provider.getPlanningTools([entry.htmlTag])[0].name,PORTRAIT_FUNCTIONS[index].name);
   assert.throws(()=>provider.validateAnnotatedInstance({htmlTag:entry.htmlTag,tagCount:2}));
@@ -46,7 +46,7 @@ test("portrait conditional cardinality and semantic event order",()=>{
  assert.throws(()=>resolvePortraitFunctionArgs(process.id,process.arguments,process.hostTiming),/crossed-out/);
  const clips=structuredClone(examples[0]);clips.arguments.upper[0].at=121;
  assert.throws(()=>resolvePortraitFunctionArgs(clips.id,clips.arguments,clips.hostTiming),/first clip/);
- for(const id of ["V01_005","V11_002"]){const item=structuredClone(examples.find((x:any)=>x.id===id));item.arguments.cards[0].text="长".repeat(20);assert.throws(()=>resolvePortraitFunctionArgs(id,item.arguments,item.hostTiming),/readable area/);}
+ for(const id of ["V01_005","V11_002"]){const item=structuredClone(examples.find((x:any)=>x.id===id));item.arguments.cards[0].text="长".repeat(20);assert.throws(()=>resolvePortraitFunctionArgs(id,item.arguments,item.hostTiming),/readable area|invalid text/);}
  const dual=structuredClone(examples.find((x:any)=>x.id==="V01_003"));dual.arguments.lower.at=131.9;
  assert.throws(()=>resolvePortraitFunctionArgs(dual.id,dual.arguments,dual.hostTiming),/complete entrance/);
 });

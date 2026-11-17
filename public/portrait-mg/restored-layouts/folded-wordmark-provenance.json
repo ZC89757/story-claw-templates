@@ -1,0 +1,12 @@
+{
+  "source": "D:/MG_Reference_Library/creators/eshuocaijing/effects/V16_002/reference.mp4",
+  "frame": 27,
+  "crop": {
+    "left": 34,
+    "top": 531,
+    "width": 292,
+    "height": 52
+  },
+  "method": "RGB from reference wordmark on black converted to straight RGBA; only fixed original lettering, no footage/subject included",
+  "purpose": "Preserve original source wordmark, not an added identity. Custom signature text remains legacy compatibility and is not claimed identical."
+}

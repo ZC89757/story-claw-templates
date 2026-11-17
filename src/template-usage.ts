@@ -23,7 +23,6 @@ export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
   {template: "timed-table", useWhen: "多个对象共享多个字段，需要逐项对照"},
   {template: "directed-graph", useWhen: "原文存在真实因果、依赖、转移或流程；production-chain 用宽距工位解释有方向的生产协作，沿用节点和边参数"},
   {template: "side-by-side-comparison", useWhen: "两个对象在同一维度上形成明确对比；editorial-scale 沿用原文字参数，以已有数字为视觉主角，不推算或发明缺失的精确值"},
-  {template: "weighted-comparison", useWhen: "原文明确表达两侧的轻重、取舍或不对称权重"},
   {template: "decomposition", useWhen: "原文把一个整体明确拆成多个组成部分"},
   {template: "xy-chart", useWhen: "一组原文明确数字构成有意义的趋势"},
   {template: "multi-series-chart", useWhen: "多组原文明确数字可放在同一尺度上比较，或正文对象明确且能通过可靠公开资料补齐同口径数字"},
@@ -49,8 +48,7 @@ export const MG_TEMPLATE_USAGE: readonly MgTemplateUsage[] = Object.freeze([
   {template: "emphasis", useWhen: "原文中的短句本身是决定性信息，值得短暂强调；brush-shadow 适合白字黄影书法大字，海陆空单字从上方落下，其他短标题从左向右显现"},
   {template: "news-flashback", useWhen: "一句话需要拿真实网页资料来背书：整屏翻页展示检索到的文章截图，中央压着该实例的重点大字"},
   {template: "showcase", useWhen: "原文需要把多个功能、步骤、卡片或界面元素逐项陈列"},
-  {template: "metric", useWhen: "原文包含可读的数字、比例、进度、仪表或指标变化"},
-  {template: "transition", useWhen: "原文明确存在两个画面段落之间的转场节点，且需要几何擦除或闪切"},
-  {template: "rhythm", useWhen: "原文需要在重音、节拍或蒙太奇节点施加短促的脉冲、冻结或频闪"},
+  {template: "metric", useWhen: "原文有多项需要逐条展示的明确指标或数值"},
+  {template: "transition", useWhen: "原文明确存在两个画面段落之间的转场节点，且需要几何擦除、遮罩或其他保留样式的衔接"},
   {template: "effect", useWhen: "原文需要光斑、扫描、框线、冲击、装配或品牌视觉效果；object-drop 只提供一张掉落物图片，glass-fracture 只提供一张裂纹下层图片，烟雾和裂纹由模板固定提供"},
 ]);

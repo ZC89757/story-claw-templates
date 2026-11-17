@@ -333,9 +333,9 @@
             }
           }
           function getWrappedName(outerType, innerType, wrapperName) {
-            var displayName = outerType.displayName;
-            if (displayName) {
-              return displayName;
+            var displayName2 = outerType.displayName;
+            if (displayName2) {
+              return displayName2;
             }
             var functionName = innerType.displayName || innerType.name || "";
             return functionName !== "" ? wrapperName + "(" + functionName + ")" : wrapperName;
@@ -435,12 +435,12 @@
             }
             return config.key !== void 0;
           }
-          function defineKeyPropWarningGetter(props, displayName) {
+          function defineKeyPropWarningGetter(props, displayName2) {
             var warnAboutAccessingKey = function() {
               {
                 if (!specialPropKeyWarningShown) {
                   specialPropKeyWarningShown = true;
-                  error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                  error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName2);
                 }
               }
             };
@@ -450,12 +450,12 @@
               configurable: true
             });
           }
-          function defineRefPropWarningGetter(props, displayName) {
+          function defineRefPropWarningGetter(props, displayName2) {
             var warnAboutAccessingRef = function() {
               {
                 if (!specialPropRefWarningShown) {
                   specialPropRefWarningShown = true;
-                  error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                  error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName2);
                 }
               }
             };
@@ -568,12 +568,12 @@
             }
             {
               if (key || ref) {
-                var displayName = typeof type === "function" ? type.displayName || type.name || "Unknown" : type;
+                var displayName2 = typeof type === "function" ? type.displayName || type.name || "Unknown" : type;
                 if (key) {
-                  defineKeyPropWarningGetter(props, displayName);
+                  defineKeyPropWarningGetter(props, displayName2);
                 }
                 if (ref) {
-                  defineRefPropWarningGetter(props, displayName);
+                  defineRefPropWarningGetter(props, displayName2);
                 }
               }
             }
@@ -871,9 +871,9 @@
                   get: function() {
                     return context.displayName;
                   },
-                  set: function(displayName) {
+                  set: function(displayName2) {
                     if (!hasWarnedAboutDisplayNameOnConsumer) {
-                      warn("Setting `displayName` on Context.Consumer has no effect. You should set it directly on the context with Context.displayName = '%s'.", displayName);
+                      warn("Setting `displayName` on Context.Consumer has no effect. You should set it directly on the context with Context.displayName = '%s'.", displayName2);
                       hasWarnedAboutDisplayNameOnConsumer = true;
                     }
                   }
@@ -3505,9 +3505,9 @@
             }
           }
           function getWrappedName(outerType, innerType, wrapperName) {
-            var displayName = outerType.displayName;
-            if (displayName) {
-              return displayName;
+            var displayName2 = outerType.displayName;
+            if (displayName2) {
+              return displayName2;
             }
             var functionName = innerType.displayName || innerType.name || "";
             return functionName !== "" ? wrapperName + "(" + functionName + ")" : wrapperName;
@@ -23673,9 +23673,9 @@
             return false;
           }
           function getWrappedName(outerType, innerType, wrapperName) {
-            var displayName = outerType.displayName;
-            if (displayName) {
-              return displayName;
+            var displayName2 = outerType.displayName;
+            if (displayName2) {
+              return displayName2;
             }
             var functionName = innerType.displayName || innerType.name || "";
             return functionName !== "" ? wrapperName + "(" + functionName + ")" : wrapperName;
@@ -24114,12 +24114,12 @@
               }
             }
           }
-          function defineKeyPropWarningGetter(props, displayName) {
+          function defineKeyPropWarningGetter(props, displayName2) {
             {
               var warnAboutAccessingKey = function() {
                 if (!specialPropKeyWarningShown) {
                   specialPropKeyWarningShown = true;
-                  error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                  error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName2);
                 }
               };
               warnAboutAccessingKey.isReactWarning = true;
@@ -24129,12 +24129,12 @@
               });
             }
           }
-          function defineRefPropWarningGetter(props, displayName) {
+          function defineRefPropWarningGetter(props, displayName2) {
             {
               var warnAboutAccessingRef = function() {
                 if (!specialPropRefWarningShown) {
                   specialPropRefWarningShown = true;
-                  error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                  error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName2);
                 }
               };
               warnAboutAccessingRef.isReactWarning = true;
@@ -24219,12 +24219,12 @@
                 }
               }
               if (key || ref) {
-                var displayName = typeof type === "function" ? type.displayName || type.name || "Unknown" : type;
+                var displayName2 = typeof type === "function" ? type.displayName || type.name || "Unknown" : type;
                 if (key) {
-                  defineKeyPropWarningGetter(props, displayName);
+                  defineKeyPropWarningGetter(props, displayName2);
                 }
                 if (ref) {
-                  defineRefPropWarningGetter(props, displayName);
+                  defineRefPropWarningGetter(props, displayName2);
                 }
               }
               return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);
@@ -24494,6 +24494,13 @@
   // tools/mg-template-gallery/app.tsx
   var import_react = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
+
+  // tools/mg-template-gallery/preview-orientation.ts
+  function previewOrientation({ previewKind }) {
+    return previewKind.startsWith("portrait-") || previewKind === "sc-longtake-relay" ? "portrait" : "landscape";
+  }
+
+  // tools/mg-template-gallery/app.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
   function TemplateVideo({ item }) {
     const [src, setSrc] = (0, import_react.useState)(item.previewFile);
@@ -24508,6 +24515,7 @@
       ] }) : null
     ] });
   }
+  var displayName = (name) => name.replace(/^竖屏\s*·\s*/, "");
   var keyOf = (item) => `${item.template}::${item.style}`;
   async function writeClipboard(value) {
     if (navigator.clipboard?.writeText) {
@@ -24568,6 +24576,8 @@
     );
   }
   function Gallery({ catalog }) {
+    const [orientation, setOrientation] = (0, import_react.useState)("landscape");
+    const orientedCatalog = (0, import_react.useMemo)(() => catalog.filter((item) => previewOrientation(item) === orientation), [catalog, orientation]);
     const [category, setCategory] = (0, import_react.useState)("\u5168\u90E8");
     const [structure, setStructure] = (0, import_react.useState)("");
     const [query, setQuery] = (0, import_react.useState)("");
@@ -24575,17 +24585,17 @@
     const [selected, setSelected] = (0, import_react.useState)(null);
     const tree = (0, import_react.useMemo)(() => {
       const categories = /* @__PURE__ */ new Map();
-      catalog.forEach((item) => {
+      orientedCatalog.forEach((item) => {
         if (!categories.has(item.category)) categories.set(item.category, /* @__PURE__ */ new Map());
         const groups = categories.get(item.category);
         if (!groups.has(item.structureName)) groups.set(item.structureName, []);
         groups.get(item.structureName).push(item);
       });
       return [...categories];
-    }, [catalog]);
-    const rows = (0, import_react.useMemo)(() => catalog.filter(
+    }, [orientedCatalog]);
+    const rows = (0, import_react.useMemo)(() => orientedCatalog.filter(
       (item) => (category === "\u5168\u90E8" || item.category === category) && (!structure || item.structureName === structure) && (!query || [item.name, item.style, item.template, item.structureName, item.category, item.description].join(" ").toLowerCase().includes(query.toLowerCase()))
-    ), [catalog, category, structure, query]);
+    ), [orientedCatalog, category, structure, query]);
     if (selected) {
       const detailJson = detailJsonFor(selected);
       return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: "detail-main", children: [
@@ -24598,7 +24608,7 @@
               " \xB7 ",
               selected.layerRole
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: selected.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: displayName(selected.name) }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "detail-id", children: [
               selected.template,
               " / ",
@@ -24652,7 +24662,7 @@
             setStructure("");
           }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u5168\u90E8\u6837\u5F0F" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: catalog.length })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "count", children: orientedCatalog.length })
           ] }),
           tree.map(([cat, groups]) => {
             const isOpen = open.has(cat);
@@ -24685,10 +24695,21 @@
           })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "toolbar", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "search", children: [
-          "\u2315",
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: query, onChange: (event) => setQuery(event.target.value), placeholder: "\u641C\u7D22\u540D\u79F0\u3001\u6837\u5F0F ID\u3001\u6A21\u677F\u7C7B\u578B\u2026" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: orientation === "portrait" ? "portrait-gallery" : void 0, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "toolbar", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar-top", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "search", children: [
+            "\u2315",
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: query, onChange: (event) => setQuery(event.target.value), placeholder: "\u641C\u7D22\u540D\u79F0\u3001\u6837\u5F0F ID\u3001\u6A21\u677F\u7C7B\u578B\u2026" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "orientation-switch", role: "group", "aria-label": "\u9884\u89C8\u753B\u9762\u65B9\u5411", children: [["landscape", "\u6A2A\u5C4F"], ["portrait", "\u7AD6\u5C4F"]].map(
+            ([value, label]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", "aria-pressed": orientation === value, onClick: () => {
+              if (value === orientation) return;
+              setOrientation(value);
+              setCategory("\u5168\u90E8");
+              setStructure("");
+              setQuery("");
+            }, children: label }, value)
+          ) })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "active-row", children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: category === "\u5168\u90E8" ? "\u5168\u90E8\u6A21\u677F" : structure ? `${category} / ${structure}` : `${category}\u5206\u7C7B` }),
@@ -24697,20 +24718,28 @@
             " \u4E2A\u7ED3\u679C"
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", { className: "gallery", children: rows.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "card", onClick: () => setSelected(item), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "video-wrap", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HoverVideo, { src: item.previewFile }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "play-hint", children: "\u25B6" })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-body", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "category", children: [
-              item.category,
-              item.isDefault ? " \xB7 \u9ED8\u8BA4" : ""
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: item.name }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "style-id", children: item.style })
-          ] })
-        ] }, keyOf(item))) })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", { className: "gallery", children: rows.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          "article",
+          {
+            className: "card",
+            onClick: () => setSelected(item),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "video-wrap", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HoverVideo, { src: item.previewFile }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "play-hint", children: "\u25B6" })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-body", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "category", children: [
+                  item.category,
+                  item.isDefault ? " \xB7 \u9ED8\u8BA4" : ""
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: displayName(item.name) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "style-id", children: item.style })
+              ] })
+            ]
+          },
+          keyOf(item)
+        )) })
       ] })
     ] });
   }

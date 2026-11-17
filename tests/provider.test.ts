@@ -34,7 +34,7 @@ test("provider exposes only the host-facing static template protocol", () => {
   const effect = provider.templates.find((item) => item.htmlTag === "mg-effect");
   assert.deepEqual(Object.keys(effect ?? {}).sort(), ["groups", "htmlTag", "layerRole", "selectionHint"]);
   assert.equal(effect?.layerRole, "overlay");
-  assert.ok(effect?.groups.includes("scanline-annotate-focus"));
+  assert.ok(effect?.groups.includes("neon-triple-marquee"));
 });
 
 test("ai-hot-focus-stage declares one normalized descendant composition bounds", () => {
@@ -105,7 +105,7 @@ test("provider selects only tools needed by HTML and returns opaque runtime payl
   ]));
   const call = provider.resolveCall({timing: {start: 12, end: (12) + 60},
     name: "create_effect_cue",
-    arguments: {group: "scanline-annotate-focus", order: null, text: "核心数字", items: [{text: "数字", at: 12.5}]},
+    arguments: {group: "neon-triple-marquee", order: null, text: "核心数字", items: [{text: "数字", at: 12.5}]},
   });
   assert.equal(call.htmlTag, "mg-effect");
   assert.equal(call.layerRole, "overlay");

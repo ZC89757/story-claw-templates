@@ -185,7 +185,7 @@ const imageStackSpec = {
   images: [
     {at: 0, image: "ai-company-logos/openai.svg", label: "OpenAI 官方标识"},
     {at: 0.72, image: "ai-company-logos/microsoft.svg", label: "合作平台"},
-    {at: 1.44, image: "AI 生成：数据中心与模型服务器的真实摄影画面", label: "待生成环境"},
+    {at: 1.44, image: "web-news/nvidia-newsroom.png", label: "相关技术资料"},
   ],
 };
 

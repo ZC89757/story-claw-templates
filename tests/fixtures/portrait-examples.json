@@ -43,8 +43,8 @@
       "group": "portrait",
       "order": null,
       "background": {
-        "source": "assets/backdrop.jpg",
-        "sourceStart": null
+        "source": "assets/background.mp4",
+        "sourceStart": 0
       },
       "clips": [
         {
@@ -127,25 +127,50 @@
       "panels": [
         {
           "layout": "wide",
+          "at": 120,
           "comments": [
             {
-              "text": "这个过程解释得很清楚。",
+              "text": "这段转身跟拍太顺了，路灯一亮，后面的街景和动作也刚好对上。",
+              "author": null,
+              "avatar": null
+            },
+            {
+              "text": "第二个镜头是怎么拍的？",
               "author": null,
               "avatar": null
             }
-          ],
-          "at": 121
+          ]
         },
         {
           "layout": "tall",
+          "at": 124.53333333333333,
           "comments": [
             {
-              "text": "想看进一步的对比。",
-              "author": "示例读者",
-              "avatar": null
+              "text": "这段有老电影的味道。",
+              "author": "街角小馆",
+              "avatar": "portrait-mg/V01_006/avatar-1.jpg"
+            },
+            {
+              "text": "把远处的路灯也拍进去，画面就有层次了。",
+              "author": "周末拍点什么",
+              "avatar": "portrait-mg/V01_006/avatar-2.jpg"
+            },
+            {
+              "text": "室内这两个角度我更喜欢第二个，人物一转身，顶部暖光就跟着进来了。",
+              "author": "小岛映像",
+              "avatar": "portrait-mg/V01_006/avatar-3.jpg"
+            },
+            {
+              "text": "光落下来的一瞬间真好看。",
+              "author": "见山",
+              "avatar": "portrait-mg/V01_006/avatar-4.jpg"
+            },
+            {
+              "text": "等一个拍摄花絮。",
+              "author": "慢放一遍",
+              "avatar": "portrait-mg/V01_006/avatar-5.jpg"
             }
-          ],
-          "at": 125
+          ]
         }
       ]
     }
@@ -155,7 +180,7 @@
     "function": "create_portrait_vertical_relation",
     "hostTiming": {
       "start": 120,
-      "end": 132
+      "end": 125.63333333333334
     },
     "arguments": {
       "group": "portrait",
@@ -163,19 +188,19 @@
       "nodes": [
         {
           "media": {
-            "source": "assets/person.png",
-            "sourceStart": null
+            "source": "assets/node-0.mp4",
+            "sourceStart": 0
           },
           "label": "发起者",
           "at": 120
         },
         {
           "media": {
-            "source": "assets/team.png",
-            "sourceStart": null
+            "source": "assets/node-1.mp4",
+            "sourceStart": 0
           },
           "label": "执行团队",
-          "at": 124
+          "at": 121.2
         }
       ]
     }
@@ -226,7 +251,7 @@
         }
       ],
       "headline": {
-        "text": "持续探索新的方向",
+        "text": "世界排名第一",
         "at": 128
       }
     }
@@ -326,7 +351,7 @@
     "arguments": {
       "group": "portrait",
       "order": null,
-      "text": "看清变化"
+      "text": "引爆"
     }
   },
   {
@@ -341,14 +366,14 @@
       "order": null,
       "subject": {
         "image": "assets/subject.jpg",
-        "label": "处理流程"
+        "label": "核心业务"
       },
       "rejected": {
-        "text": "只看单一环节",
+        "text": "旧的方案",
         "at": 122
       },
       "replacement": {
-        "text": "关注完整链路",
+        "text": "新的方向",
         "at": 126
       }
     }
@@ -382,11 +407,11 @@
       "order": null,
       "cards": [
         {
-          "text": "投入阶段",
+          "text": "增长",
           "at": 120
         },
         {
-          "text": "回报阶段",
+          "text": "回落",
           "at": 124
         }
       ]

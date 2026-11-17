@@ -17,10 +17,23 @@ export async function removePortraitTemporary(directory:string) {
 }
 
 /** Captures a saved page with no network requests and no page script execution. */
-export async function preparePortraitCapture(id:string,spec:any,context:{webSnapshotDirectory?:string;resolveImage:(source:string)=>Promise<string>}):Promise<PreparedPortraitCapture> {
-  const url=new URL(spec.url);
-  if (!/^https?:$/.test(url.protocol)) throw new Error(`${id}: 网页地址必须为 http(s)`);
-  const snapshot=await requireWebSnapshot(spec.url,context.webSnapshotDirectory);
+export async function preparePortraitCapture(id:string,spec:any,context:{webSnapshotDirectory?:string;publicRoot?:string;resolveImage:(source:string)=>Promise<string>}):Promise<PreparedPortraitCapture> {
+  let snapshot:string;
+  if(spec.snapshotPath!==undefined){
+    if(typeof spec.snapshotPath!=="string"||!spec.snapshotPath.trim()||/^(https?:|data:|blob:)/i.test(spec.snapshotPath))throw new Error(id+": 请提供已保存的本地HTML快照路径");
+    if(!/\.html?$/i.test(spec.snapshotPath))throw new Error(id+": 快照必须为HTML文件");
+    const absolute=path.isAbsolute(spec.snapshotPath);
+    if(!absolute&&spec.snapshotPath.replaceAll("\\","/").split("/").includes(".."))throw new Error(id+": 相对快照路径不能包含..");
+    const candidates=absolute?[spec.snapshotPath]:[path.resolve(context.publicRoot??process.cwd(),spec.snapshotPath),path.resolve(spec.snapshotPath)];
+    let found:string|undefined;
+    for(const file of candidates){if((await fs.stat(file).catch(()=>null))?.isFile()){found=file;break;}}
+    if(!found)throw new Error(id+": 找不到本地HTML快照 "+spec.snapshotPath);
+    snapshot=path.resolve(found);
+  }else{
+    const url=new URL(spec.url);
+    if(!/^https?:$/.test(url.protocol))throw new Error(id+": 网页地址必须为http(s)");
+    snapshot=await requireWebSnapshot(spec.url,context.webSnapshotDirectory);
+  }
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),"story-claw-portrait-capture-"));
   let child:ReturnType<typeof spawn>|undefined; let cdp:CdpClient|undefined;
   try {

@@ -6,8 +6,14 @@ import {peopleRenderers, peopleDemos} from "./groups/people";
 import {graphicsRenderers, graphicsDemos} from "./groups/graphics";
 import {referenceRenderers, getReferenceDemo} from "./reference-scene";
 
-export const portraitRenderers:Record<string,ComponentType<{spec:any}>>={...mediaRenderers,...peopleRenderers,...graphicsRenderers,...referenceRenderers};
-export const portraitDemos:Record<string,PortraitDemo>={...mediaDemos,...peopleDemos,...graphicsDemos};
+import {batchARenderers, batchADemos} from "./batch-a";
+import {batchBRenderers, batchBDemos} from "./batch-b";
+import {batchCRenderers, batchCDemos} from "./batch-c";
+
+import {selectedRenderers, selectedDemos} from "./selected";
+
+export const portraitRenderers:Record<string,ComponentType<{spec:any}>>={...mediaRenderers,...peopleRenderers,...graphicsRenderers,...referenceRenderers,...batchARenderers,...batchBRenderers,...batchCRenderers,...selectedRenderers};
+export const portraitDemos:Record<string,PortraitDemo>={...mediaDemos,...peopleDemos,...graphicsDemos,...batchADemos,...batchBDemos,...batchCDemos,...selectedDemos};
 export const getPortraitDemo=(key:string)=>{
   const id=PORTRAIT_CATALOG.find(x=>x.template===key||x.previewKind===key||x.id===key)?.id;
   const demo = id ? portraitDemos[id] ?? getReferenceDemo(id) : undefined;

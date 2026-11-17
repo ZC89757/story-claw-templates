@@ -11,18 +11,17 @@ type Props = {spec: ShowcaseSpec; style?: string; css?: CSSProperties};
  */
 export const SHOWCASE_STYLE_IDS = [
   "ai-stream-response",
-  "autolayout-gap-dial",
+
   "panel-to-canvas",
   "diagram-cascade",
   "chip-grid-single-select-blackout",
-  "chip-lift-to-user-pill",
+
   "dialogue-duet",
   "cast-ensemble",
   "command-palette-summon",
-  "glass-pill-dictation-typing",
-  "hashtag-to-pill-materialize",
+
   "cursor-performance",
-  "keycap-smash-cut",
+
   "picker-carousel-feature-cycle",
   "segmented-thumb-hero",
   "theme-sweep-toggle",
@@ -37,8 +36,7 @@ export const SHOWCASE_STYLE_IDS = [
   "doc-park-left-pill-deal",
   "draw-svg-trace",
   "axial-stretch",
-  "contact-shadow-lift",
-  "floating-glossy-label-pills",
+
   "integration-hub-map",
   "list-reveal",
   "list-stack-press",
@@ -49,21 +47,20 @@ export const SHOWCASE_STYLE_IDS = [
   "masking-tape-slap",
   "popup-book-rise",
   "product-card-progressive-assemble",
-  "radial-wave",
+
   "research-card-stack-scroll",
   "row-embed",
   "runway-ground-skim",
-  "skeleton-reveal",
-  "svg-shape-morph",
+
   "value-stagger-gradient",
   "bento-light-up",
   "grid-wave-flip",
-  "wireframe-draw-on",
+
   "spotlight-hero-card",
   "magician-card-flourish",
   "outro-group-photo-launch",
   "ui-strip-away-outro",
-  "icon-flip-bloom",
+
   "input-morph-assemble",
 ] as const;
 
@@ -93,18 +90,17 @@ const copy = (items: ShowcaseItem[], index: number, fallback: string): string =>
 
 const STYLE_SOUND: Readonly<Record<ShowcaseStyle, string>> = {
   "ai-stream-response": "whoosh-fast.mp3",
-  "autolayout-gap-dial": "transition-snap.mp3",
+
   "panel-to-canvas": "whoosh-fast.mp3",
   "diagram-cascade": "transition-snap.mp3",
   "chip-grid-single-select-blackout": "transition-snap.mp3",
-  "chip-lift-to-user-pill": "whoosh-fast.mp3",
+
   "dialogue-duet": "whoosh-fast.mp3",
   "cast-ensemble": "whoosh-fast.mp3",
   "command-palette-summon": "whoosh-fast.mp3",
-  "glass-pill-dictation-typing": "keyboard.mp3",
-  "hashtag-to-pill-materialize": "keyboard.mp3",
+
   "cursor-performance": "whoosh-fast.mp3",
-  "keycap-smash-cut": "impact-cine.mp3",
+
   "picker-carousel-feature-cycle": "transition-snap.mp3",
   "segmented-thumb-hero": "transition-snap.mp3",
   "theme-sweep-toggle": "transition-snap.mp3",
@@ -119,8 +115,7 @@ const STYLE_SOUND: Readonly<Record<ShowcaseStyle, string>> = {
   "doc-park-left-pill-deal": "transition-soft.mp3",
   "draw-svg-trace": "glitch-electric-small.mp3",
   "axial-stretch": "whoosh-fast.mp3",
-  "contact-shadow-lift": "whoosh-fast.mp3",
-  "floating-glossy-label-pills": "whoosh-fast.mp3",
+
   "integration-hub-map": "transition-snap.mp3",
   "list-reveal": "whoosh-fast.mp3",
   "list-stack-press": "transition-snap.mp3",
@@ -131,21 +126,20 @@ const STYLE_SOUND: Readonly<Record<ShowcaseStyle, string>> = {
   "masking-tape-slap": "transition-soft.mp3",
   "popup-book-rise": "transition-soft.mp3",
   "product-card-progressive-assemble": "transition-snap.mp3",
-  "radial-wave": "glitch-electric-small.mp3",
+
   "research-card-stack-scroll": "transition-soft.mp3",
   "row-embed": "whoosh-fast.mp3",
   "runway-ground-skim": "whoosh-fast.mp3",
-  "skeleton-reveal": "transition-soft.mp3",
-  "svg-shape-morph": "glitch-electric-small.mp3",
+
   "value-stagger-gradient": "transition-snap.mp3",
   "bento-light-up": "glitch-electric-small.mp3",
   "grid-wave-flip": "transition-snap.mp3",
-  "wireframe-draw-on": "glitch-electric-small.mp3",
+
   "spotlight-hero-card": "whoosh-big.mp3",
   "magician-card-flourish": "whoosh-big.mp3",
   "outro-group-photo-launch": "whoosh-big.mp3",
   "ui-strip-away-outro": "whoosh-big.mp3",
-  "icon-flip-bloom": "transition-snap.mp3",
+
   "input-morph-assemble": "transition-snap.mp3",
 };
 
@@ -168,20 +162,6 @@ const FixedSfx = ({style, items}: {style: ShowcaseStyle; items: ShowcaseItem[]})
 const Header = ({title}: {title?: string}) => title
   ? <div style={{position: "absolute", left: 92, top: 58, fontSize: 40, fontWeight: 850, color: INK}}>{title}</div>
   : null;
-
-const TextBar = ({item, p, x, y, width, tint = ACCENT}: {
-  item: ShowcaseItem;
-  p: number;
-  x: number;
-  y: number;
-  width: number;
-  tint?: string;
-}) => <div style={{
-  position: "absolute", left: x, top: y, width, height: 72, borderRadius: 14,
-  display: "flex", alignItems: "center", padding: "0 26px", boxSizing: "border-box",
-  background: PANEL, border: "2px solid " + LINE, color: INK, fontSize: 30, fontWeight: 750,
-  opacity: p, transform: "translateY(" + ((1 - p) * 54) + "px)",
-}}><span style={{width: 16, height: 16, borderRadius: 5, background: tint, marginRight: 18, flex: "0 0 auto"}} />{item.text}</div>;
 
 const Card = ({item, p, index, x, y, width = 390, height = 250, transform = "", tint}: {
   item: ShowcaseItem;
@@ -310,21 +290,6 @@ const StreamResponse = ({items, seconds}: RendererProps) => {
   })}</>;
 };
 
-const GapDial = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 1.35);
-  const count = Math.max(3, Math.min(6, items.length || 5));
-  const gap = 22 + p * 118;
-  const blockWidth = 180;
-  const total = count * blockWidth + (count - 1) * gap;
-  const left = (WIDTH - total) / 2;
-  return <><div style={{position: "absolute", left: 820, top: 170, width: 280, height: 116, borderRadius: 58, background: "#e7ecee", color: "#142228", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 42, fontWeight: 900, transform: "scale(" + (0.78 + p * 0.22) + ")"}}>GAP {Math.round(gap)}</div>
-  <div style={{position: "absolute", left: left - 30, top: 430, width: total + 60, height: 150, border: "3px solid " + ACCENT, borderRadius: 30, opacity: 0.35 + p * 0.65}} />
-  {Array.from({length: count}).map((_, index) => {
-    const q = ease((p - index * 0.05) / 0.8);
-    return <div key={index} style={{position: "absolute", left: left + index * (blockWidth + gap), top: 455, width: blockWidth, height: 100, borderRadius: 18, background: index % 2 ? "#26363c" : PANEL, border: "2px solid " + color(index), opacity: q, transform: "scale(" + (0.82 + q * 0.18) + ")"}}><div style={{position: "absolute", left: 18, top: 34, color: INK, fontSize: 22, fontWeight: 800}}>{copy(items, index, "组件 " + (index + 1))}</div></div>;
-  })}</>;
-};
-
 const PanelToCanvas = ({items, seconds}: RendererProps) => <><div style={{position: "absolute", left: 120, top: 160, width: 480, bottom: 140, borderRadius: 24, background: "#152128", border: "2px solid " + LINE}}>
   <div style={{height: 72, padding: "22px 28px", color: INK, fontSize: 28, fontWeight: 850, borderBottom: "2px solid " + LINE}}>可选模块</div>
   {visible(items, 5).map((item, index) => {
@@ -367,17 +332,6 @@ const ChipGrid = ({items, seconds}: RendererProps) => {
   </div></>;
 };
 
-const ChipLift = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 0.9);
-  const selected = copy(items, 0, "核心用户");
-  return <>{Array.from({length: 12}).map((_, index) => {
-    const active = index === 5;
-    const row = Math.floor(index / 4);
-    const col = index % 4;
-    return <div key={index} style={{position: "absolute", left: 520 + col * 220, top: 330 + row * 110, width: 160, height: 62, borderRadius: 31, background: "#26343a", border: "2px solid " + (active ? ACCENT : LINE), color: INK, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 750, opacity: active ? 1 - p : 1, transform: "scale(" + (active ? 1 - p * 0.15 : 1) + ")"}}>{active ? selected.slice(0, 8) : "标签 " + (index + 1)}</div>;
-  })}<div style={{position: "absolute", left: 510 - p * 170, top: 475 - p * 185, width: 190 + p * 850, height: 68 + p * 82, borderRadius: 80, background: "linear-gradient(135deg, " + ACCENT + ", #f8b05a)", color: "#182127", opacity: p, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 + p * 20, fontWeight: 900, boxShadow: "0 24px 55px rgba(239,107,66,.36)"}}><span style={{width: 46, height: 46, borderRadius: "50%", background: "#17262b", marginRight: 22}} />{selected}</div></>;
-};
-
 const DialogueDuet = ({items, seconds}: RendererProps) => {
   const first = items[0];
   const second = items[1] ?? first;
@@ -412,38 +366,11 @@ const CommandPalette = ({items, seconds}: RendererProps) => {
   </div>;
 };
 
-const DictationPill = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 0.55);
-  const text = copy(items, 0, "说出你的想法");
-  return <><div style={{position: "absolute", left: 410, top: 405, width: 1100, height: 150, borderRadius: 75, background: "linear-gradient(135deg, rgba(255,255,255,.24), rgba(138,211,223,.08))", border: "2px solid rgba(220,245,248,.65)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.45), 0 28px 68px rgba(0,0,0,.35)", display: "flex", alignItems: "center", padding: "0 50px", boxSizing: "border-box", opacity: p, transform: "scale(" + (0.82 + p * 0.18) + ")"}}>
-    <span style={{fontSize: 38, fontWeight: 800, color: INK}}>{text.slice(0, Math.floor(text.length * p))}<span style={{opacity: Math.floor(seconds * 5) % 2 ? 1 : 0}}>│</span></span>
-    <div style={{marginLeft: "auto", display: "flex", gap: 7, alignItems: "center"}}>{Array.from({length: 5}).map((_, index) => <span key={index} style={{width: 8, height: 18 + Math.abs(Math.sin(seconds * 9 + index)) * 34 * p, background: CYAN, borderRadius: 6}} />)}</div>
-  </div></>;
-};
-
-const HashtagPill = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 0.9);
-  const text = copy(items, 0, "#话题");
-  return <><div style={{position: "absolute", left: 0, right: 0, top: 265, textAlign: "center", fontSize: 150, fontWeight: 950, color: INK, opacity: 1 - p, transform: "scale(" + (1 + p * 0.18) + ")"}}>{text.slice(0, Math.floor(text.length * Math.min(1, seconds / 0.42)))}<span style={{opacity: Math.floor(seconds * 6) % 2 ? 1 : 0}}>_</span></div>
-  <div style={{position: "absolute", left: 520 - p * 130, top: 400, width: 880 + p * 260, height: 170, borderRadius: 100, background: "linear-gradient(110deg, " + ACCENT + ", #fbcb76)", color: "#1c282c", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 60 - p * 18, fontWeight: 900, opacity: p, transform: "rotate(" + ((1 - p) * -8) + "deg)"}}>{text}</div></>;
-};
-
 const CursorPerformance = ({items, seconds}: RendererProps) => {
   const p = ease(seconds / 0.82);
   const x = 160 + p * 1390;
   const y = 830 - Math.sin(p * Math.PI) * 560;
   return <><div style={{position: "absolute", left: 390, top: 210, width: 1140, height: 660, border: "3px solid " + LINE, borderRadius: 28, background: PANEL, transform: "scale(" + (1 + Math.max(0, p - 0.58) * 0.3) + ")", transformOrigin: "72% 30%"}}>{visible(items, 5).map((item, index) => <div key={item.id} style={{position: "absolute", left: 70 + (index % 2) * 520, top: 110 + Math.floor(index / 2) * 170, width: 430, height: 110, borderRadius: 18, background: "#25333a", border: "2px solid " + (index === 2 ? ACCENT : LINE), display: "flex", alignItems: "center", padding: 24, boxSizing: "border-box", color: INK, fontSize: 25, fontWeight: 750, opacity: progress(item, seconds)}}>{item.text}</div>)}</div><Cursor x={x} y={y} scale={1.25} rotate={-28} /><span style={{position: "absolute", left: x - 12, top: y + 14, width: 48 * Math.max(0, Math.sin(p * Math.PI)), height: 48 * Math.max(0, Math.sin(p * Math.PI)), borderRadius: "50%", background: ACCENT, opacity: 0.7}} /></>;
-};
-
-const KeycapSmash = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 0.48);
-  const shock = Math.max(0, Math.sin(p * Math.PI));
-  return <><div style={{position: "absolute", left: 760, top: 270 + p * 120, width: 400, height: 320, borderRadius: 48, background: "#e4e9ea", color: "#162126", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 124, fontWeight: 950, boxShadow: "0 " + (44 - p * 34) + "px 0 #738087, 0 32px 70px rgba(0,0,0,.42)", transform: "scaleY(" + (1 - p * 0.15) + ")"}}>⌘</div>
-  {visible(items, 8).map((item, index) => {
-    const angle = index / 8 * Math.PI * 2;
-    const radius = p * (280 + (index % 3) * 85);
-    return <div key={item.id} style={{position: "absolute", left: 945 + Math.cos(angle) * radius, top: 430 + Math.sin(angle) * radius, color: color(index), fontSize: 23, fontWeight: 850, opacity: p, transform: "rotate(" + (p * (index % 2 ? 55 : -55)) + "deg) scale(" + (0.55 + shock * 0.45) + ")"}}>{item.text}</div>;
-  })}</>;
 };
 
 const PickerCarousel = ({items, seconds}: RendererProps) => {
@@ -565,21 +492,6 @@ const SvgTrace = ({items, seconds}: RendererProps) => {
   })}</>;
 };
 
-const ContactLift = ({items, seconds}: RendererProps) => <>{visible(items, 6).map((item, index) => {
-  const p = progress(item, seconds);
-  const x = 330 + (index % 3) * 440;
-  const y = 315 + Math.floor(index / 3) * 290;
-  const lift = p * (70 + (index % 2) * 24);
-  return <div key={item.id}><div style={{position: "absolute", left: x + 35 - lift * 0.16, top: y + 210 + lift * 0.45, width: 340 + lift * 0.5, height: 46 + lift * 0.3, borderRadius: "50%", background: "rgba(0,0,0,.48)", filter: "blur(" + (18 + lift * 0.12) + "px)", opacity: p * 0.6}} /><Card item={item} p={p} index={index} x={x} y={y} width={360} height={210} transform={"translateY(" + (-lift) + "px) rotate(" + ((index % 2 ? 1 : -1) * lift * 0.05) + "deg)"} /></div>;
-})}</>;
-
-const GlossyPills = ({items, seconds}: RendererProps) => <>{visible(items, 8).map((item, index) => {
-  const p = progress(item, seconds);
-  const x = 260 + (index % 4) * 420;
-  const y = 280 + Math.floor(index / 4) * 310 + Math.sin(seconds * 3.4 + index * 1.7) * 34;
-  return <div key={item.id} style={{position: "absolute", left: x, top: y, minWidth: 270, height: 98, borderRadius: 49, padding: "0 36px", boxSizing: "border-box", display: "flex", alignItems: "center", background: "linear-gradient(135deg, rgba(255,255,255,.4), " + color(index) + ")", border: "2px solid rgba(255,255,255,.5)", color: "#172126", fontSize: 25, fontWeight: 900, boxShadow: "inset 0 2px 0 rgba(255,255,255,.55), 0 22px 38px rgba(0,0,0,.25)", opacity: p, transform: "translateY(" + ((1 - p) * 150) + "px) rotate(" + (Math.sin(index * 2) * 3) + "deg)"}}>{item.text}<span style={{position: "absolute", left: 22, top: 12, width: "45%", height: 12, borderRadius: 9, background: "rgba(255,255,255,.46)"}} /></div>;
-})}</>;
-
 const IntegrationHub = ({items, seconds}: RendererProps) => {
   const list = visible(items, 8);
   return <><svg width={WIDTH} height={HEIGHT} style={{position: "absolute", inset: 0}}>{list.map((item, index) => {
@@ -650,17 +562,6 @@ const ProductAssemble = ({items, seconds}: RendererProps) => <div style={{positi
   return <div key={item.id} style={{position: "absolute", left: 48 + (index % 2) * 370, top: 150 + Math.floor(index / 2) * 145, width: 310, height: 104, borderRadius: 16, background: "#293941", border: "2px solid " + color(index), color: INK, display: "flex", alignItems: "center", padding: 20, boxSizing: "border-box", fontSize: 22, fontWeight: 800, opacity: p, transform: "translate(" + ((1 - p) * (index % 2 ? 220 : -220)) + "px," + ((1 - p) * (index - 2) * 45) + "px) scale(" + (0.75 + p * 0.25) + ")"}}>{item.text}</div>;
 })}</div>;
 
-const RadialWave = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 0.9);
-  return <><div style={{position: "absolute", left: 690, top: 390, width: 540, height: 300, borderRadius: 30, background: "rgba(16,23,27,.76)", border: "2px solid " + LINE, color: INK, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, fontWeight: 900, textAlign: "center", padding: 52, boxSizing: "border-box"}}>{copy(items, 0, "波纹扩散")}</div>{Array.from({length: 153}).map((_, index) => {
-    const col = index % 17;
-    const row = Math.floor(index / 17);
-    const distance = Math.hypot(col - 8, row - 4);
-    const q = clamp((p * 9 - distance) / 1.8);
-    return <span key={index} style={{position: "absolute", left: 270 + col * 86, top: 180 + row * 90, width: 12, height: 12, borderRadius: "50%", background: distance < p * 9 ? color((col + row) % COLORS.length) : "#3a4a50", opacity: 0.2 + q * 0.8, transform: "scale(" + (0.5 + q * 1.9) + ")"}} />;
-  })}</>;
-};
-
 const ResearchStack = ({items, seconds}: RendererProps) => <>{visible(items, 6).map((item, index) => {
   const p = progress(item, seconds);
   return <Card key={item.id} item={item} p={p} index={index} x={570 + index * 16} y={190 + index * 72 + Math.max(0, seconds - item.at) * 64} width={700} height={230} transform={"translateY(" + ((1 - p) * 360) + "px) rotate(" + ((index % 2 ? 1 : -1) * 1.4) + "deg)"} />;
@@ -675,22 +576,6 @@ const Runway = ({items, seconds}: RendererProps) => <><div style={{position: "ab
   const p = progress(item, seconds);
   return <Card key={item.id} item={item} p={p} index={index} x={300 + (index % 3) * 530} y={430 + Math.floor(index / 3) * 190} width={390} height={180} transform={"perspective(900px) rotateX(55deg) translateY(" + ((1 - p) * -660) + "px) scale(" + (0.72 + p * 0.28) + ")"} />;
 })}</>;
-
-const Skeleton = ({items, seconds}: RendererProps) => <>{visible(items, 6).map((item, index) => {
-  const p = progress(item, seconds);
-  const done = p > 0.75;
-  return <div key={item.id} style={{position: "absolute", left: 330 + (index % 3) * 430, top: 290 + Math.floor(index / 3) * 260, width: 360, height: 200, borderRadius: 20, background: done ? PANEL : "transparent", border: "3px dashed " + color(index), opacity: p, transform: "rotate(" + ((1 - p) * (index % 2 ? 5 : -5)) + "deg)"}}><div style={{position: "absolute", left: 26, right: 90, top: 34, height: 18, borderRadius: 10, background: done ? color(index) : "transparent", border: done ? "none" : "2px solid " + color(index)}} /><div style={{position: "absolute", left: 26, right: 32, top: 78, height: 12, borderRadius: 7, background: done ? LINE : "transparent", border: done ? "none" : "2px solid " + LINE}} />{done ? <div style={{position: "absolute", left: 26, bottom: 28, color: INK, fontSize: 22, fontWeight: 800, opacity: (p - 0.65) / 0.35}}>{item.text}</div> : null}</div>;
-})}</>;
-
-const ShapeMorph = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 1.1);
-  const path = p < 0.5 ? "M 960 260 C 1220 260 1320 420 1180 560 C 1320 730 1130 850 960 760 C 760 890 590 720 730 560 C 570 380 720 230 960 260 Z" : "M 960 210 L 1230 430 L 1140 790 L 780 790 L 690 430 Z";
-  return <><svg width={WIDTH} height={HEIGHT} style={{position: "absolute", inset: 0}}><path d={path} fill="rgba(138,211,223,.18)" stroke={p < 0.5 ? ACCENT : CYAN} strokeWidth="12" transform={"rotate(" + (p * 24) + " 960 540) scale(" + (0.82 + p * 0.18) + ")"} /></svg>{visible(items, 5).map((item, index) => {
-    const angle = index / 5 * Math.PI * 2 - Math.PI / 2;
-    const q = progress(item, seconds);
-    return <div key={item.id} style={{position: "absolute", left: 960 + Math.cos(angle) * 510 - 105, top: 540 + Math.sin(angle) * 320 - 42, width: 210, minHeight: 84, borderRadius: 16, background: PANEL, border: "2px solid " + color(index), color: INK, textAlign: "center", padding: 14, boxSizing: "border-box", fontSize: 21, fontWeight: 800, opacity: q, transform: "scale(" + (0.45 + q * 0.55) + ")"}}>{item.text}</div>;
-  })}</>;
-};
 
 const ValueGradient = ({items, seconds}: RendererProps) => {
   const count = Math.max(8, Math.min(16, items.length * 2 || 12));
@@ -715,11 +600,6 @@ const GridWave = ({items, seconds}: RendererProps) => <>{Array.from({length: 9})
   const p = item ? progress(item, seconds - (row + col) * 0.09, 0.5) : 0;
   return <div key={index} style={{position: "absolute", left: 280 + col * 470, top: 190 + row * 255, width: 420, height: 210, perspective: 900}}><div style={{position: "absolute", inset: 0, borderRadius: 20, background: p > 0.52 ? "#26373c" : color(index), border: "3px solid " + color(index), color: INK, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 24, boxSizing: "border-box", fontSize: 24, fontWeight: 850, transform: "rotateY(" + ((1 - p) * 180) + "deg)", opacity: p}}>{item?.text ?? "网格 " + (index + 1)}</div></div>;
 })}</>;
-
-const Wireframe = ({items, seconds}: RendererProps) => {
-  const p = ease(seconds / 1.05);
-  return <><svg width={WIDTH} height={HEIGHT} style={{position: "absolute", inset: 0}}><rect x="170" y="130" width="1580" height="820" rx="34" fill="rgba(13,23,28,.42)" stroke={CYAN} strokeWidth="7" strokeDasharray="4300" strokeDashoffset={4300 * (1 - p)} /><line x1="450" y1="130" x2="450" y2="950" stroke={CYAN} strokeWidth="6" strokeDasharray="850" strokeDashoffset={850 * (1 - p)} /><line x1="450" y1="300" x2="1750" y2="300" stroke={CYAN} strokeWidth="6" strokeDasharray="1300" strokeDashoffset={1300 * (1 - p)} />{Array.from({length: 6}).map((_, index) => <rect key={index} x={520 + (index % 3) * 390} y={370 + Math.floor(index / 3) * 250} width="330" height="180" rx="18" fill="none" stroke={color(index)} strokeWidth="5" strokeDasharray="1050" strokeDashoffset={1050 * (1 - clamp((p - index * 0.06) / 0.7))} />)}</svg><div style={{position: "absolute", left: 170 + p * 1580, top: 130, width: 8, height: 820, background: "#fff", boxShadow: "0 0 35px 16px " + ACCENT, opacity: Math.sin(p * Math.PI)}} />{visible(items, 6).map((item, index) => <div key={item.id} style={{position: "absolute", left: 550 + (index % 3) * 390, top: 420 + Math.floor(index / 3) * 250, width: 270, color: INK, fontSize: 23, fontWeight: 800, textAlign: "center", opacity: progress(item, seconds)}}>{item.text}</div>)}</>;
-};
 
 const SpotlightHero = ({items, seconds}: RendererProps) => {
   const p = ease(seconds / 0.85);
@@ -754,11 +634,6 @@ const StripAway = ({items, seconds}: RendererProps) => <>{visible(items, 6).map(
   return <div key={item.id} style={{position: "absolute", left: index % 2 ? 980 : 200, top: 180 + Math.floor(index / 2) * 240, width: 720, height: 180, borderRadius: 20, background: "#26363b", border: "2px solid " + color(index), color: INK, display: "flex", alignItems: "center", padding: 32, boxSizing: "border-box", fontSize: 30, fontWeight: 850, opacity: 1 - p * 0.76, transform: "translate(" + dx + "px," + dy + "px) rotate(" + ((index % 2 ? 1 : -1) * p * 9) + "deg)"}}>{item.text}</div>;
 })}<div style={{position: "absolute", left: 780, top: 440, width: 360, height: 200, borderRadius: 30, background: ACCENT, color: "#172126", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 42, fontWeight: 950, opacity: ease(seconds / 1.4)}}>{copy(items, 0, "品牌")}</div></>;
 
-const IconBloom = ({items, seconds}: RendererProps) => <>{visible(items, 8).map((item, index) => {
-  const p = progress(item, seconds);
-  return <div key={item.id} style={{position: "absolute", left: 300 + (index % 4) * 420, top: 280 + Math.floor(index / 4) * 310, width: 300, height: 210, perspective: 700}}><div style={{position: "absolute", inset: 0, borderRadius: 28, background: p > 0.52 ? color(index) : "#27363b", border: "3px solid " + color(index), color: p > 0.52 ? "#172126" : INK, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 22, boxSizing: "border-box", fontSize: 24, fontWeight: 900, transform: "rotateY(" + ((1 - p) * 180) + "deg) scale(" + (1 + Math.sin(p * Math.PI) * 0.12) + ")"}}>{item.text}</div><div style={{position: "absolute", left: 150, top: 105, width: 80 + p * 180, height: 80 + p * 180, borderRadius: "50%", border: "3px solid " + color(index), opacity: (1 - p) * 0.7, transform: "translate(-50%,-50%)"}} /></div>;
-})}</>;
-
 const InputMorph = ({items, seconds}: RendererProps) => {
   const p = ease(seconds / 0.9);
   const text = copy(items, 0, "输入想法");
@@ -768,18 +643,17 @@ const InputMorph = ({items, seconds}: RendererProps) => {
 const sceneFor = (style: ShowcaseStyle, props: RendererProps): ReactNode => {
   switch (style) {
     case "ai-stream-response": return <StreamResponse {...props} />;
-    case "autolayout-gap-dial": return <GapDial {...props} />;
+
     case "panel-to-canvas": return <PanelToCanvas {...props} />;
     case "diagram-cascade": return <DiagramCascade {...props} />;
     case "chip-grid-single-select-blackout": return <ChipGrid {...props} />;
-    case "chip-lift-to-user-pill": return <ChipLift {...props} />;
+
     case "dialogue-duet": return <DialogueDuet {...props} />;
     case "cast-ensemble": return <CursorCast {...props} />;
     case "command-palette-summon": return <CommandPalette {...props} />;
-    case "glass-pill-dictation-typing": return <DictationPill {...props} />;
-    case "hashtag-to-pill-materialize": return <HashtagPill {...props} />;
+
     case "cursor-performance": return <CursorPerformance {...props} />;
-    case "keycap-smash-cut": return <KeycapSmash {...props} />;
+
     case "picker-carousel-feature-cycle": return <PickerCarousel {...props} />;
     case "segmented-thumb-hero": return <SegmentedHero {...props} />;
     case "theme-sweep-toggle": return <ThemeToggle {...props} />;
@@ -794,8 +668,7 @@ const sceneFor = (style: ShowcaseStyle, props: RendererProps): ReactNode => {
     case "doc-park-left-pill-deal": return <DocPills {...props} />;
     case "draw-svg-trace": return <SvgTrace {...props} />;
     case "axial-stretch": return <AxialStretch {...props} />;
-    case "contact-shadow-lift": return <ContactLift {...props} />;
-    case "floating-glossy-label-pills": return <GlossyPills {...props} />;
+
     case "integration-hub-map": return <IntegrationHub {...props} />;
     case "list-reveal": return <ListReveal {...props} />;
     case "list-stack-press": return <ListStackPress {...props} />;
@@ -806,21 +679,20 @@ const sceneFor = (style: ShowcaseStyle, props: RendererProps): ReactNode => {
     case "masking-tape-slap": return <TapeSlap {...props} />;
     case "popup-book-rise": return <PopupBook {...props} />;
     case "product-card-progressive-assemble": return <ProductAssemble {...props} />;
-    case "radial-wave": return <RadialWave {...props} />;
+
     case "research-card-stack-scroll": return <ResearchStack {...props} />;
     case "row-embed": return <RowEmbed {...props} />;
     case "runway-ground-skim": return <Runway {...props} />;
-    case "skeleton-reveal": return <Skeleton {...props} />;
-    case "svg-shape-morph": return <ShapeMorph {...props} />;
+
     case "value-stagger-gradient": return <ValueGradient {...props} />;
     case "bento-light-up": return <Bento {...props} />;
     case "grid-wave-flip": return <GridWave {...props} />;
-    case "wireframe-draw-on": return <Wireframe {...props} />;
+
     case "spotlight-hero-card": return <SpotlightHero {...props} />;
     case "magician-card-flourish": return <Magician {...props} />;
     case "outro-group-photo-launch": return <OutroGroup {...props} />;
     case "ui-strip-away-outro": return <StripAway {...props} />;
-    case "icon-flip-bloom": return <IconBloom {...props} />;
+
     case "input-morph-assemble": return <InputMorph {...props} />;
   }
 };
@@ -833,18 +705,17 @@ const makeRenderer = (style: ShowcaseStyle): ShowcaseRenderer => (props) => scen
  */
 export const SHOWCASE_STYLE_RENDERERS: Readonly<Record<ShowcaseStyle, ShowcaseRenderer>> = {
   "ai-stream-response": makeRenderer("ai-stream-response"),
-  "autolayout-gap-dial": makeRenderer("autolayout-gap-dial"),
+
   "panel-to-canvas": makeRenderer("panel-to-canvas"),
   "diagram-cascade": makeRenderer("diagram-cascade"),
   "chip-grid-single-select-blackout": makeRenderer("chip-grid-single-select-blackout"),
-  "chip-lift-to-user-pill": makeRenderer("chip-lift-to-user-pill"),
+
   "dialogue-duet": makeRenderer("dialogue-duet"),
   "cast-ensemble": makeRenderer("cast-ensemble"),
   "command-palette-summon": makeRenderer("command-palette-summon"),
-  "glass-pill-dictation-typing": makeRenderer("glass-pill-dictation-typing"),
-  "hashtag-to-pill-materialize": makeRenderer("hashtag-to-pill-materialize"),
+
   "cursor-performance": makeRenderer("cursor-performance"),
-  "keycap-smash-cut": makeRenderer("keycap-smash-cut"),
+
   "picker-carousel-feature-cycle": makeRenderer("picker-carousel-feature-cycle"),
   "segmented-thumb-hero": makeRenderer("segmented-thumb-hero"),
   "theme-sweep-toggle": makeRenderer("theme-sweep-toggle"),
@@ -859,8 +730,7 @@ export const SHOWCASE_STYLE_RENDERERS: Readonly<Record<ShowcaseStyle, ShowcaseRe
   "doc-park-left-pill-deal": makeRenderer("doc-park-left-pill-deal"),
   "draw-svg-trace": makeRenderer("draw-svg-trace"),
   "axial-stretch": makeRenderer("axial-stretch"),
-  "contact-shadow-lift": makeRenderer("contact-shadow-lift"),
-  "floating-glossy-label-pills": makeRenderer("floating-glossy-label-pills"),
+
   "integration-hub-map": makeRenderer("integration-hub-map"),
   "list-reveal": makeRenderer("list-reveal"),
   "list-stack-press": makeRenderer("list-stack-press"),
@@ -871,21 +741,20 @@ export const SHOWCASE_STYLE_RENDERERS: Readonly<Record<ShowcaseStyle, ShowcaseRe
   "masking-tape-slap": makeRenderer("masking-tape-slap"),
   "popup-book-rise": makeRenderer("popup-book-rise"),
   "product-card-progressive-assemble": makeRenderer("product-card-progressive-assemble"),
-  "radial-wave": makeRenderer("radial-wave"),
+
   "research-card-stack-scroll": makeRenderer("research-card-stack-scroll"),
   "row-embed": makeRenderer("row-embed"),
   "runway-ground-skim": makeRenderer("runway-ground-skim"),
-  "skeleton-reveal": makeRenderer("skeleton-reveal"),
-  "svg-shape-morph": makeRenderer("svg-shape-morph"),
+
   "value-stagger-gradient": makeRenderer("value-stagger-gradient"),
   "bento-light-up": makeRenderer("bento-light-up"),
   "grid-wave-flip": makeRenderer("grid-wave-flip"),
-  "wireframe-draw-on": makeRenderer("wireframe-draw-on"),
+
   "spotlight-hero-card": makeRenderer("spotlight-hero-card"),
   "magician-card-flourish": makeRenderer("magician-card-flourish"),
   "outro-group-photo-launch": makeRenderer("outro-group-photo-launch"),
   "ui-strip-away-outro": makeRenderer("ui-strip-away-outro"),
-  "icon-flip-bloom": makeRenderer("icon-flip-bloom"),
+
   "input-morph-assemble": makeRenderer("input-morph-assemble"),
 };
 

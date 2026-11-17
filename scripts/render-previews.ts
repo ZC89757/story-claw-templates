@@ -1,3 +1,4 @@
+import './windows-hidden-processes.cjs';
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";

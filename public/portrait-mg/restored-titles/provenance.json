@@ -1,0 +1,88 @@
+{
+  "source": "D:/MG_Reference_Library/creators/eshuocaijing/effects",
+  "assets": {
+    "question.png": {
+      "id": "V07_004",
+      "frames": [
+        48
+      ],
+      "bounds": [
+        125,
+        207,
+        117,
+        141
+      ],
+      "description": "Matte of the fixed question symbol and its cyan edge."
+    },
+    "scans-*.webp": {
+      "id": "V07_004",
+      "frames": [
+        24,
+        137
+      ],
+      "description": "Frame-indexed cyan streaks, isolated numerals and fine scans from the reference composite. The fixed-waterfront mask is supplemented with supported column interpolation and the narrow sample of the inner arc. Original subtitles and question/answer artwork are excluded from the transparent sequence. The right-hand post-reveal beam preserves the source-supported core with a soft fringe. Later river digits fill source-supported cyan strokes from local chroma and temporal residual, with foreground constrained by the previous matte. The original clean overlay is unavailable. Frames 104–113 additionally recover the cyan strokes in three constrained river lanes with horizontal median subtraction and a cyan projection. The isolated translucent digit overlay has no host text."
+    },
+    "card-*.png": {
+      "id": "V21_008",
+      "frames": [
+        80,
+        104
+      ],
+      "description": "Settled original card surfaces with Chinese and English text removed. The right card center is locally corrected to the exposed plate colors, with corners and blue edge unchanged."
+    },
+    "panel-edge.png": {
+      "id": "V27_006",
+      "frames": [
+        26,
+        175
+      ],
+      "description": "Matte of the stable blue glow around the board border."
+    },
+    "panel-registration.png": {
+      "id": "V27_006",
+      "frames": [
+        26,
+        175
+      ],
+      "description": "Fixed corner circuit marks and translucent squares."
+    },
+    "network-*.webp": {
+      "id": "V27_006",
+      "frames": [
+        0,
+        179
+      ],
+      "description": "Frame-indexed original particles, narrow lines and detected translucent triangular faces. Geometry-constrained temporal differencing isolates a subset from the live-action image; the complete original network plate is unavailable. A local lower-envelope model adds translucent geometry near source-supported segments, separates soft point glows from narrow ridges, and excludes known host-caption and title regions. Compact source bright points anchor one-pixel edges with measured along-segment contrast, and sufficiently supported three-edge faces restore low alpha area. The second pass suppresses part of the broader low-frequency extraction where its edge support is weak. A narrow supplemental pass reconstructs the tracked f16–35 lower translucent faces, f141–155 upper face, and f147–179 lower panel face at their observed positions. f143–179 also recover a little local energy around compact nodes and thin lines of the existing matte."
+    },
+    "city-demo.mp4": {
+      "role": "Replaceable demo footage shared by the two independent video slots",
+      "creator": "Cody",
+      "source": "https://www.pexels.com/video/a-river-within-a-city-1551380/",
+      "license": "https://www.pexels.com/license/",
+      "rangeSeconds": [
+        1,
+        8.5
+      ],
+      "crop": "Centered portrait crop at 720x1280, source movement preserved"
+    },
+    "noto-sans-sc.woff2": {
+      "description": "Noto Sans SC variable font subset for GB2312 Chinese, Latin and punctuation. Used as the fixed sans-serif face for replacement copy.",
+      "license": "SIL Open Font License 1.1, bundled in noto-sans-sc-OFL.txt",
+      "source": "https://github.com/notofonts/noto-cjk"
+    },
+    "pangmen-brush.ttf": {
+      "description": "Unmodified PangMenZhengDao-Cu typeface for the three information cards. Selected through same-text comparisons. Original reference font was not identified.",
+      "designer": "庞门正道 × 车港敏",
+      "source": "https://github.com/dxinef/freefonts/blob/master/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E7%B2%97%E4%B9%A6%E4%BD%93.ttf",
+      "authorRelease": "https://mp.weixin.qq.com/s/LZ_PMNc-3uX-Atmri4OLGQ",
+      "releaseStatement": "https://www.maoken.com/wp-content/uploads/2020/11/License01-7.jpg",
+      "notes": "The author's April 1, 2019 statement permits commercial use. The local file is unmodified. ZeoSeven also lists integration and redistribution for the original font; the author statement does not explicitly detail those uses.",
+      "additionalSource": "https://fonts.zeoseven.com/items/259/"
+    },
+    "board-numerals.woff2": {
+      "description": "A fixed edited ASCII face for editable data rows, derived from the bundled Noto Sans SC at weight 665. The single-sided numeral 1 and proportional digit and punctuation advances apply to all input.",
+      "license": "SIL Open Font License 1.1, bundled in noto-sans-sc-OFL.txt",
+      "source": "noto-sans-sc.woff2 in this directory"
+    }
+  }
+}

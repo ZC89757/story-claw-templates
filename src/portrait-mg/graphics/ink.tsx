@@ -1,3 +1,4 @@
+import {VideoCanvasStage} from '../batch-a/video-canvas';
 import {inkLettering} from './lettering';
 import React from 'react';
 import {CanvasStage,clamp,key,loadFont,offscreen,raster,sample,smooth,textTile,track,type Painter,type Raster} from './canvas';
@@ -10,14 +11,14 @@ function ns(a:Float32Array,x:number,y:number){x=Math.abs(x);y=Math.abs(y);if(x>3
 const gauss=(x:number,y:number,cx:number,cy:number,rx:number,ry:number)=>Math.exp(-.5*(((x-cx)/rx)**2+((y-cy)/ry)**2));
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const inkPaint:Painter=async(g,localFrame,spec)=>{
- const [noise,back]=await Promise.all([fields(),raster('portrait-mg/V10_004/substrate.png'),loadFont('PortraitInk','portrait-mg/V10_004/brush.ttf'),loadFont('PortraitInkFallback','portrait-mg/V10_004/fallback.ttf')]);
+ const [noise,back]=await Promise.all([fields(),Promise.resolve(spec._backgroundRaster).then(v=>v??raster('portrait-mg/V10_004/substrate.png')),loadFont('PortraitInk','portrait-mg/V10_004/brush.ttf'),loadFont('PortraitInkFallback','portrait-mg/V10_004/fallback.ttf')]);
  const [n0,n1,n2,n3,n4,warpX,warpY,warpFine,ridges]=noise;
  const frame=localFrame+20,t=Math.min(frame,72)+Math.max(0,frame-72)*.23,age=Math.max(0,t-22),plumes=G.plumes.filter((p:number[][])=>t>=p[0][0]).map((p:number[][])=>track(p,t));
  const gain=key(t,[[21,.25],[27,.65],[35,1],[72,1]]),activation=key(t,[[21,0],[22,.27],[23,.64],[24,1],[72,1]]),fogLevel=key(t,[[24,0],[28,.24],[42,.37],[72,.39]]);
  const sideOpening=key(t,[[27,0],[29,1],[32,.65],[35,0]]);
  const surge=key(t,[[26,0],[28,1],[31,.79],[36,0]]),tongueX=key(t,[[27,18],[29,40],[32,86]]),ridgeX=key(t,[[26,224],[28,272],[30,320],[38,333]]);
  const settle=key(frame,[[70,0],[72,.1],[74,.19],[82,.5],[88,.84],[94,.98],[97,1]]),reach=key(frame,[[25,0],[28,115],[30,164],[32,185],[34,248],[36,280],[40,301],[45,370]]),offset=key(frame,[[25,-183],[26,-135],[27,-88],[28,-55],[29,-31],[30,-14],[31,-4],[32,0],[109,0]]);
- const titleHeight=Math.min(125,244/Math.max(1,[...spec.text].length)*1.025),title=await inkLettering(spec.text,244,titleHeight),tc=offscreen(360,640),tg=tc.getContext('2d')!;tg.drawImage(title,57+offset,305-titleHeight/2,244,titleHeight);const mask=tg.getImageData(0,0,360,640).data;
+ const titleHeight=125,titleWidth=122*[...spec.text].length,title=await inkLettering(spec.text,titleWidth,titleHeight),tc=offscreen(360,640),tg=tc.getContext('2d')!;tg.drawImage(title,179-titleWidth/2+offset,305-titleHeight/2,titleWidth,titleHeight);const mask=tg.getImageData(0,0,360,640).data;
  const c=offscreen(360,640),ctx=c.getContext('2d')!,out=ctx.createImageData(360,640);
  for(let y=0;y<640;y++)for(let x=0;x<360;x++){
  const idx=y*360+x,wx=warpX[idx]*(9+Math.min(age,50)*.17),wy=warpY[idx]*(7+Math.min(age,50)*.12),dx=-Math.min(age,49)*.30+warpX[idx]*(4+age*.065),dy=warpY[idx]*(3+age*.045);
@@ -45,4 +46,4 @@ const inkPaint:Painter=async(g,localFrame,spec)=>{
  }
  ctx.putImageData(out,0,0);g.drawImage(c,0,0,360,640);
 };
-export const InkTitle:React.FC<{spec:any}>=p=><CanvasStage {...p} paint={inkPaint}/>;
+export const InkTitle:React.FC<{spec:any}>=p=><VideoCanvasStage {...p} paint={inkPaint} source={p.spec.background?.source ?? "portrait-mg/batch-a/hood-background.mp4"} start={p.spec.background?.sourceStart ?? 0}/>;

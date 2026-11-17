@@ -1,0 +1,96 @@
+{
+  "bottle-left.png": {
+    "reference": "V19_002",
+    "keyframe": 5,
+    "extraction": "isolated demo subject"
+  },
+  "bottle-middle.png": {
+    "reference": "V19_002",
+    "keyframe": 5,
+    "extraction": "isolated demo subject"
+  },
+  "bottle-right.png": {
+    "reference": "V19_002",
+    "keyframe": 5,
+    "extraction": "isolated demo subject"
+  },
+  "vehicle.png": {
+    "reference": "V21_001",
+    "keyframe": 6,
+    "extraction": "isolated demo subject"
+  },
+  "dessert.png": {
+    "reference": "V30_001",
+    "keyframe": 5,
+    "extraction": "isolated demo subject"
+  },
+  "poster.jpg": {
+    "reference": "V07_001",
+    "keyframe": 3,
+    "extraction": "poster content only"
+  },
+  "dessert.jpg": {
+    "source": "dessert.png",
+    "role": "演示卡片图片"
+  },
+  "cafe.mp4": {
+    "source": "portrait-mg/batch-c/documents-demo.mp4",
+    "sourceStart": 0.2,
+    "sourceEnd": 6.2,
+    "role": "演示用连续视频"
+  },
+  "city.jpg": {
+    "source": "portrait-mg/restored-titles/city-demo.mp4",
+    "sourceStart": 1.8,
+    "role": "静态演示图片"
+  },
+  "event.mp4": {
+    "source": "BV1dB8u6AEY3/original.mp4",
+    "sourceStart": 15,
+    "sourceEnd": 24,
+    "role": "演示用连续视频"
+  },
+  "panorama.mp4": {
+    "source": "BV1dB8u6AEY3/original.mp4",
+    "sourceStart": 33,
+    "sourceEnd": 38,
+    "role": "演示用连续视频"
+  },
+  "interview.mp4": {
+    "source": "video-footage/sources/tavus-griffin-official.mp4",
+    "sourceStart": 12.4,
+    "sourceEnd": 20.4,
+    "role": "演示用连续视频"
+  },
+  "interview.jpg": {
+    "source": "portrait-mg/V01_007/speaker.mp4",
+    "sourceStart": 0.6,
+    "role": "静态演示图片"
+  },
+  "presenter.jpg": {
+    "source": "portrait-mg/V01_005/preview-background.mp4",
+    "sourceStart": 1,
+    "role": "静态演示图片"
+  },
+  "vehicle.jpg": {
+    "source": "documentary-demos/roadster.mp4",
+    "sourceStart": 2.5,
+    "role": "静态演示图片"
+  },
+  "gold-masthead.png": {
+    "source": "portrait-mg/batch-c/gold-frame.png",
+    "crop": [
+      0,
+      0,
+      360,
+      70
+    ],
+    "role": "原版静态金色纹理与边框，署名裁除"
+  },
+  "road-demo.mp4": {
+    "source": "documentary-demos/roadster.mp4",
+    "sourceStart": 1,
+    "sourceEnd": 5,
+    "role": "两套汽车示例的可替换实拍底，竖屏裁切"
+  }
+}
