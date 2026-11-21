@@ -7,6 +7,7 @@ import {PORTRAIT_CATALOG, type PortraitTemplateName} from "./catalog.js";
 import {LEGACY_PORTRAIT_FUNCTIONS} from "./legacy-definitions";
 import {REFERENCE_FUNCTIONS} from "./reference-definitions";
 import {getReferenceProfile} from "./reference-profiles";
+import {latepostContracts} from "./latepost/contracts";
 
 const PORTRAIT_FUNCTIONS = [...LEGACY_PORTRAIT_FUNCTIONS, ...REFERENCE_FUNCTIONS];
 
@@ -43,6 +44,8 @@ export const portraitElementAts = (input:unknown):number[] => {
 export const isPortraitTemplate = (kind:string):kind is PortraitTemplateName => PORTRAIT_CATALOG.some(x=>x.template===kind);
 export const portraitCatalogEntry = (kind:string) => PORTRAIT_CATALOG.find(x=>x.template===kind || x.id===kind || x.previewKind===kind);
 const legacyMinDuration:Record<string,number>={V16_002:69/30,V01_001:.5,V01_002:.5,V01_003:.7,V01_005:.5,V01_006:.6,V01_007:1,V03_001:1,V04_001:3,V04_002:1.5,V05_001:1,V05_002:1.1,V07_003:3,V10_004:2.5,V10_005:3,V11_001:1,V11_002:.35,V12_001:2};
+const minimumPortraitDuration = (id: string) =>
+  latepostContracts.get(id)?.minimumDuration ?? referenceMinimumSeconds[id] ?? legacyMinDuration[id] ?? .4;
 
 const checkOrdered=(events:any[],name:string,strict=false)=>{
   if(events.some((x,i)=>i>0&&(strict?x.at<=events[i-1].at:x.at<events[i-1].at)))throw new Error(`${name}: event times must ${strict?"strictly increase":"be non-decreasing"}`);
@@ -154,7 +157,7 @@ export const resolvePortraitFunctionArgs = (id:string,input:unknown,timing:Funct
     throw new Error("V28_004.target: highlight must be inside the original document");
   }
   validateLegacyVideoRanges(id,args,timing.start,timing.end);
-  const minimumDuration = referenceMinimumSeconds[id] ?? legacyMinDuration[id] ?? .4;
+  const minimumDuration = minimumPortraitDuration(id);
   if (timing.end - timing.start + .000001 < minimumDuration) throw new Error(`${id}: window is too short for the fixed entrance (${minimumDuration}s)`);
   for(const at of portraitElementAts(args))if(at<timing.start||at>=timing.end)throw new Error(`${id}: event.at outside host [start,end)`);
   if (id === "V10_008" && timing.end - args.upper.at < .4) throw new Error("V10_008: allow the complete five-strip entrance");
@@ -162,6 +165,7 @@ export const resolvePortraitFunctionArgs = (id:string,input:unknown,timing:Funct
   const local=(value:any):any=>Array.isArray(value)?value.map(local):value&&typeof value==="object"?Object.fromEntries(Object.entries(value).map(([k,v])=>[k,k==="at"?Math.round(((v as number)-timing.start)*1e6)/1e6:local(v)])):value;
   const {group,order,...business}=args;
   const spec=local(business);
+  latepostContracts.get(id)?.validate?.(spec, timing.end - timing.start);
   const readable=(text:string,width:number,minSize:number,label:string,asciiUnits=.75)=>{
     const units=Array.from(text).reduce((n,c)=>n+(/[WM@]/.test(c)?(asciiUnits===.75?1.1:asciiUnits):/[\x00-\x7F]/.test(c)?asciiUnits:1),0);
     if(units*minSize>width)throw new Error(`${id}.${label}: text exceeds the fixed readable area; shorten the wording`);
@@ -209,6 +213,8 @@ export const resolvePortraitFunctionArgs = (id:string,input:unknown,timing:Funct
 };
 
 function portraitDefinition(index: number) {
+  const latepost = latepostContracts.get(PORTRAIT_CATALOG[index].id);
+  if (latepost) return latepost.definition;
   const definition = PORTRAIT_FUNCTIONS[index];
   const extra = portraitContentParameters[PORTRAIT_CATALOG[index].id];
   if (!extra) return definition;
@@ -220,9 +226,9 @@ function portraitDefinition(index: number) {
 }
 
 export const portraitBindings = PORTRAIT_CATALOG.map((entry,index)=>({
-  name:PORTRAIT_FUNCTIONS[index].name,label:entry.name,template:entry.template,
+  name:portraitDefinition(index).name,label:entry.name,template:entry.template,
   definition:portraitDefinition(index),groups:["portrait"] as const,
-  minDurationSeconds:referenceMinimumSeconds[entry.id] ?? legacyMinDuration[entry.id] ?? .4,
+  minDurationSeconds:minimumPortraitDuration(entry.id),
   resolve:(input:unknown,timing:FunctionCallTiming)=>resolvePortraitFunctionArgs(entry.id,input,timing),
   elementAts:(input:Record<string,any>)=>portraitElementAts(input),
 }));

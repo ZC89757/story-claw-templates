@@ -10,6 +10,7 @@ import {PNG} from "pngjs";
 import {PORTRAIT_CATALOG} from "./catalog.js";
 import {getReferenceProfile} from "./reference-profiles";
 import {preparePortraitCapture,removePortraitTemporary} from "./capture";
+import {latepostContracts} from "./latepost/contracts";
 
 const execute=promisify(execFile);
 // Source module is src/portrait-mg/assets.ts; packaged Provider bundles it into src/provider.js.
@@ -85,6 +86,18 @@ export async function preparePortraitAssets(kind:string,spec:any,context:Portrai
     else {const metadata=JSON.parse(await fs.readFile(path.join(output,"flash.json"),"utf8"));metadata.binary=`data:application/octet-stream;base64,${(await fs.readFile(path.join(output,"flash.bin"))).toString("base64")}`;spec._prepared.flashData=`data:application/json;base64,${Buffer.from(JSON.stringify(metadata)).toString("base64")}`;}
   };
   try {
+    const latepost = latepostContracts.get(id);
+    if (latepost) {
+      for (const slot of latepost.media?.(spec, duration) ?? []) {
+        const key = slot.path.at(-1);
+        if (key === undefined) throw new Error(`${id}: media slot requires a field path`);
+        const owner = slot.path.slice(0, -1).reduce((value, segment) => value[segment], spec);
+        const label = slot.path.join(".");
+        if (slot.type === "video") await media(owner[key], label, slot.seconds);
+        else owner[key] = (await image(owner[key], label, slot.type === "cutout")).source;
+      }
+      return spec;
+    }
     if (spec.signature?.source) {
       spec.signature.source = (await image(spec.signature.source, "signature.source", true)).source;
     }

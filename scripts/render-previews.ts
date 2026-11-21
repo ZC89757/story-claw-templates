@@ -99,7 +99,7 @@ if (checkOnly) {
   // A portrait-only pass must not copy the unrelated multi-gigabyte footage library.
   let bundlePublicDir = path.join(root, "public");
   if (renderItems.every((item) => item.previewKind.startsWith("portrait-"))) {
-    bundlePublicDir = path.join(root, "scratch", "portrait-mg", "preview-public");
+    bundlePublicDir = path.join(process.env.STORY_CLAW_PREVIEW_WORK_DIR ?? path.join(root, "scratch", "portrait-mg"), "preview-public");
     await fs.mkdir(bundlePublicDir, {recursive:true});
     await fs.cp(path.join(root,"public","portrait-mg"), path.join(bundlePublicDir,"portrait-mg"), {recursive:true});
     for (const file of externalPortraitFixtures) {
